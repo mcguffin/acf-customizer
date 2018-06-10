@@ -1,0 +1,13 @@
+{
+  "modules": {
+    "admin": {},
+    "core": {}
+  },
+  "plugin_author": "J\u00f6rn Lund",
+  "plugin_author_uri": "",
+  "plugin_name": "acf-customizer",
+  "plugin_namespace": "AcfCustomizer",
+  "plugin_slug": "acf-customizer",
+  "this_year": 2018,
+  "wp_plugin_slug": "acf-customizer"
+}
