@@ -42,11 +42,11 @@ if ( ! defined('ABSPATH') ) {
 }
 
 
-define( 'ACF-CUSTOMIZER_FILE', __FILE__ );
-define( 'ACF-CUSTOMIZER_DIRECTORY', plugin_dir_path(__FILE__) );
-define( 'ACF-CUSTOMIZER_PLUGIN', pathinfo( ACF-CUSTOMIZER_DIRECTORY, PATHINFO_FILENAME ) . '/' . pathinfo( __FILE__, PATHINFO_BASENAME ) );
+define( 'ACF_CUSTOMIZER_FILE', __FILE__ );
+define( 'ACF_CUSTOMIZER_DIRECTORY', plugin_dir_path(__FILE__) );
+define( 'ACF_CUSTOMIZER_PLUGIN', pathinfo( ACF_CUSTOMIZER_DIRECTORY, PATHINFO_FILENAME ) . '/' . pathinfo( __FILE__, PATHINFO_BASENAME ) );
 
-require_once ACF-CUSTOMIZER_DIRECTORY . 'include/autoload.php';
+require_once ACF_CUSTOMIZER_DIRECTORY . 'include/autoload.php';
 
 Core\Core::instance();
 

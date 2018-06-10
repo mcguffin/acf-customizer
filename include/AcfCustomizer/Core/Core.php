@@ -38,7 +38,7 @@ class Core extends Plugin {
 	 *  @action plugins_loaded
 	 */
 	public function load_textdomain() {
-		$path = pathinfo( dirname( ACF-CUSTOMIZER_FILE ), PATHINFO_FILENAME );
+		$path = pathinfo( dirname( ACF_CUSTOMIZER_FILE ), PATHINFO_FILENAME );
 		load_plugin_textdomain( 'acf-customizer' , false, $path . '/languages' );
 	}
 
@@ -57,7 +57,7 @@ class Core extends Plugin {
 	 *	@return wp_enqueue_editor
 	 */
 	public function get_asset_url( $asset ) {
-		return plugins_url( $asset, ACF-CUSTOMIZER_FILE );
+		return plugins_url( $asset, ACF_CUSTOMIZER_FILE );
 	}
 
 

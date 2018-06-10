@@ -20,9 +20,9 @@ class Plugin extends Singleton {
 	 */
 	protected function __construct() {
 
-		register_activation_hook( ACF-CUSTOMIZER_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( ACF-CUSTOMIZER_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( ACF-CUSTOMIZER_FILE, array( __CLASS__ , 'uninstall' ) );
+		register_activation_hook( ACF_CUSTOMIZER_FILE, array( __CLASS__ , 'activate' ) );
+		register_deactivation_hook( ACF_CUSTOMIZER_FILE, array( __CLASS__ , 'deactivate' ) );
+		register_uninstall_hook( ACF_CUSTOMIZER_FILE, array( __CLASS__ , 'uninstall' ) );
 
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
 
@@ -34,7 +34,7 @@ class Plugin extends Singleton {
 	 */
 	public function maybe_upgrade() {
 		// trigger upgrade
-		$meta = get_plugin_data( ACF-CUSTOMIZER_FILE );
+		$meta = get_plugin_data( ACF_CUSTOMIZER_FILE );
 		$new_version = $meta['Version'];
 		$old_version = get_option( 'acf-customizer_version' );
 
