@@ -1,12 +1,12 @@
 <?php
 
-namespace AcfCustomizer\AutoUpdate;
+namespace ACFCustomizer\AutoUpdate;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
-use AcfCustomizer\Core;
+use ACFCustomizer\Core;
 
 class AutoUpdateGithub extends AutoUpdate {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace AcfCustomizer;
+namespace ACFCustomizer;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -31,4 +31,4 @@ function __autoload( $class ) {
 }
 
 
-spl_autoload_register( 'AcfCustomizer\__autoload' );
+spl_autoload_register( 'ACFCustomizer\__autoload' );

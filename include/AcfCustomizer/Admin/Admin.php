@@ -1,12 +1,12 @@
 <?php
 
-namespace AcfCustomizer\Admin;
+namespace ACFCustomizer\Admin;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
-use AcfCustomizer\Core;
+use ACFCustomizer\Core;
 
 
 class Admin extends Core\Singleton {

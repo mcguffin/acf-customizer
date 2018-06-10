@@ -1,13 +1,13 @@
 <?php
 
-namespace AcfCustomizer\AutoUpdate;
+namespace ACFCustomizer\AutoUpdate;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use AcfCustomizer\Core;
+use ACFCustomizer\Core;
 
 abstract class AutoUpdate extends Core\Singleton {
 

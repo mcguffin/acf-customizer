@@ -35,7 +35,7 @@ Command line args were: ``
 */
 
 
-namespace AcfCustomizer;
+namespace ACFCustomizer;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');

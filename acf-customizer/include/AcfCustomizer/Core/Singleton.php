@@ -1,6 +1,6 @@
 <?php
 
-namespace AcfCustomizer\Core;
+namespace ACFCustomizer\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');

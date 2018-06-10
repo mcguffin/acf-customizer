@@ -1,14 +1,14 @@
 <?php
 
-namespace AcfCustomizer\Core;
+namespace ACFCustomizer\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use AcfCustomizer\PostType;
-use AcfCustomizer\Compat;
+use ACFCustomizer\PostType;
+use ACFCustomizer\Compat;
 
 class Plugin extends Singleton {
 

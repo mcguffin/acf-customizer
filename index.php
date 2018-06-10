@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: acf-customizer
+Plugin Name: ACF Customizer
 Plugin URI: http://wordpress.org/
-Description: Enter description here.
+Description: Use ACF Fields in customizer. 
 Author: Jörn Lund
 Version: 0.0.1
-Author URI: 
+Author URI:
 License: GPL3
 Text Domain: acf-customizer
 Domain Path: /languages/
@@ -35,7 +35,7 @@ Command line args were: ``
 */
 
 
-namespace AcfCustomizer;
+namespace ACFCustomizer;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -65,4 +65,3 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 
 }
-
