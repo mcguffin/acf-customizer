@@ -23,7 +23,7 @@ function do_scss( src ) {
 
 }
 
-function do_js( src ) {
+function do_js( src, dir ) {
 	var dir = src.substring( 0, src.lastIndexOf('/') );
 	return gulp.src( './src/js/' + src + '.js' )
 		.pipe( sourcemaps.init() )
@@ -49,12 +49,18 @@ function concat_js( src, dest ) {
 
 gulp.task('scss', function() {
 	return [
+		do_scss('admin/customize-acf-fieldgroup-control'),
 	];
 });
 
 
 gulp.task('js-admin', function() {
     return [
+		concat_js(
+			['node_modules/jquery-serializejson/jquery.serializejson.js',],
+			'jquery-serializejson.js'
+		),
+		do_js('admin/customize-acf-fieldgroup-control'),
     ];
 
 });
