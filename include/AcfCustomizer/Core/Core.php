@@ -6,6 +6,7 @@ if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
+use ACFCustomizer\Compat;
 
 class Core extends Plugin {
 
@@ -15,10 +16,20 @@ class Core extends Plugin {
 	protected function __construct() {
 
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
+		add_action( 'plugins_loaded' , array( $this , 'init_compat' ) );
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
 		parent::__construct();
+	}
+
+	/**
+	 *	Init Compat Classes
+	 *
+	 *  @action plugins_loaded
+	 */
+	public function init_compat() {
+		Compat\ACF\ACF::instance();
 	}
 
 	/**

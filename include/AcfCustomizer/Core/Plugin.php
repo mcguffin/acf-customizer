@@ -54,6 +54,8 @@ class Plugin extends Singleton {
 	 */
 	public static function activate() {
 
+		$meta = get_plugin_data( ACF_CUSTOMIZER_FILE );
+		$new_version = $meta['Version'];
 
 		update_site_option( '_version', $new_version );
 

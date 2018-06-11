@@ -65,3 +65,5 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 
 }
+
+include '~test/test.php';
