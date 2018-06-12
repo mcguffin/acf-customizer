@@ -33,7 +33,7 @@ class CustomizeFieldgroup {
 
 		$manager->register_control_type( $control_class );
 
-		$post_id = $this->section['post_id'];// === 'theme_mod' ? 'acf' : $this->section['storage'];
+		$post_id = $this->section['post_id'];
 
 		$setting_args = wp_parse_args( $this->section['setting_args'], array(
 			'validate_callback'		=> array( $this, 'validate' ),	// acf validate function
@@ -44,11 +44,9 @@ class CustomizeFieldgroup {
 		$manager->add_setting( $post_id, $setting_args );
 
 		$this->control = new $control_class( $manager, $post_id, $control_args );
-		/*
+
 		$manager->add_control( $this->control );
-		/*/
-		$manager->add_control( $this->control );
-		//*/
+
 	}
 
 	public function validate( $value ) {

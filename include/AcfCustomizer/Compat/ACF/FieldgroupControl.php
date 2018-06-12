@@ -20,15 +20,13 @@ class FieldgroupControl extends \WP_Customize_Control {
 	 */
 	public $type 				= ''; // acf field group key in instances
 
-	protected $post_id			= '';
-
-	protected $field_group_key	= '';
+	protected $section_id			= '';
 
 
 	public function content_template() {
 
 		?>
-			<div class="acf-fields" data-field-group-key="<?php echo $this->field_group_key; ?>" data-post-id="<?php echo $this->post_id; ?>">
+			<div class="acf-fields" data-section-id="<?php echo $this->section_id; ?>">
 				YadaYada!
 			</div>
 		<?php

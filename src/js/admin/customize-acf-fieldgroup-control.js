@@ -32,10 +32,8 @@
 
 			request = wp.ajax.send( 'load_customizer_field_group', {
 				data: {
-					field_group_key: this.$wrapper.attr('data-field-group-key'),
-					post_id: this.$wrapper.attr('data-post-id'),
-					_nonce: options.load_field_group_nonce,
-
+					section_id	: this.$wrapper.attr('data-section-id'),
+					_nonce		: options.load_field_group_nonce,
 				}
 			} );
 

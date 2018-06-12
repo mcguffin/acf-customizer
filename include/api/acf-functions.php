@@ -15,6 +15,7 @@
  *		'description'		=> (string)
  *		'active_callback'	=> (callable)
  *	)
+ *	@return string Panel ID
  */
 function acf_add_customizer_panel( $panel = '' ) {
 
@@ -22,7 +23,7 @@ function acf_add_customizer_panel( $panel = '' ) {
 		_doing_it_wrong( __FUNCTION__, sprintf('%s must not be called after the init hook',__FUNCTION__), '0.0.1' );
 	}
 
-	ACFCustomizer\Compat\ACF\Customize::instance()->add_panel( $panel );
+	return ACFCustomizer\Compat\ACF\Customize::instance()->add_panel( $panel );
 
 }
 
@@ -44,6 +45,7 @@ function acf_add_customizer_panel( $panel = '' ) {
  *		'storage_type'			=> (string)	option|theme_mod
  *		'post_id' 				=> (string) provide a string to save as option or theme_mod
  *	)
+ *	@return string Section ID
  */
 function acf_add_customizer_section( $section = '' ) {
 
@@ -51,6 +53,6 @@ function acf_add_customizer_section( $section = '' ) {
 		_doing_it_wrong( __FUNCTION__, sprintf('%s must not be called after the init hook',__FUNCTION__), '0.0.1' );
 	}
 
-	ACFCustomizer\Compat\ACF\Customize::instance()->add_section( $section );
+	return ACFCustomizer\Compat\ACF\Customize::instance()->add_section( $section );
 
 }

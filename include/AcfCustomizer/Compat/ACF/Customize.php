@@ -91,29 +91,28 @@ class Customize extends	Core\Singleton {
 
 		return $value;
 	}
-	/**
-	 *	@filter pre_set_theme_mod_{$type}
-	 */
-	public function acf_save_theme_mod( $value, $old_value ) {
-return $value;
-		return $this->convert_theme_mod( $value );
 
-	}
 
 	/**
 	 *	@filter theme_mod_{$type}
 	 */
 	public function convert_theme_mod( $mod ) {
+		if ( ! is_array( $mod ) ) {
+			return $mod;
+		}
+
+		$return_mod = array();
+
 		foreach ( array_keys($mod) as $field_key ) {
-			// need field group here!
 			$field = acf_get_field( $field_key );
 			// save like in options|postmeta|whereever|...
-			$mod[ $field['name'] ] = $mod[ $field_key ];
-			$mod[ '_' . $field['name'] ] = $field_key;
-			unset( $mod[ $field_key ] );
+			$return_mod[ $field['name'] ] = $mod[ $field_key ];
+			$return_mod[ '_' . $field['name'] ] = $field_key;
 		}
-		return $mod;
+
+		return $return_mod;
 	}
+
 	/**
 	 *	@action wp_ajax_load_customizer_field_group
 	 */
@@ -124,15 +123,18 @@ return $value;
 				'message' => __( 'Bad Nonce.', 'acf-customizer' ),
 			) );
 		}
+		$section = $this->get_section( $_REQUEST['section_id'] );
 
-		$field_group = acf_get_field_group( $_REQUEST['field_group_key'] );
-
-		$post_id = $_REQUEST['post_id'];
 
 		add_filter( 'acf/pre_render_fields', array( $this, 'prepare_fields' ), 10, 2 );
 
 		ob_start();
-		acf_render_fields( acf_get_fields( $field_group ), $post_id, 'div', $field_group['instruction_placement'] );
+
+		foreach ( $section['field_groups'] as $field_group_key ) {
+			$field_group = acf_get_field_group( $field_group_key );
+			acf_render_fields( acf_get_fields( $field_group ), $section['post_id'], 'div', $field_group['instruction_placement'] );
+		}
+
 		$html = ob_get_clean();
 
 		remove_filter( 'acf/pre_render_fields', array( $this, 'prepare_fields' ), 10 );
@@ -179,7 +181,7 @@ return $value;
 					$this->field_groups[ $field_group_key ] = $field_group;
 				}
 
-				$control_class = $this->get_control_class( $field_group_key, $section, false );
+				$control_class = $this->get_control_class( $section_id, false );
 
 				$this->field_group_types[] = $control_class;
 				$this->sections[ $section_id ][ 'field_groups' ][] =  $field_group_key;
@@ -236,7 +238,7 @@ return $value;
 
 			foreach( $section['field_groups'] as $field_group_key ) {
 
-				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section, $this->get_control_class( $field_group_key, $section ) );
+				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section, $this->get_control_class( $section_id ) );
 
 			}
 		}
@@ -244,52 +246,70 @@ return $value;
 
 
 	/**
-	 *
+	 *	@param array $args see function acf_add_customizer_panel
 	 */
-	public function add_panel( $panel = '' ) {
-		$panel_id = '';
-		if ( is_string( $panel ) ) {
-			$panel_id = $panel;
-			$panel = array();
+	public function add_panel( $args = '' ) {
+
+		if ( empty( $args ) ) {
+			return false;
 		}
-
-		if ( isset( $panel['id'] ) ) {
-			$panel_id = $panel['id'];
-			unset($panel['id']);
-		}
-
-		if ( empty( $panel_id ) ) {
-			$panel_id = sprintf('acf_customizer_panel_%d', count( $this->panels ) + 1 );
-		}
-
-		$panel_args = wp_parse_args( $panel, array(
-			'priority'			=> 160, // acf field priority?
-			'capability'		=> 'edit_theme_options',
-			'theme_supports'	=> array(),
-			'title'				=> __( 'ACF Panel', 'acf-customizer' ),
-			'description'		=> '',
-			'active_callback'	=> '',
-		));
-
-		$panel_args = wp_parse_args( array(
-			'type'				=> 'default',
-		), $panel );
-
-		$this->panels[ $panel_id ] = array(
-			'id'	=> $panel_id,
-			'args'	=> $panel_args,
-		);
-	}
-
-
-	public function add_section( $args ) {
 
 		if ( is_string( $args ) ) {
 			$args = array(
-				'id'	=> $args,
+				'id'	=> sanitize_key( $args ),
+				'title'	=> $args,
 			);
 		}
 
+
+		$defaults = array(
+			'priority'			=> 160, // acf field priority?
+			'capability'		=> 'edit_theme_options',
+			'theme_supports'	=> array(),
+			'title'				=> '',
+			'description'		=> '',
+			'active_callback'	=> '',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$args['type']	= 'default';
+
+		if ( empty( $args['id'] ) ) {
+			$id_base = sanitize_key( $args['title'] );
+			$args['id'] = sanitize_key( $args['title'] );
+			while ( isset( $this->sections[ $args['id'] ] ) ) {
+				$args['id'] = sprintf( $id_base . '_%d', count( $this->sections ) + 1 );
+			}
+		}
+
+
+		if ( empty( $args['id'] ) ) {
+			$args['id'] = sprintf('acf_customizer_panel_%d', count( $this->panels ) + 1 );
+		}
+
+		$this->panels[ $args['id'] ] = array(
+			'id'	=> $args['id'],
+			'args'	=> $args,
+		);
+		return $args['id'];
+	}
+
+	/**
+	 *	@param $args see function acf_add_customizer_section
+	 */
+	public function add_section( $args ) {
+
+		if ( empty( $args ) ) {
+			return false;
+		}
+
+		if ( is_string( $args ) ) {
+			$args = array(
+				'id'	=> sanitize_key( $args ),
+				'title'	=> $args,
+			);
+		}
 
 		$defaults = array(
 			'id'					=> '',
@@ -322,7 +342,11 @@ return $value;
 		$section_args['type']	= 'default';
 
 		if ( empty( $args['id'] ) ) {
-			$args['id'] = sprintf('acf_customizer_section_%d', count( $this->sections ) + 1 );
+			$id_base = sanitize_key( $args['title'] );
+			$args['id'] = sanitize_key( $args['title'] );
+			while ( isset( $this->sections[ $args['id'] ] ) ) {
+				$args['id'] = sprintf( $id_base . '_%d', count( $this->sections ) + 1 );
+			}
 		}
 
 		if ( empty( $args['post_id'] ) ) {
@@ -359,7 +383,7 @@ return $value;
 			'control_args'	=> $control_args,
 			'setting_args'	=> $setting_args,
 		);
-		return $args['id'];
+		return $args['post_id'];
 	}
 
 	public function get_section( $section_id ) {
@@ -377,11 +401,10 @@ return $value;
 		return $choices;
 	}
 
-	private function get_control_class( $field_group_key, $section, $generate = true ) {
+	private function get_control_class( $section_id, $generate = true ) {
 //		$key = $this->acf_field_group['key'];
 
-		$post_id = $section['post_id'];
-		$class = str_replace( '-', '_', sanitize_key( $field_group_key . '_' . $post_id ) );
+		$class = str_replace( '-', '_', 'acf_control_' . sanitize_key( $section_id ) );
 
 		if ( ! $generate || class_exists( $class ) ) {
 			return $class;
@@ -389,8 +412,7 @@ return $value;
 
 		$code = "class {$class} extends ACFCustomizer\Compat\ACF\FieldgroupControl {
 			public \$type = '{$class}';
-			protected \$field_group_key = '{$field_group_key}';
-			protected \$post_id = '{$post_id}';
+			protected \$section_id = '{$section_id}';
 		}";
 		eval($code);
 
