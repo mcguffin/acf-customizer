@@ -25,5 +25,8 @@
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
     "gulp-util": "*"
+  },
+  "dependencies": {
+    "jquery-serializejson": "^2.8.1"
   }
 }

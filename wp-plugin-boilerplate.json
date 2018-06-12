@@ -1,6 +1,9 @@
 {
   "modules": {
-    "admin": {},
+    "admin": {
+      "css": true,
+      "js": true
+    },
     "autoupdate": {},
     "compat": {},
     "core": {},

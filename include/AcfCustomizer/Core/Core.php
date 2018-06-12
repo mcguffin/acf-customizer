@@ -18,7 +18,6 @@ class Core extends Plugin {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 		add_action( 'plugins_loaded' , array( $this , 'init_compat' ) );
 		add_action( 'init' , array( $this , 'init' ) );
-		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
 		parent::__construct();
 	}
@@ -31,15 +30,6 @@ class Core extends Plugin {
 	public function init_compat() {
 		Compat\ACF\ACF::instance();
 	}
-
-	/**
-	 *	Load frontend styles and scripts
-	 *
-	 *	@action wp_enqueue_scripts
-	 */
-	public function wp_enqueue_style() {
-	}
-
 
 
 
@@ -59,6 +49,7 @@ class Core extends Plugin {
 	 *  @action init
 	 */
 	public function init() {
+		wp_register_script( 'jquery-serializejson', $this->get_asset_url( 'js/jquery-serializejson.js' ), array( 'jquery' ) );
 	}
 
 	/**
