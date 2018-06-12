@@ -64,17 +64,24 @@ class Customize extends	Core\Singleton {
 		if ( isset( $this->section_storage_types[ $post_id ] ) ) {
 			$data_source = array();
 			// sanitize!!!
-			if ( isset( $_REQUEST['customized'] ) ) {
+			if ( is_customize_preview() && isset( $_REQUEST['customized'] )) {
 				$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true );
 				if ( isset( $customized[ $post_id ] ) ) {
 					$data_source = $this->convert_theme_mod( $customized[ $post_id ] );
+					if ( isset( $data_source[ $field['name'] ] ) ) {
+						return $data_source[ $field['name'] ];
+					}
 				}
-			} else if ( $this->section_storage_types[ $post_id ] === 'theme_mod' ) {
+			}
+			if ( $this->section_storage_types[ $post_id ] === 'theme_mod' ) {
+
 				$data_source = get_theme_mod( $post_id );
+
+				if ( isset( $data_source[ $field['name'] ] ) ) {
+					return $data_source[ $field['name'] ];
+				}
 			}
-			if ( isset( $data_source[ $field['name'] ] ) ) {
-				$value = $data_source[ $field['name'] ];
-			}
+
 		}
 		return $value;
 	}

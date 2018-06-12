@@ -3,16 +3,22 @@ ACF-Customizer
 
 Bringing ACF Fields to the WordPress Customizer.
 
+Minimum ACF version: 5.6
+
+This plugin is still under heavy development.
+Help is appreciated.
+
+
 Todo:
 -----
  - [ ] Test with field types
-	 - [ ] Basic
-		 - [ ] Text
-		 - [ ] Text Area
-		 - [ ] Number
-		 - [ ] Range
-		 - [ ] Email
-		 - [ ] URL
+	 - [x] Basic
+		 - [x] Text
+		 - [x] Text Area
+		 - [x] Number
+		 - [x] Range
+		 - [x] Email
+		 - [x] URL
 	 - [ ] Content
 		 - [ ] Image
 		 - [ ] File
@@ -46,10 +52,12 @@ Todo:
 		 - [ ] Repeater
 		 - [ ] Flexible Content
 		 - [ ] Clone
- - [ ] More storage types:
+ - [ ] Support more storage types:
 	 - [ ] 'post' on single posts
 	 - [ ] 'term' on term archives
 	 - [ ] 'user' on user archives
+ - [ ] Source documentation
+ - [ ] Better help
 
 
 
