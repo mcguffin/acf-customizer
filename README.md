@@ -46,6 +46,10 @@ Todo:
 		 - [ ] Repeater
 		 - [ ] Flexible Content
 		 - [ ] Clone
+ - [ ] More storage types:
+	 - [ ] 'post' on single posts
+	 - [ ] 'term' on term archives
+	 - [ ] 'user' on user archives
 
 
 
