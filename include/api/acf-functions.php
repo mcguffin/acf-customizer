@@ -33,7 +33,6 @@ function acf_add_customizer_panel( $panel = '' ) {
  *	See https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
  *
  *	@param $page array(
- *		'id'					=> (string)
  *		'priority'				=> (int)
  *		'panel'					=> (string)
  *		'capability'			=> (string)
@@ -43,7 +42,7 @@ function acf_add_customizer_panel( $panel = '' ) {
  *		'active_callback'		=> (callable)
  *		'description_hidden'	=> (boolean)
  *		'storage_type'			=> (string)	option|theme_mod
- *		'post_id' 				=> (string) provide a string to save as option or theme_mod
+ *		'post_id' 				=> (string) 
  *	)
  *	@return string Section ID
  */

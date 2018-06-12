@@ -29,8 +29,6 @@ class CustomizeFieldgroup {
 	}
 	private function initialize( $manager, $control_class ) {
 
-		$this->id = $this->section['id'] . '_' . $this->acf_field_group['key'];
-
 		$manager->register_control_type( $control_class );
 
 		$post_id = $this->section['post_id'];

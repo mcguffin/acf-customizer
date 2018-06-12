@@ -234,11 +234,11 @@ class Customize extends	Core\Singleton {
 		}
 		foreach ( $this->sections as $section_id => $section ) {
 
-			$wp_section = $wp_customize->add_section( $section_id, $section['args'] );
+			$wp_section = $wp_customize->add_section( $section['post_id'], $section['args'] );
 
 			foreach( $section['field_groups'] as $field_group_key ) {
 
-				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section, $this->get_control_class( $section_id ) );
+				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section, $this->get_control_class( $section['post_id'] ) );
 
 			}
 		}
@@ -250,19 +250,19 @@ class Customize extends	Core\Singleton {
 	 */
 	public function add_panel( $args = '' ) {
 
-		if ( empty( $args ) ) {
+		if ( empty( $args ) || empty( $args['title'] ) ) {
 			return false;
 		}
 
 		if ( is_string( $args ) ) {
 			$args = array(
-				'id'	=> sanitize_key( $args ),
 				'title'	=> $args,
 			);
 		}
 
 
 		$defaults = array(
+			'id'				=> '',
 			'priority'			=> 160, // acf field priority?
 			'capability'		=> 'edit_theme_options',
 			'theme_supports'	=> array(),
@@ -300,24 +300,23 @@ class Customize extends	Core\Singleton {
 	 */
 	public function add_section( $args ) {
 
-		if ( empty( $args ) ) {
+		if ( empty( $args ) || empty($args['title']) ) {
 			return false;
 		}
 
 		if ( is_string( $args ) ) {
 			$args = array(
-				'id'	=> sanitize_key( $args ),
-				'title'	=> $args,
+				'post_id'	=> sanitize_key( $args ),
+				'title'		=> $args,
 			);
 		}
 
 		$defaults = array(
-			'id'					=> '',
 			'priority'				=> 160,
 			'panel'					=> null,
 			'capability'			=> 'edit_theme_options',
 			'theme_supports'		=> array(),
-			'title'					=> __( 'ACF Section', 'acf-customizer' ),
+			'title'					=> '',
 			'description'			=> '',
 			'active_callback'		=> '',
 			'description_hidden'	=> false,
@@ -341,16 +340,8 @@ class Customize extends	Core\Singleton {
 
 		$section_args['type']	= 'default';
 
-		if ( empty( $args['id'] ) ) {
-			$id_base = sanitize_key( $args['title'] );
-			$args['id'] = sanitize_key( $args['title'] );
-			while ( isset( $this->sections[ $args['id'] ] ) ) {
-				$args['id'] = sprintf( $id_base . '_%d', count( $this->sections ) + 1 );
-			}
-		}
-
 		if ( empty( $args['post_id'] ) ) {
-			$args['post_id'] = $args['id'];
+			$args['post_id'] = sanitize_key( $args['title'] );
 		}
 
 
@@ -363,18 +354,17 @@ class Customize extends	Core\Singleton {
 //			'sanitize_callback'		=> array( $this, 'sanitize' ),
 			'sanitize_js_callback'	=> false,
 			'dirty'					=> false,
-			'section'				=> $args['id'],
+			'section'				=> $args['post_id'],
 		);
 
 		$setting_args = array(
 			'type'			=> $args['storage_type'], // theme_mod|option
 			'setting'		=> $args['post_id'],
 			'capability'	=> $args['capability'],
-			'section'		=> $args['id'],
+			'section'		=> $args['post_id'],
 		);
 
-		$this->sections[ $args['id'] ] = array(
-			'id'			=> $args['id'],
+		$this->sections[ $args['post_id'] ] = array(
 			'post_id'		=> $args['post_id'],
 			'storage_type'	=> $args['storage_type'],
 			'field_groups'	=> array(),

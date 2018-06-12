@@ -5,8 +5,7 @@ Bringing ACF Fields to the WordPress Customizer.
 
 Todo:
 -----
- - [ ] Support more than one ACF fieldgroup per section.
- - [ ] Test with all field types
+ - [ ] Test with field types
 	 - [ ] Basic
 		 - [ ] Text
 		 - [ ] Text Area
@@ -47,7 +46,7 @@ Todo:
 		 - [ ] Repeater
 		 - [ ] Flexible Content
 		 - [ ] Clone
- - [ ]
+
 
 
 Usage
@@ -68,8 +67,6 @@ Usage
 
 
     acf_add_customizer_section( array(
-		'id'					=> 'a_section',
-			// a unique id. Dafault: sanitized title arg
 
 		'priority'				=> 1000,
 			// See https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
@@ -99,7 +96,7 @@ Usage
 			// theme_mod or option. Default: theme_mod.
 
 		'post_id' 				=> 'a_section_theme_mod',				
-			// (string|int) post_id argument passed to get_field(). Default: id
+			// (string|int) post_id argument passed to get_field(). Default: sanitized title arg
 	) );
 
 	the_field( 'field_selector', 'a_section_theme_mod' );
