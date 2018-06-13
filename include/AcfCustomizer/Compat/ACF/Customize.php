@@ -33,6 +33,11 @@ class Customize extends	Core\Singleton {
 	private $field_groups = array();
 
 	/**
+	 *	Field groups
+	 */
+	private $mce_init = array();
+
+	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
@@ -40,7 +45,10 @@ class Customize extends	Core\Singleton {
 		add_action( 'init', array( $this, 'init' ), 0xffffffff );
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
+		// must build hidden wp_editor AFTER customize_controls_print_styles
+		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
 
 		add_action( 'wp_ajax_load_customizer_field_group', array( $this, 'load_field_group' ) );
 	}
@@ -111,6 +119,16 @@ class Customize extends	Core\Singleton {
 		return $return_mod;
 	}
 
+	public function hidden_wp_editor() {
+
+		?>
+			<div class="hidden">
+				<?php wp_editor('','acf_content'); ?>
+			</div>
+		<?php
+
+	}
+
 	/**
 	 *	@action wp_ajax_load_customizer_field_group
 	 */
@@ -127,6 +145,7 @@ class Customize extends	Core\Singleton {
 
 		add_filter( 'acf/pre_render_fields', array( $this, 'prepare_fields' ), 10, 2 );
 
+
 		ob_start();
 
 		foreach ( $section['field_groups'] as $field_group_key ) {
@@ -134,13 +153,26 @@ class Customize extends	Core\Singleton {
 			acf_render_fields( acf_get_fields( $field_group ), $section['post_id'], 'div', $field_group['instruction_placement'] );
 		}
 
+		$mce_init = array();
 		$html = ob_get_clean();
 
-		remove_filter( 'acf/pre_render_fields', array( $this, 'prepare_fields' ), 10 );
+		
+		// MCE: get editor settings
+		ob_start();
+		add_action( 'before_wp_tiny_mce', array( $this, 'catch_mce_init' ) );
+		// admin_print_footer_scripts will trigger before_wp_tiny_mce at some point
+		do_action('admin_print_footer_scripts');
+		ob_end_clean();
+		// END MCE
 
 		wp_send_json_success( array(
 			'html' => $html,
+			'mce_init'	=> $this->mce_init,
 		) );
+	}
+
+	public function catch_mce_init( $settings ) {
+		$this->mce_init = $settings;
 	}
 
 	/**
@@ -149,8 +181,6 @@ class Customize extends	Core\Singleton {
 	public function prepare_fields( $fields, $post_id ) {
 
 		foreach ( array_keys( $fields ) as $i ) {
-
-//			$fields[$i] = acf_get_field( $fields[$i]['key'], $post_id );
 
 			// no prefix for numeric post_id
 			$fields[$i]['prefix'] = '';//ntval( $post_id ) ? '' : $post_id;//$this->current_storage === 'theme_mod' ? 'acf' : '';
@@ -209,7 +239,6 @@ class Customize extends	Core\Singleton {
 	 *	@action customize_register
 	 */
 	public function customize_register( $wp_customize ) {
-		$this->init();
 
 		$wp_customize->register_control_type( 'ACFCustomizer\Compat\ACF\FieldgroupControl' );
 
@@ -227,14 +256,15 @@ class Customize extends	Core\Singleton {
 			}
 		}
 	}
-
 	/**
 	 *	@action customize_controls_enqueue_scripts
 	 */
-	public function enqueue_scripts() {
-
+	public function enqueue_assets() {
 		$core = Core\Core::instance();
-		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ) );
+//
+		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
+
+
 
 		wp_enqueue_script(
 			'acf-fieldgroup-control',

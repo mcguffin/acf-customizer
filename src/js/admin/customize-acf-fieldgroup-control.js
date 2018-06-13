@@ -45,6 +45,7 @@
 			request.done( function(response) {
 				control.$wrapper.html( response.html );
 				control.$fields = control.container.find('.acf-fields > .acf-field');
+//				tinyMCEPreInit.mceInit = _.extend( tinyMCEPreInit.mceInit, response.mce_init );
 				control.init_fields();
 				/*
 				control.$inputs = control.container.find('.acf-field :input');

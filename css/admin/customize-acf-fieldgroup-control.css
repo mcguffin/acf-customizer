@@ -40,7 +40,8 @@
       #customize-theme-controls .acf-fields .acf-gallery .acf-gallery-side .acf-gallery-side-data table.form-table thead {
         display: block; }
       #customize-theme-controls .acf-fields .acf-gallery .acf-gallery-side .acf-gallery-side-data table.form-table tr.acf-field {
-        margin-top: 0; }
+        margin-top: 0;
+        margin-bottom: 6px; }
         #customize-theme-controls .acf-fields .acf-gallery .acf-gallery-side .acf-gallery-side-data table.form-table tr.acf-field td.acf-label {
           margin: 0;
           padding: 0; }
