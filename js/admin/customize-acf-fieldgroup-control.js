@@ -9,7 +9,6 @@
 
 			api.Control.prototype.initialize.call( control, id, args );
 
-			console.log(id)
 		},
 		ready: function() {
 			var control = this,
@@ -45,8 +44,11 @@
 
 			request.done( function(response) {
 				control.$wrapper.html( response.html );
-				control.$fields = control.container.find('.acf-field');
+				control.$fields = control.container.find('.acf-fields > .acf-field');
+				control.init_fields();
+				/*
 				control.$inputs = control.container.find('.acf-field :input');
+				*/
 			} );
 
 			request.fail( function( response ) {
@@ -56,6 +58,15 @@
 				request = null;
 			} );
 
+		},
+		init_fields: function() {
+
+			var control = this;
+
+			acf.do_action('ready', control.$wrapper);
+			// control.$fields.each(function(i,el){
+			// 	acf.field
+			// });
 		}
 	});
 
