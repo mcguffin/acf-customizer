@@ -21,15 +21,13 @@ class CustomizeFieldgroup {
 
 	private $control;
 
-	public function __construct( $manager, $acf_field_group, $section, $control_class ) {
+	public function __construct( $manager, $acf_field_group, $section ) {
 		$this->acf_field_group = $acf_field_group;
 		$this->section = $section;
-		$this->initialize( $manager, $control_class );
+		$this->initialize( $manager );
 
 	}
-	private function initialize( $manager, $control_class ) {
-
-		$manager->register_control_type( $control_class );
+	private function initialize( $manager ) {
 
 		$post_id = $this->section['post_id'];
 
@@ -41,7 +39,7 @@ class CustomizeFieldgroup {
 
 		$manager->add_setting( $post_id, $setting_args );
 
-		$this->control = new $control_class( $manager, $post_id, $control_args );
+		$this->control = new FieldgroupControl( $manager, $post_id, $control_args );
 
 		$manager->add_control( $this->control );
 

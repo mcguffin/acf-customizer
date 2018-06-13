@@ -188,9 +188,6 @@ class Customize extends	Core\Singleton {
 					$this->field_groups[ $field_group_key ] = $field_group;
 				}
 
-				$control_class = $this->get_control_class( $section_id, false );
-
-				$this->field_group_types[] = $control_class;
 				$this->sections[ $section_id ][ 'field_groups' ][] =  $field_group_key;
 
 				$this->section_storage_types[ $section['post_id'] ] = $section['storage_type'];
@@ -225,7 +222,6 @@ class Customize extends	Core\Singleton {
 		);
 
 		wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
-			'field_group_types'			=> $this->field_group_types,
 			'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
 		) );
 	}
@@ -236,6 +232,8 @@ class Customize extends	Core\Singleton {
 	 */
 	public function customize_register( $wp_customize ) {
 
+		$wp_customize->register_control_type( 'ACFCustomizer\Compat\ACF\FieldgroupControl' );
+
 		foreach ( $this->panels as $panel_id => $panel ) {
 			$wp_panel = $wp_customize->add_panel( $panel_id, $panel['args'] );
 		}
@@ -245,7 +243,7 @@ class Customize extends	Core\Singleton {
 
 			foreach( $section['field_groups'] as $field_group_key ) {
 
-				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section, $this->get_control_class( $section['post_id'] ) );
+				new CustomizeFieldgroup( $wp_customize, $this->field_groups[ $field_group_key ], $section );
 
 			}
 		}
@@ -397,24 +395,5 @@ class Customize extends	Core\Singleton {
 
 		return $choices;
 	}
-
-	private function get_control_class( $section_id, $generate = true ) {
-//		$key = $this->acf_field_group['key'];
-
-		$class = str_replace( '-', '_', 'acf_control_' . sanitize_key( $section_id ) );
-
-		if ( ! $generate || class_exists( $class ) ) {
-			return $class;
-		}
-
-		$code = "class {$class} extends ACFCustomizer\Compat\ACF\FieldgroupControl {
-			public \$type = '{$class}';
-			protected \$section_id = '{$section_id}';
-		}";
-		eval($code);
-
-		return $class;
-	}
-
 
 }

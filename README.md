@@ -11,39 +11,35 @@ Help is appreciated.
 
 Todo:
 -----
- - [ ] Test with field types
-	 - [x] Basic
-		 - [x] Text
-		 - [x] Text Area
-		 - [x] Number
-		 - [x] Range
-		 - [x] Email
-		 - [x] URL
+ - [ ] Fix for field types
 	 - [ ] Content
-		 - [ ] Image
-		 - [ ] File
 		 - [ ] WYSIWYG
-		 - [ ] oEmbed
+			 - Sometimes does not init
+			 - Does not save
 		 - [ ] Gallery
-	 - [ ] Choice
-		 - [ ] Select
-		 - [ ] Checkbox
-		 - [ ] Radio Button
-		 - [ ] Button Group
-		 - [ ] True / False
+			 - Does not save
+			 - No drag drop
+			 - needs restyling
 	 - [ ] Relational
-		 - [ ] Link
 		 - [ ] Post Object
+			 - Doesn't init
 		 - [ ] Page Link
+			 - Doesn't init
 		 - [ ] Relationship
-		 - [ ] Taxonomy
+			 - Doesn't init
 		 - [ ] User
+			 - Doesn't init
 	 - [ ] jQuery
 		 - [ ] Google Map
+			 - Doesn't init
 		 - [ ] Date Picker
+			 - Doesn't init
 		 - [ ] Date Time Picker
+			 - Doesn't init
 		 - [ ] Time Picker
+			 - Doesn't init
 		 - [ ] Color Picker
+			 - Doesn't init
 	 - [ ] Layout
 		 - [ ] Message
 		 - [ ] Accordion

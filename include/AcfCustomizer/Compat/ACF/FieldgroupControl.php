@@ -18,17 +18,11 @@ class FieldgroupControl extends \WP_Customize_Control {
 	 * @since 4.9.0
 	 * @var string
 	 */
-	public $type 				= ''; // acf field group key in instances
-
-	protected $section_id			= '';
-
+	public $type 				= 'acf_customizer'; // acf field group key in instances
 
 	public function content_template() {
-
 		?>
-			<div class="acf-fields" data-section-id="<?php echo $this->section_id; ?>">
-				YadaYada!
-			</div>
+			<div class="acf-fields"></div>
 		<?php
 	}
 

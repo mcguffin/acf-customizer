@@ -7,8 +7,9 @@
 
             args = opt || {};
 
-
 			api.Control.prototype.initialize.call( control, id, args );
+
+			console.log(id)
 		},
 		ready: function() {
 			var control = this,
@@ -32,7 +33,7 @@
 
 			request = wp.ajax.send( 'load_customizer_field_group', {
 				data: {
-					section_id	: this.$wrapper.attr('data-section-id'),
+					section_id	: this.id,
 					_nonce		: options.load_field_group_nonce,
 				}
 			} );
@@ -53,11 +54,11 @@
 		}
 	});
 
-
-
-	$.each( options.field_group_types, function(i,type){
-		api.controlConstructor[type] = api.AcfFieldGroupControl;
-	});
+	//
+	//
+	// $.each( options.field_group_types, function(i,type){
+	 	api.controlConstructor['acf_customizer'] = api.AcfFieldGroupControl;
+	// });
 
 
 })( wp.customize, jQuery, acf_fieldgroup_control );
