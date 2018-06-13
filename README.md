@@ -16,32 +16,31 @@ Todo:
  - [ ] Fix for field types
 	 - [ ] Content
 		 - [ ] WYSIWYG
-			 - Sometimes does not init
-			 - Does not save
+			 - [ ] Sometimes does not init
+			 - [ ] uses tinymce default init settings
 		 - [ ] Gallery
-			 - Does not save
-			 - No drag drop
-			 - needs restyling
+			 - [ ] No drag drop
+			 - [x] needs restyling
 	 - [ ] Relational
 		 - [ ] Post Object
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Page Link
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Relationship
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] User
-			 - Doesn't init
+			 - [ ] Doesn't init
 	 - [ ] jQuery
 		 - [ ] Google Map
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Date Picker
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Date Time Picker
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Time Picker
-			 - Doesn't init
+			 - [ ] Doesn't init
 		 - [ ] Color Picker
-			 - Doesn't init
+			 - [ ] Doesn't init
 	 - [ ] Layout
 		 - [ ] Message
 		 - [ ] Accordion

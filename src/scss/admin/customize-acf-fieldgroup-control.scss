@@ -1,3 +1,86 @@
 @import '../variables/variables';
 
 @import '../mixins/mixins';
+
+// #customize-sidebar-outer-content {
+// 	overflow-x:visible;
+// }
+//
+// #customize-controls {
+// 	.wp-full-overlay-sidebar-content {
+// 		overflow-x:visible;
+// 	}
+// 	.control-section {
+// 		&.open {
+// 			overflow-x:visible;
+// 		}
+// 	}
+// }
+
+#customize-theme-controls {
+	.acf-fields {
+		margin-left:-12px;
+		margin-right:-12px;
+		& > .acf-field {
+			// padding-left:0;
+			// padding-right:0;
+		}
+		.acf-gallery {
+			overflow: hidden;
+			.acf-gallery-main {
+				right:0 !important;
+				width:100%  !important;
+			}
+			&.sidebar-open {
+				.acf-gallery-side {
+					right:0;
+					left:0;
+				}
+			}
+			.acf-gallery-side {
+				&,
+				& > * {
+					width:100% !important;
+				}
+				left:100%;
+				right:auto;
+				.acf-gallery-side-data {
+					table.form-table {
+						&,
+						tr,
+						td,
+						th,
+						tbody,
+						tfoot,
+						thead {
+							display:block;
+						}
+						tr {
+							&.acf-field {
+								margin-top:0;
+								td.acf-label {
+									margin:0;
+									padding:0;
+									> label {
+										font-size:11px;
+										line-height: 1em;
+										margin:0;
+									}
+								}
+								td.acf-input {
+									margin:0;
+								}
+							}
+						}
+					}
+
+				}
+			}
+			.acf-hl {
+				& > li {
+					max-width:50%;
+				}
+			}
+		}
+	}
+}

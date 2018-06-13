@@ -21,8 +21,13 @@
 			control.loadForm();
 
 			control.container.on('change','.acf-field', function(e){
+				//*
+				var $inputs = control.container.find('.acf-field :input');
+				control.setting.set( $inputs.serializeJSON() );
+				/*/
 				console.log('change',control.$inputs.serializeJSON())
 				control.setting.set( control.$inputs.serializeJSON() );
+				//*/
 			});
 
 			api.Control.prototype.ready.apply( control, arguments );
