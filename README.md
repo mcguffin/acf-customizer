@@ -6,7 +6,7 @@ Bringing ACF Fields to the WordPress Customizer.
 Minimum ACF version: 5.6
 
 This plugin is still under heavy development.
-Help is appreciated.
+Help appreciated.
 
 
 Todo:
