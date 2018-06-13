@@ -1,5 +1,6 @@
 
 (function( api, $, options ) {
+	var current_control;
 
 	api.AcfFieldGroupControl = api.Control.extend({
 		initialize: function( id, opt ) {
@@ -21,8 +22,17 @@
 
 			control.container.on('change','.acf-field', function(e){
 				//*
+				// check valid
 				var $inputs = control.container.find('.acf-field :input');
-				control.setting.set( $inputs.serializeJSON() );
+				console.log('------change------');
+				acf.validation.errors = [];
+				$inputs.each(function(){
+					this.checkValidity();
+				});
+
+				acf.validation.busy = false;
+				current_control = control;
+				acf.validation.fetch( control.container );
 				/*/
 				console.log('change',control.$inputs.serializeJSON())
 				control.setting.set( control.$inputs.serializeJSON() );
@@ -45,7 +55,6 @@
 			request.done( function(response) {
 				control.$wrapper.html( response.html );
 				control.$fields = control.container.find('.acf-fields > .acf-field');
-//				tinyMCEPreInit.mceInit = _.extend( tinyMCEPreInit.mceInit, response.mce_init );
 				control.init_fields();
 				/*
 				control.$inputs = control.container.find('.acf-field :input');
@@ -64,17 +73,30 @@
 
 			var control = this;
 
+			// will init fields
 			acf.do_action('ready', control.$wrapper);
-			// control.$fields.each(function(i,el){
-			// 	acf.field
-			// });
 		}
 	});
+
+	acf.add_action('validation_success', function(e) {
+		var $inputs = current_control.container.find('.acf-field :input');
+		current_control.setting.set( $inputs.serializeJSON() );
+	});
+	acf.add_action('validation_failure',function(e){
+		current_control.container.find('> .acf-error-message').remove();
+	});
+	acf.add_action('invalid', function($input){
+		acf.validation.busy = true;
+	});
+
 
 	//
 	//
 	// $.each( options.field_group_types, function(i,type){
 	 	api.controlConstructor['acf_customizer'] = api.AcfFieldGroupControl;
+		api.bind('changeset-error', function(){
+			console.log(arguments)
+		});
 	// });
 
 

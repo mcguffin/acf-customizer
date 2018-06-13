@@ -156,7 +156,7 @@ class Customize extends	Core\Singleton {
 		$mce_init = array();
 		$html = ob_get_clean();
 
-		
+
 		// MCE: get editor settings
 		ob_start();
 		add_action( 'before_wp_tiny_mce', array( $this, 'catch_mce_init' ) );
@@ -381,19 +381,18 @@ class Customize extends	Core\Singleton {
 			'capability'			=> $args['capability'],
 			'theme_supports'		=> $args['theme_supports'],
 			'default' 				=> '',//isset($this->acf_field_group['default_value']) ? $this->acf_field['default_value'] : '',
-			'transport'				=> 'refresh', // 'postMessage|refresh'
-//			'validate_callback'		=> array( $this, 'validate' ),	// acf validate function
-//			'sanitize_callback'		=> array( $this, 'sanitize' ),
-			'sanitize_js_callback'	=> false,
-			'dirty'					=> false,
 			'section'				=> $args['post_id'],
 		);
 
 		$setting_args = array(
-			'type'			=> $args['storage_type'], // theme_mod|option
-			'setting'		=> $args['post_id'],
-			'capability'	=> $args['capability'],
-			'section'		=> $args['post_id'],
+			'type'					=> $args['storage_type'], // theme_mod|option
+			'setting'				=> $args['post_id'],
+			'capability'			=> $args['capability'],
+			'theme_supports'		=> $args['theme_supports'],
+			'default'				=> array(),
+			'transport'				=> 'refresh', // 'postMessage|refresh'
+			'sanitize_js_callback'	=> false,
+			'dirty'					=> false,
 		);
 
 		$this->sections[ $args['post_id'] ] = array(
@@ -406,6 +405,12 @@ class Customize extends	Core\Singleton {
 			'setting_args'	=> $setting_args,
 		);
 		return $args['post_id'];
+	}
+
+
+	public function validate( $validity, $value ) {
+
+		return $validity;
 	}
 
 	public function get_section( $section_id ) {

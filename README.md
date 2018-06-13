@@ -11,7 +11,7 @@ Help appreciated.
 
 Todo:
 -----
- - [ ] Validation
+ - [x] Validation
  - [ ] Sanitize callbacks
  - [ ] Support more storage types:
 	 - [ ] 'post' on single posts

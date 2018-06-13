@@ -45,8 +45,22 @@ class CustomizeFieldgroup {
 
 	}
 
-	public function validate( $value ) {
-		return $value;
+	public function validate( $validity, $value ) {
+
+		// We have to use acf validation here, which is heavyly depending on the browser
+
+		return $validity;
+
+		acf_reset_validation_errors();
+		acf_validate_values($value);
+
+		if ( $errs = acf_get_validation_errors() )
+
+		foreach ( $errs as $err ) {
+			$validity->add( $err['input'], $err['message'] );
+		}
+
+		return $validity;
 	}
 
 	public function sanitize( $value ) {
