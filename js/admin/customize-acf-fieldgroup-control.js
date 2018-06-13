@@ -1,5 +1,7 @@
 
 (function( api, $, options ) {
+
+	// store for acf's static validation callbacks
 	var current_control;
 
 	api.AcfFieldGroupControl = api.Control.extend({
@@ -18,7 +20,7 @@
 			this.$wrapper = control.container.find('.acf-fields').first();
 			acf.do_action( 'append', control.container );
 
-			control.loadForm();
+			control.load_form();
 
 			control.container.on('change','.acf-field', function(e){
 				//*
@@ -41,7 +43,7 @@
 
 			api.Control.prototype.ready.apply( control, arguments );
 		},
-		loadForm: function() {
+		load_form: function() {
 
 			var control = this;
 
@@ -83,6 +85,7 @@
 		current_control.setting.set( $inputs.serializeJSON() );
 	});
 	acf.add_action('validation_failure',function(e){
+		// need to remove acf message because it displays a wrong number of invalid fields
 		current_control.container.find('> .acf-error-message').remove();
 	});
 	acf.add_action('invalid', function($input){

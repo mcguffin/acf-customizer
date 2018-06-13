@@ -17,9 +17,9 @@ Todo:
 	 - [ ] 'post' on single posts
 	 - [ ] 'term' on term archives
 	 - [ ] 'user' on user archives
- - [ ] MCE: make script loading conditional
+ - [ ] MCE: make script loading conditional (performance)
  - [ ] Source documentation
- - [ ] Better help
+ - [ ] User documentation
 
 
 
