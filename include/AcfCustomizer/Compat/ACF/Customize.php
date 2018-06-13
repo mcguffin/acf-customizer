@@ -33,21 +33,12 @@ class Customize extends	Core\Singleton {
 	private $field_groups = array();
 
 	/**
-	 *	Field group classnames
-	 *	Used in JS for registering customize-control constructors
-	 */
-	private $field_group_types = array();
-
-	/**
-	 *	?
-	 */
-	private $section_field_groups = array();
-
-	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
+
 		add_action( 'init', array( $this, 'init' ), 0xffffffff );
+
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -124,6 +115,7 @@ class Customize extends	Core\Singleton {
 	 *	@action wp_ajax_load_customizer_field_group
 	 */
 	public function load_field_group() {
+
 		// check nonce
 		if ( ! wp_verify_nonce($_REQUEST['_nonce'],'load-field-group') ) {
 			wp_send_json_error( array(
@@ -167,7 +159,9 @@ class Customize extends	Core\Singleton {
 		return $fields;
 	}
 
-
+	/**
+	 *	@action init
+	 */
 	public function init() {
 
 
@@ -210,27 +204,12 @@ class Customize extends	Core\Singleton {
 	}
 
 
-	public function enqueue_scripts() {
-
-		$core = Core\Core::instance();
-		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ) );
-
-		wp_enqueue_script(
-			'acf-fieldgroup-control',
-			$core->get_asset_url( 'js/admin/customize-acf-fieldgroup-control.js' ),
-			array( 'jquery', 'jquery-serializejson', 'customize-controls' )
-		);
-
-		wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
-			'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
-		) );
-	}
-
 
 	/**
 	 *	@action customize_register
 	 */
 	public function customize_register( $wp_customize ) {
+		$this->init();
 
 		$wp_customize->register_control_type( 'ACFCustomizer\Compat\ACF\FieldgroupControl' );
 
@@ -249,6 +228,24 @@ class Customize extends	Core\Singleton {
 		}
 	}
 
+	/**
+	 *	@action customize_controls_enqueue_scripts
+	 */
+	public function enqueue_scripts() {
+
+		$core = Core\Core::instance();
+		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ) );
+
+		wp_enqueue_script(
+			'acf-fieldgroup-control',
+			$core->get_asset_url( 'js/admin/customize-acf-fieldgroup-control.js' ),
+			array( 'jquery', 'jquery-serializejson', 'customize-controls' )
+		);
+
+		wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
+			'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
+		) );
+	}
 
 	/**
 	 *	@param array $args see function acf_add_customizer_panel

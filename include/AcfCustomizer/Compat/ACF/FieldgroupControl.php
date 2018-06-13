@@ -20,6 +20,18 @@ class FieldgroupControl extends \WP_Customize_Control {
 	 */
 	public $type 				= 'acf_customizer'; // acf field group key in instances
 
+	/**
+	 *	@inheritdoc
+	 */
+	protected function render_content() {
+		return;
+		if(is_array($this->value())){error_log(var_export($this->value(),true));}
+		return parent::render_content();
+	}
+
+	/**
+	 *	@inheritdoc
+	 */
 	public function content_template() {
 		?>
 			<div class="acf-fields"></div>

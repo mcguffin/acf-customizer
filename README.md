@@ -11,6 +11,8 @@ Help is appreciated.
 
 Todo:
 -----
+ - [ ] Validation
+ - [ ] Sanitize callbacks
  - [ ] Fix for field types
 	 - [ ] Content
 		 - [ ] WYSIWYG
