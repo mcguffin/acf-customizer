@@ -37,6 +37,8 @@ class Customize extends	Core\Singleton {
 	 */
 	private $mce_init = array();
 
+	private $_converted_theme_mod = null;
+
 	/**
 	 *	@inheritdoc
 	 */
@@ -51,38 +53,82 @@ class Customize extends	Core\Singleton {
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
 
 		add_action( 'wp_ajax_load_customizer_field_group', array( $this, 'load_field_group' ) );
+
+	}
+
+
+	/**
+	 *	Either previewed converted theme mod from request or actual theme mod from db
+	 */
+	private function get_current_theme_mod( $post_id ) {
+		// if ( is_customize_preview() && isset( $_REQUEST['customized'] ) ) {
+		// 	// can be theme mod or option...
+		// 	$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true );
+		// 	if ( isset( $customized[ $post_id ] ) ) {
+		// 		/*
+		// 		$data_source = $this->convert_theme_mod( $customized[ $post_id ] );
+		// 		/*/
+		// 		$data_source = $customized[ $post_id ];
+		// 		//*/
+		// 		if (  empty( $data_source ) ) {
+		// 			return $data_source;
+		// 		}
+		// 	}
+		// }
+		return get_theme_mod( $post_id );
 	}
 
 	/**
-	 *	Handle custimizer preview
+	 *	Handle theme mod values
 	 *
 	 *	@filter acf/load_value
 	 */
-	public function acf_load_value( $value, $post_id, $field ) {
+	public function acf_pre_load_value( $value, $post_id, $field ) {
 
 		if ( isset( $this->section_storage_types[ $post_id ] ) ) {
-			$data_source = array();
-			// sanitize!!!
-			if ( is_customize_preview() && isset( $_REQUEST['customized'] )) {
-				$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true );
-				if ( isset( $customized[ $post_id ] ) ) {
-					$data_source = $this->convert_theme_mod( $customized[ $post_id ] );
-					if ( isset( $data_source[ $field['name'] ] ) ) {
-						return $data_source[ $field['name'] ];
-					}
-				}
-			}
 			if ( $this->section_storage_types[ $post_id ] === 'theme_mod' ) {
-
-				$data_source = get_theme_mod( $post_id );
-
+				$data_source = $this->get_current_theme_mod( $post_id );
 				if ( isset( $data_source[ $field['name'] ] ) ) {
+					error_log('pre load value: '.$field['name'].' '.var_export($data_source[$field['name']],true));
 					return $data_source[ $field['name'] ];
 				}
 			}
-
 		}
 		return $value;
+	}
+
+	/**
+	 *	@filter pre_set_theme_mod_{$name}
+	 */
+	public function pre_set_theme_mod( $value, $old_value ) {
+		$post_id = substr( current_action(), strlen('pre_set_theme_mod_') );//str_replace( , '',  );
+		$value = $this->convert_theme_mod( $value );
+		return $value;
+	}
+
+
+
+	public function convert_theme_mod( $mod ) {
+		$this->_converted_theme_mod = array();
+		add_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10, 5 );
+		acf_save_post( 1, $mod );
+		remove_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10 );
+
+		$return = $this->_converted_theme_mod + array();
+		$this->_converted_theme_mod = null;
+		return $return;
+	}
+
+	/**
+	 *	Store meta key and value in tmp var
+	 *
+	 *	@filter update_post_metadata
+	 *	@return bool prevents wp from actually saving this in db
+	 */
+	public function convert_theme_mod_update_cb( $null, $object_id, $meta_key, $meta_value, $prev_value ) {
+		$this->_converted_theme_mod[$meta_key] = $meta_value;
+//		error_log( "$option: ".var_export($value,true) );
+		return true;
 	}
 
 	/**
@@ -90,34 +136,52 @@ class Customize extends	Core\Singleton {
 	 */
 	public function acf_save_option( $value, $option, $old_value ) {
 
-		if ( isset( $this->section_storage_types[ $option ] ) && $this->section_storage_types[ $option ] === 'option' ) {
-			acf_save_post( $option, $value );
-			return $old_value;
+		if ( isset( $this->section_storage_types[ $option ] ) ) {
+			if ( $this->section_storage_types[ $option ] === 'option' ) {
+				acf_save_post( $option, $value );
+				// prevent posted data from being saved!
+				return $old_value;
+			}
+			// else if post, term
 		}
 
 		return $value;
 	}
 
-
 	/**
 	 *	@filter theme_mod_{$type}
 	 */
-	public function convert_theme_mod( $mod ) {
-		if ( ! is_array( $mod ) ) {
-			return $mod;
+	public function get_theme_mod( $mod ) {
+		if ( is_customize_preview() && isset( $_REQUEST['customized'] ) ) {
+			$post_id = substr( current_action(), strlen('theme_mod_') );
+			if ( $new_mod = $this->get_currently_customizing( $post_id ) ) {
+				return $this->convert_theme_mod( $new_mod );
+			}
 		}
-
-		$return_mod = array();
-
-		foreach ( array_keys($mod) as $field_key ) {
-			$field = acf_get_field( $field_key );
-			// save like in options|postmeta|whereever|...
-			$return_mod[ $field['name'] ] = $mod[ $field_key ];
-			$return_mod[ '_' . $field['name'] ] = $field_key;
-		}
-
-		return $return_mod;
+		return $mod;
 	}
+	/**
+	 *	Whether $theme_mod is currently being customized
+	 *
+	 *	@return bool
+	 */
+	private function get_currently_customizing( $theme_mod ) {
+		if ( ! is_customize_preview() ) {
+			return false;
+		}
+		if ( ! isset( $_REQUEST['customized'] ) ) {
+			return false;
+		}
+		$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true );
+
+		if ( ! isset( $customized[ $theme_mod ] ) ) {
+			return false;
+		}
+		error_log('Customized Raw: '.var_export($_REQUEST['customized'],true));
+		error_log('Customized: '.var_export($customized,true));
+		return $customized[ $theme_mod ];
+	}
+
 
 	public function hidden_wp_editor() {
 
@@ -218,8 +282,8 @@ class Customize extends	Core\Singleton {
 
 				if ( 'theme_mod' === $section['storage_type'] ) {
 
-					add_filter( 'theme_mod_' . $section['post_id'], array( $this, 'convert_theme_mod' ), 0xffffffff );
-
+					add_filter( 'theme_mod_' . $section['post_id'], array( $this, 'get_theme_mod' ), 0xffffffff );
+					add_filter( 'pre_set_theme_mod_' . $section['post_id'], array( $this, 'pre_set_theme_mod' ), 0xffffffff, 2 );
 				}
 			}
 		}
@@ -229,7 +293,8 @@ class Customize extends	Core\Singleton {
 			add_action( 'pre_update_option', array( $this, 'acf_save_option' ), 10, 3 );
 		}
 
-		add_filter( 'acf/load_value', array( $this, 'acf_load_value'), 10, 3 );
+		//add_filter( 'acf/load_value', array( $this, 'acf_load_value'), 10, 3 );
+		add_filter( 'acf/load_value', array( $this, 'acf_pre_load_value' ), 10, 3 );
 
 	}
 

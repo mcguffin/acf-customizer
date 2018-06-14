@@ -14,10 +14,14 @@ Todo:
  - [x] Validation
  - [ ] Test Fields
 	 - [ ] Repeater
-		 - [ ] Doesn't display values if storage is theme_mod > flatten data, like in options table
-		 - [ ] Test rows loop with theme_mod data
+		 - [x] Doesn't display values if storage is theme_mod > flatten data, like in options table
+		 - [x] Test rows loop with theme_mod data
 		 - [ ] Maybe: auto-convert row layout to block
-	 - [ ] Layout
+		 - [ ] Does not save order
+	 - [ ] Flexible Content
+	 - [ ] Tab
+	 - [ ] Accordion
+	 - [ ] Group
  - [ ] Make theme mod defaults equal to acf field defaults
  - [ ] Sanitize callbacks
  - [ ] Support more storage types:

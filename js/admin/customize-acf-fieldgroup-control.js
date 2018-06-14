@@ -77,12 +77,45 @@
 
 			// will init fields
 			acf.do_action('ready', control.$wrapper);
+		},
+		updateValues: function() {
+			var control = this,
+				$inputs = control.container.find('.acf-field :input'),
+				value;
+
+			// prefixing numeric keys with a `_`
+			// repeater field names have numeric keys, which get casted to int upon serialization.
+			// As a result the sorting information is lost.
+			$inputs.each(function(){
+				var name = $(this).attr('name');
+				if ( ! name ) {
+					return;
+				}
+				$(this).data('prev-name', name );
+				$(this).attr('name',name.replace(/\[([0-9]+)\]/g,'\[_$1\]'));
+			});
+
+			value = $inputs.serializeJSON({
+				useIntKeysAsArrayIndex:false
+			})
+
+			// restoring field names to previous state
+			$inputs.each(function(){
+				$(this).attr( 'name', $(this).data('prev-name') );
+			});
+			// update values.
+			current_control.setting.set( value );
 		}
+
 	});
 
 	acf.add_action('validation_success', function(e) {
-		var $inputs = current_control.container.find('.acf-field :input');
-		current_control.setting.set( $inputs.serializeJSON() );
+		//*
+
+		current_control.updateValues();
+		/*/
+		current_control.setting.set( acf.serialize( current_control.container ) );
+		//*/
 	});
 	acf.add_action('validation_failure',function(e){
 		// need to remove acf message because it displays a wrong number of invalid fields
