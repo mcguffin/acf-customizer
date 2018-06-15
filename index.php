@@ -49,16 +49,3 @@ define( 'ACF_CUSTOMIZER_PLUGIN', pathinfo( ACF_CUSTOMIZER_DIRECTORY, PATHINFO_FI
 require_once ACF_CUSTOMIZER_DIRECTORY . 'include/autoload.php';
 
 Core\Core::instance();
-
-
-
-
-
-
-
-
-if ( is_admin() || defined( 'DOING_AJAX' ) ) {
-
-	Admin\Admin::instance();
-
-}

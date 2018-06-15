@@ -23,11 +23,11 @@ Todo:
  - [ ] Make theme mod defaults equal to acf field defaults
  - [ ] Sanitize callbacks?
  - [ ] Support more storage types:
-	 - [ ] 'post' on single posts
+	 - [x] 'post' on single posts
 	 - [ ] 'term' on term archives
 	 - [ ] 'user' on user archives
- - [ ] MCE: make script loading conditional (performance)
- - [ ] Refactor `Compat\ACF\Customize.php`
+ - [ ] MCE: make script loading conditional (performance!)
+ - [x] Refactor `Compat\ACF\Customize.php`
  - [ ] Source documentation
  - [ ] User documentation
 
