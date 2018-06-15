@@ -5,7 +5,7 @@ Plugin Name: ACF Customizer
 Plugin URI: http://wordpress.org/
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
-Version: 0.0.1
+Version: 0.0.2
 Author URI:
 License: GPL3
 Text Domain: acf-customizer
