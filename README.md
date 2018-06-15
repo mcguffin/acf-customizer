@@ -14,21 +14,20 @@ Todo:
  - [x] Validation
  - [ ] Test Fields
 	 - [ ] Repeater
-		 - [x] Doesn't display values if storage is theme_mod > flatten data, like in options table
-		 - [x] Test rows loop with theme_mod data
-		 - [ ] Maybe: auto-convert row layout to block
-		 - [ ] Does not save order
+		 - [ ] Trigger change at sort
 	 - [ ] Flexible Content
 	 - [ ] Tab
 	 - [ ] Accordion
 	 - [ ] Group
+ - [ ] Add field groups to panels
  - [ ] Make theme mod defaults equal to acf field defaults
- - [ ] Sanitize callbacks
+ - [ ] Sanitize callbacks?
  - [ ] Support more storage types:
 	 - [ ] 'post' on single posts
 	 - [ ] 'term' on term archives
 	 - [ ] 'user' on user archives
  - [ ] MCE: make script loading conditional (performance)
+ - [ ] Refactor `Compat\ACF\Customize.php`
  - [ ] Source documentation
  - [ ] User documentation
 

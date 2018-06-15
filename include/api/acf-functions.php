@@ -41,8 +41,8 @@ function acf_add_customizer_panel( $panel = '' ) {
  *		'description'			=> (string)
  *		'active_callback'		=> (callable)
  *		'description_hidden'	=> (boolean)
- *		'storage_type'			=> (string)	option|theme_mod
- *		'post_id' 				=> (string) 
+ *		'storage_type'			=> (string)	option|theme_mod|post|term
+ *		'post_id' 				=> (string)
  *	)
  *	@return string Section ID
  */

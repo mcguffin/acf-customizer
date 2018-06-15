@@ -16,6 +16,8 @@ class ACF extends Core\PluginComponent {
 
 	protected function __construct() {
 
+		Customize::instance();
+
 		// need to figure out which version ist lowest...
 		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) ) {
 			require_once ACF_CUSTOMIZER_DIRECTORY . '/include/api/acf-functions.php';

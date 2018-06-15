@@ -61,6 +61,7 @@ gulp.task('js-admin', function() {
 			'jquery-serializejson.js'
 		),
 		do_js('admin/customize-acf-fieldgroup-control'),
+		do_js('admin/customize-acf-fieldgroup-preview'),
     ];
 
 });
