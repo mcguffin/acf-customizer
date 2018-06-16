@@ -2,12 +2,13 @@
 
 /*
 Plugin Name: ACF Customizer
-Plugin URI: http://wordpress.org/
+Plugin URI: https://github.com/mcguffin/acf-customizer
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
 Version: 0.0.3
 Author URI:
 License: GPL3
+Github Repository: mcguffin/acf-customizer
 Text Domain: acf-customizer
 Domain Path: /languages/
 */
@@ -49,3 +50,12 @@ define( 'ACF_CUSTOMIZER_PLUGIN', pathinfo( ACF_CUSTOMIZER_DIRECTORY, PATHINFO_FI
 require_once ACF_CUSTOMIZER_DIRECTORY . 'include/autoload.php';
 
 Core\Core::instance();
+
+
+if ( is_admin() || defined( 'DOING_AJAX' ) ) {
+	// init auto upgrader
+	if ( ! file_exists( ACF_CUSTOMIZER_DIRECTORY . '/.git/' ) ) {
+		AutoUpdate\AutoUpdateGithub::instance();
+	}
+
+}
