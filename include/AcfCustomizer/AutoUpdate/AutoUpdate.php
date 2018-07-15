@@ -59,7 +59,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	 */
 	public function plugins_api( $res, $action, $args ) {
 		$slug = basename(ACF_CUSTOMIZER_DIRECTORY);
-		if ( $_REQUEST['plugin'] === $slug ) {
+		if ( isset($_REQUEST['plugin']) && $_REQUEST['plugin'] === $slug ) {
 			/*
 
 			'Name'        => 'Plugin Name',
