@@ -21,6 +21,19 @@ function acf_get_customizer_sections() {
 }
 
 
+/**
+ *	Get registered sections
+ *
+ *	@return array
+ */
+function acf_get_customizer_section( $section_id ) {
+	$sections = ACFCustomizer\Compat\ACF\Customize::instance()->get_sections();
+	if ( ! isset( $sections[ $section_id ] ) ) {
+		return false;
+	}
+	return $sections[ $section_id ];
+}
+
 
 /**
  *	Add Panel
