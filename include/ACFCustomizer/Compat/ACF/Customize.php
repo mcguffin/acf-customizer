@@ -112,7 +112,7 @@ class Customize extends	Core\Singleton {
 			$field_groups = acf_get_field_groups( array(
 				'customizer' => $section_id,
 			) );
-
+//vaR_dump($section_id,$field_groups);
 			foreach( $field_groups as $field_group ) {
 
 				$field_group_key = $field_group['key'];
@@ -155,7 +155,7 @@ class Customize extends	Core\Singleton {
 
 			$post_id = $section['post_id'];
 
-			$wp_section = new FieldgroupSection( $wp_customize, $post_id, $section['args'] );
+			$wp_section = new FieldgroupSection( $wp_customize, $section_id, $section['args'] );
 
 			$wp_customize->add_section( $wp_section );
 
@@ -164,14 +164,14 @@ class Customize extends	Core\Singleton {
 //			foreach ( $section['field_groups'] as $field_group_key ) {
 
 			//*
-			$wp_setting = new FieldgroupSetting( $wp_customize, $post_id, $section['setting_args'] );
+			$wp_setting = new FieldgroupSetting( $wp_customize, $section_id, $section['setting_args'] );
 
 			$wp_customize->add_setting( $wp_setting );
 			/*/
 			$manager->add_setting( $post_id, $setting_args );
 			//*/
 
-			$wp_control = new FieldgroupControl( $wp_customize, $post_id, $section['control_args'] );
+			$wp_control = new FieldgroupControl( $wp_customize, $section_id, $section['control_args'] );
 
 			$wp_customize->add_control( $wp_control );
 
@@ -225,11 +225,17 @@ class Customize extends	Core\Singleton {
 		$args['type']	= 'default';
 
 		if ( empty( $args['id'] ) ) {
+
 			$id_base = sanitize_key( $args['title'] );
+
 			$args['id'] = sanitize_key( $args['title'] );
+
 			while ( isset( $this->sections[ $args['id'] ] ) ) {
+
 				$args['id'] = sprintf( $id_base . '_%d', count( $this->sections ) + 1 );
+
 			}
+
 		}
 
 
@@ -292,20 +298,25 @@ class Customize extends	Core\Singleton {
 		if ( empty( $args['post_id'] ) ) {
 			$args['post_id'] = sanitize_key( $args['title'] );
 		}
-		//
+
+		$section_id = $args['post_id'];
+		$i = 0;
+		while ( isset( $this->sections[ $section_id ] ) ) {
+			$section_id = sprintf('%s_%d', $args['post_id'], ++$i );
+		}
 
 
 		$control_args = array(
 			'capability'			=> $args['capability'],
 			'theme_supports'		=> $args['theme_supports'],
 			'default' 				=> '',//isset($this->acf_field_group['default_value']) ? $this->acf_field['default_value'] : '',
-			'section'				=> $args['post_id'],
+			'section'				=> $section_id,
 			'storage_type'			=> $args['storage_type'],
 		);
 
 		$setting_args = array(
 			'type'					=> $args['storage_type'] === 'theme_mod' ? 'theme_mod' : 'option', // theme_mod|option
-			'setting'				=> $args['post_id'],
+			'setting'				=> $section_id,
 			'capability'			=> $args['capability'],
 			'theme_supports'		=> $args['theme_supports'],
 			'default'				=> array(),
@@ -315,7 +326,8 @@ class Customize extends	Core\Singleton {
 			'storage_type'			=> $args['storage_type'],
 		);
 
-		$this->sections[ $args['post_id'] ] = array(
+		$this->sections[ $section_id ] = array(
+			'id'			=> $section_id,
 			'post_id'		=> $args['post_id'],
 			'storage_type'	=> $args['storage_type'],
 			'field_groups'	=> array(),
@@ -324,7 +336,7 @@ class Customize extends	Core\Singleton {
 			'control_args'	=> $control_args,
 			'setting_args'	=> $setting_args,
 		);
-		return $args['post_id'];
+		return $section_id;
 	}
 
 	/**

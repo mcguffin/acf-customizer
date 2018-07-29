@@ -58,7 +58,7 @@ class FieldgroupSection extends \WP_Customize_Section {
 	 *	@return mixed
 	 */
 	public function get_context( $which = null ) {
-		if ( is_null($this->context) ) {
+		if ( is_null( $this->context ) ) {
 			return false;
 		}
 		if ( is_null( $which ) ) {

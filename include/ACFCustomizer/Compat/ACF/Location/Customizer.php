@@ -59,7 +59,6 @@ class Customizer extends \acf_location {
 		// bail early if not widget
 		if( !$customizer ) return false;
 
-
         // return
         return $this->compare( $customizer, $rule );
 
@@ -85,17 +84,6 @@ class Customizer extends \acf_location {
 
 		$choices = CompatACF\Customize::instance()->get_choices();
 
-		return $choices;
-		// vars
-		$choices = array(
-			'all'	=> __('All', 'acf'),
-			'many'	=> __('Many', 'acf'),
-			'some'	=> __('Some', 'acf'),
-			'few'	=> __('Few', 'acf'),
-		);
-
-
-		// return
 		return $choices;
 
 	}
