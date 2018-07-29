@@ -187,13 +187,7 @@ class Customize extends	Core\Singleton {
 //
 		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
 
-
-
-		wp_enqueue_script(
-			'acf-fieldgroup-control',
-			$core->get_asset_url( 'js/admin/customize-acf-fieldgroup-control.js' ),
-			array( 'jquery', 'jquery-serializejson', 'customize-controls' )
-		);
+		wp_enqueue_script( 'acf-fieldgroup-control' );
 
 		wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
 			'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),

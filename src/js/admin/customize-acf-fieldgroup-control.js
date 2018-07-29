@@ -57,7 +57,15 @@
 
 				acf.validation.busy = false;
 				current_control = control;
-				acf.validation.fetch( control.container );
+				acf.validation.fetch( {
+					form: control.container,
+					success:function($form) {
+						// allow for submit
+						// acf.validation.ignore = 1;
+						// $button.trigger('click');
+					},
+
+				} );
 				/*/
 				console.log('change',control.$inputs.serializeJSON())
 				control.setting.set( control.$inputs.serializeJSON() );

@@ -49,7 +49,28 @@ class Core extends Plugin {
 	 *  @action init
 	 */
 	public function init() {
-		wp_register_script( 'jquery-serializejson', $this->get_asset_url( 'js/jquery-serializejson.js' ), array( 'jquery' ) );
+
+		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.min' : '';
+
+		if ( version_compare( acf()->version,'5.7','lt' ) ) {
+			$control_src = "js/legacy/5.6/admin/customize-acf-fieldgroup-control{$suffix}.js";
+		} else {
+			$control_src = "js/admin/customize-acf-fieldgroup-control{$suffix}.js";
+		}
+
+		wp_register_script( 'jquery-serializejson', $this->get_asset_url( "js/jquery-serializejson{$suffix}.js" ), array( 'jquery' ) );
+
+		wp_register_script(
+			'acf-fieldgroup-control',
+			$this->get_asset_url( $control_src ),
+			array( 'jquery', 'jquery-serializejson', 'customize-controls' )
+		);
+
+		wp_register_script(
+			'acf-fieldgroup-preview',
+			$this->get_asset_url( "js/admin/customize-acf-fieldgroup-preview{$suffix}.js" ),
+			array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
+		);
 	}
 
 	/**

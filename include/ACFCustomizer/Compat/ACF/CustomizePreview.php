@@ -70,14 +70,13 @@ class CustomizePreview extends Core\Singleton {
 
 	}
 
-
+	/**
+	 *	@action wp_enueue_scripts
+	 */
 	public function enqueue_preview() {
-		$core = Core\Core::instance();
-		wp_enqueue_script(
-			'acf-fieldgroup-preview',
-			$core->get_asset_url( 'js/admin/customize-acf-fieldgroup-preview.js' ),
-			array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
-		);
+
+		wp_enqueue_script( 'acf-fieldgroup-preview' );
+
 	}
 
 	public function wp_foot() {
