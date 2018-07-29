@@ -1,6 +1,12 @@
 <?php
 
 
+
+
+function acf_customize() {
+	return ACFCustomizer\Compat\ACF\Customize::instance();
+}
+
 /**
  *	Add Panel
  *
@@ -23,7 +29,7 @@ function acf_add_customizer_panel( $panel = '' ) {
 		_doing_it_wrong( __FUNCTION__, sprintf('%s must not be called after the init hook',__FUNCTION__), '0.0.1' );
 	}
 
-	return ACFCustomizer\Compat\ACF\Customize::instance()->add_panel( $panel );
+	return acf_customize()->add_panel( $panel );
 
 }
 
@@ -52,6 +58,6 @@ function acf_add_customizer_section( $section = '' ) {
 		_doing_it_wrong( __FUNCTION__, sprintf('%s must not be called after the init hook',__FUNCTION__), '0.0.1' );
 	}
 
-	return ACFCustomizer\Compat\ACF\Customize::instance()->add_section( $section );
+	return acf_customize()->add_section( $section );
 
 }
