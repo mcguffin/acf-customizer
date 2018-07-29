@@ -55,7 +55,7 @@ Core\Core::instance();
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	// init auto upgrader
 	if ( ! file_exists( ACF_CUSTOMIZER_DIRECTORY . '/.git/' ) ) {
-		AutoUpdate\AutoUpdateGithub::instance();
+		AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
 	}
 
 }
