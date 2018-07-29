@@ -11,72 +11,44 @@ use ACFCustomizer\Core;
 
 abstract class AutoUpdate extends Core\Singleton {
 
-
 	/**
 	 *	@var array Current release info
 	 */
 	protected $release_info = null;
 
 	/**
-	 *	@inheritdoc
+	 *	@var string absolute path to plugin file
 	 */
-	protected function __construct() {
+	protected $file = null;
+
+	/**
+	 *	@var string absolute path to plugin directory
+	 */
+	protected $directory = null;
+
+	/**
+	 *	@param string $plugin_file absolute path to plugin file
+	 */
+	public function init( $plugin_file ) {
+
+		$this->file = $plugin_file;
+		$this->directory = plugin_dir_path( $plugin_file );
 
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pre_set_transient' ), 10, 3 );
 
 		add_filter( 'upgrader_source_selection', array( $this, 'source_selection' ), 10, 4 );
-
-		add_action( 'upgrader_process_complete', array( $this, 'upgrade_completed' ), 10, 2 );
-
 		add_filter( 'plugins_api', array( $this, 'plugins_api' ), 10, 3 );
-
 	}
-
-	/**
-	 *	@action upgrader_process_complete
-	 */
-	public function upgrade_completed( $wp_upgrader, $hook_extra ) {
-
-		$plugin = plugin_basename( ACF_CUSTOMIZER_FILE );
-
-		if ( $hook_extra['action'] === 'update' && $hook_extra['type'] === 'plugin' && in_array( $plugin, $hook_extra['plugins'] ) ) {
-
-			$plugin_info = get_plugin_data( ACF_CUSTOMIZER_FILE );
-
-			$old_version = get_option( 'acf-customizer_version' );
-			$new_version = $plugin_info['Version'];
-
-			do_action( 'acf-customizer_upgraded', $new_version, $old_version );
-
-		//	update_option( 'acf-customizer_version', $plugin_info['Version'] );
-
-		}
-	}
-
 
 	/**
 	 *	@filter plugin_api
 	 */
 	public function plugins_api( $res, $action, $args ) {
-		$slug = basename(ACF_CUSTOMIZER_DIRECTORY);
+		$slug = basename($this->directory);
+
 		if ( isset($_REQUEST['plugin']) && $_REQUEST['plugin'] === $slug ) {
-			/*
 
-			'Name'        => 'Plugin Name',
-			'PluginURI'   => 'Plugin URI',
-			'Version'     => 'Version',
-			'Description' => 'Description',
-			'Author'      => 'Author',
-			'AuthorURI'   => 'Author URI',
-			'TextDomain'  => 'Text Domain',
-			'DomainPath'  => 'Domain Path',
-			'Network'     => 'Network',
-
-
-			*/
-
-
-			$plugin_info	= get_plugin_data( ACF_CUSTOMIZER_FILE );
+			$plugin_info	= get_plugin_data( $this->file );
 			$release_info	= $this->get_release_info();
 
 			$plugin_api = array(
@@ -106,7 +78,7 @@ abstract class AutoUpdate extends Core\Singleton {
 //				'donate_link'				=> '',
 				'banners'					=> $this->get_plugin_banners(),
 				'external'					=> true,
-			) + $release_info;
+			) + (array) $release_info;
 
 			return (object) $plugin_api;
 		}
@@ -117,12 +89,11 @@ abstract class AutoUpdate extends Core\Singleton {
 	 *	@filter upgrader_source_selection
 	 */
 	public function source_selection( $source, $remote_source, $wp_upgrader, $hook_extra ) {
-		if ( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === plugin_basename( ACF_CUSTOMIZER_FILE ) ) {
+		if ( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === plugin_basename( $this->file ) ) {
 			// $source: filepath
 			// $remote_source download dir
 			$source_dirname = pathinfo( $source, PATHINFO_FILENAME);
 			$plugin_dirname = pathinfo( $hook_extra['plugin'], PATHINFO_DIRNAME );
-
 			if ( $source_dirname !== $plugin_dirname ) {
 
 				$new_source = pathinfo( $remote_source, PATHINFO_DIRNAME )  . '/' . $plugin_dirname;
@@ -164,23 +135,23 @@ abstract class AutoUpdate extends Core\Singleton {
 
 		// get own version
 		if ( $release_info = $this->get_release_info() ) {
-			$plugin 		= plugin_basename( ACF_CUSTOMIZER_FILE );
-			$slug			= basename(ACF_CUSTOMIZER_DIRECTORY);
-			$plugin_info	= get_plugin_data( ACF_CUSTOMIZER_FILE );
+			$plugin 		= plugin_basename( $this->file );
+			$slug			= basename($this->directory);
+			$plugin_info	= get_plugin_data( $this->file );
 
-			if ( version_compare( $release_info['version'], $plugin_info['Version'] , '>' ) ) {
+			if ( version_compare( $release_info->version, $plugin_info['Version'] , '>' ) ) {
 
 				$transient->response[ $plugin ] = (object) array(
-					'id'			=> $release_info['id'],
+					'id'			=> $release_info->id,
 					'slug'			=> $slug,
 					'plugin'		=> $plugin,
-					'new_version'	=> $release_info['version'],
+					'new_version'	=> $release_info->version,
 					'url'			=> $plugin_info['PluginURI'],
-					'package'		=> $release_info['download_link'],
+					'package'		=> $release_info->download_link,
 					'icons'			=> array(),
 					'banners'		=> array(),
 					'banners_rtl'	=> array(),
-					'tested'		=> $release_info['tested'],
+					'tested'		=> $release_info->tested,
 					'compatibility'	=> (object) array(),
 				);
 				if ( isset( $transient->no_update ) && isset( $transient->no_update[$plugin] ) ) {
@@ -207,7 +178,7 @@ abstract class AutoUpdate extends Core\Singleton {
 			$this->release_info = $this->get_remote_release_info();
 		}
 
-		return $this->release_info;
+		return (object) $this->release_info;
 	}
 
 	/**
@@ -216,11 +187,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	 *	@return array(
 	 *		'id'			=> '...'
 	 *		'version'		=> '...'
-	 *		'download_link'	=> 'https://...'
-	 *		'tested'		=> <WP version>
-	 *		'requires'		=> <Min WP version>
-	 *		'requires_php'	=> <Min PHP version>
-	 *		'last_updated'	=> <date>
+	 *		'download_url'	=> 'https://...'
 	 *	)
 	 */
 	abstract function get_remote_release_info();
