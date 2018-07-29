@@ -333,7 +333,12 @@ class Customize extends	Core\Singleton {
 		return $args['post_id'];
 	}
 
-
+	/**
+	 *	@return array();
+	 */
+	public function get_sections() {
+		return array_values( $this->sections );
+	}
 
 	public function validate( $validity, $value ) {
 
