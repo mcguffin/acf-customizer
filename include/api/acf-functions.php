@@ -2,10 +2,25 @@
 
 
 
-
+/**
+ *	Get a ACFCustomizer instance
+ *
+ *	@return ACFCustomizer\Compat\ACF\Customize
+ */
 function acf_customize() {
 	return ACFCustomizer\Compat\ACF\Customize::instance();
 }
+
+/**
+ *	Get registered sections
+ *
+ *	@return array
+ */
+function acf_get_customizer_sections() {
+	return ACFCustomizer\Compat\ACF\Customize::instance()->get_sections();
+}
+
+
 
 /**
  *	Add Panel
