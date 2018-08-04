@@ -3,7 +3,28 @@
 
 	// store for acf's static validation callbacks
 	var current_control,
-		acf_customize_context;
+		acf_customize_context,
+		queue = [];
+
+	// make sure fields get inited in the order they appear in the dom
+	function enqueue(request,done) {
+		var idx = queue.length,
+			item = { idx:idx, request:request, done: done, finished:false, scope:null, arguments:null };
+
+		queue.push( item );
+
+		request.done( function(){
+			var it;
+			item.finished = true;
+			item.self = this;
+			item.arguments = arguments;
+			while ( queue.length && queue[0].finished ) {
+				it = queue.shift();
+				it.done.apply( it.self, it.arguments );
+			}
+		} );
+	}
+
 
 	api.AcfFieldGroupControl = api.Control.extend({
 		preview_context: {
@@ -29,6 +50,7 @@
 			if ( 0 <= ['post','term','user'].indexOf( control.params.storage_type ) ) {
 				// reload fields if preview url changed
 				api.bind( 'acf-customize-context-changed', function( context ) {
+
 					if ( context.type === control.params.storage_type ) {
 						control
 							.set_preview_context( context )
@@ -71,37 +93,38 @@
 			});
 
 			api.Control.prototype.ready.apply( control, arguments );
+
 		},
 		load_form: function() {
 
-			var control = this;
+			var control = this,
+				request;
 
-			request = wp.ajax.send( 'load_customizer_field_groups_'+this.id, {
+			request = wp.ajax.send( 'load_customizer_field_groups_'+control.id, {
 				data: {
 					wp_customize			: 'on',
-					section_id				: this.id,
+					section_id				: control.id,
 					acf_customize_context	: JSON.stringify( control.preview_context ),
 					_nonce					: options.load_field_group_nonce,
 				}
 			} );
 
+			/*
 			request.done( function(response) {
-				control.$wrapper.html( response.html );
-				control.$fields = control.container.find('.acf-fields > .acf-field');
-				// control.container.find('.acf-fields [id]').each(function(){
-				// 	var id = $(this).attr('id'),
-				// 		new_id = control.id + id;
-				// 	$(this).attr('id', new_id );
-				// 	control.container.find('[for="'+id+'"]').each(function(){
-				// 		$(this).attr('for', new_id );
-				// 	});
-				// });
-				control.init_fields();
-				/*
-				control.$inputs = control.container.find('.acf-field :input');
-				*/
-			} );
 
+				control.$wrapper.html( response.html );
+
+				control.init_fields();
+
+			} );
+			/*/
+			enqueue( request, function(response) {
+
+				control.$wrapper.html( response.html );
+
+				control.init_fields();
+
+			} );
 			request.fail( function( response ) {
 				console.log(' - load field group failure')
 			} );
@@ -113,14 +136,19 @@
 		},
 		unload_form: function() {
 			var control = this;
+
 			control.$wrapper.html( '' );
 		},
 		init_fields: function() {
 
 			var control = this;
 
+			control.$fields = control.container.find('.acf-fields > .acf-field');
+
 			// will init fields
-			acf.do_action('ready', control.$wrapper);
+			setTimeout(function(){
+				acf.doAction('ready', control.$wrapper);
+			},1);
 		},
 		updateValues: function() {
 			var control = this,
@@ -189,6 +217,7 @@
 	api.bind('changeset-error', function(){
 		//console.log(arguments)
 	});
+
 
 
 })( wp.customize, jQuery, acf_fieldgroup_control );
