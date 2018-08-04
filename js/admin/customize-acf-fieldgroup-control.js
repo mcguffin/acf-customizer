@@ -59,6 +59,7 @@
 				current_control = control;
 				acf.validation.fetch( {
 					form: control.container,
+					lock:false,
 					success:function($form) {
 						// allow for submit
 						// acf.validation.ignore = 1;
@@ -66,10 +67,7 @@
 					},
 
 				} );
-				/*/
-				console.log('change',control.$inputs.serializeJSON())
-				control.setting.set( control.$inputs.serializeJSON() );
-				//*/
+
 			});
 
 			api.Control.prototype.ready.apply( control, arguments );
@@ -105,6 +103,7 @@
 			} );
 
 			request.fail( function( response ) {
+				console.log(' - load field group failure')
 			} );
 
 			request.always( function() {
@@ -181,7 +180,6 @@
 
 
 	api.bind( 'save-request-params', function(query){
-		console.log(acf_customize_context)
 		_.extend( query, {'acf_customize_context' : JSON.stringify( acf_customize_context )} ) ;
 	} );
 	//
