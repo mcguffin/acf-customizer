@@ -18,9 +18,17 @@
 // }
 
 #customize-theme-controls {
+	& > ul {
+		& > .customize-control-acf_customizer {
+			&.customize-control {
+				margin-left:-12px;
+				margin-right:-12px;
+				width:auto;
+				float:none;
+			}
+		}
+	}
 	.acf-fields {
-		margin-left:-12px;
-		margin-right:-12px;
 		& > .acf-field {
 			// padding-left:0;
 			// padding-right:0;
