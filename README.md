@@ -14,16 +14,12 @@ Todo:
  - [ ] Test Fields
 	 - [ ] Repeater
 		 - [ ] Trigger change at sort
-	 - [ ] Flexible Content
+	 - [x] Flexible Content
 	 - [ ] Tab
 	 - [ ] Accordion
 	 - [ ] Group
- - [ ] Abandon simple usage.
  - [ ] Make theme mod defaults equal to acf field defaults
  - [ ] Sanitize callbacks?
- - [ ] Support more storage types:
-	 - [x] 'post' on single posts
-	 - [x] 'term' on term pages
  - [ ] MCE: make script loading conditional (performance!)
  - [ ] Source documentation
  - [ ] User documentation

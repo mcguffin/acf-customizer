@@ -28,7 +28,9 @@ class Core extends Plugin {
 	 *  @action plugins_loaded
 	 */
 	public function init_compat() {
-		Compat\ACF\ACF::instance();
+		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) ) {
+			Compat\ACF\ACF::instance();
+		}
 	}
 
 

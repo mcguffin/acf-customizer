@@ -161,21 +161,15 @@ class Customize extends	Core\Singleton {
 
 			$section['setting_args']['field_groups'] = $section['field_groups'];
 
-//			foreach ( $section['field_groups'] as $field_group_key ) {
 
-			//*
 			$wp_setting = new FieldgroupSetting( $wp_customize, $section_id, $section['setting_args'] );
 
 			$wp_customize->add_setting( $wp_setting );
-			/*/
-			$manager->add_setting( $post_id, $setting_args );
-			//*/
 
 			$wp_control = new FieldgroupControl( $wp_customize, $section_id, $section['control_args'] );
 
 			$wp_customize->add_control( $wp_control );
 
-//			}
 		}
 	}
 
@@ -184,7 +178,7 @@ class Customize extends	Core\Singleton {
 	 */
 	public function enqueue_assets() {
 		$core = Core\Core::instance();
-//
+
 		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
 
 		wp_enqueue_script( 'acf-fieldgroup-control' );
@@ -254,7 +248,6 @@ class Customize extends	Core\Singleton {
 	 *	@param $args see function acf_add_customizer_section
 	 */
 	public function add_section( $args ) {
-
 		if ( empty( $args ) || empty( $args['title'] ) ) {
 			return false;
 		}
@@ -345,23 +338,32 @@ class Customize extends	Core\Singleton {
 	}
 
 	/**
-	 *	@return array();
+	 *	@return array
 	 */
 	public function get_sections() {
 		return array_values( $this->sections );
 	}
 
+	/**
+	 *	@return boolean
+	 */
 	public function validate( $validity, $value ) {
 
 		return $validity;
 	}
 
+	/**
+	 *	@return null|array
+	 */
 	public function get_section( $section_id ) {
 		if ( isset( $this->sections[ $section_id ] ) ) {
 			return $this->sections[ $section_id ];
 		}
 	}
 
+	/**
+	 *	@return array
+	 */
 	public function get_choices() {
 		$choices = array();
 		foreach ( $this->sections as $key => $element ) {
