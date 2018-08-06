@@ -109,15 +109,7 @@
 				}
 			} );
 
-			/*
-			request.done( function(response) {
 
-				control.$wrapper.html( response.html );
-
-				control.init_fields();
-
-			} );
-			/*/
 			enqueue( request, function(response) {
 
 				control.$wrapper.html( response.html );
@@ -155,29 +147,45 @@
 				$inputs = control.container.find('.acf-field :input'),
 				value;
 
-			// prefixing numeric keys with a `_`
-			// repeater field names have numeric keys, which get casted to int upon serialization.
-			// As a result the sorting information is lost ...
+			// convert object with prefixed numeric keys to array
+			function fixNumKeys( obj ) {
+				if ( $.isPlainObject( obj ) ) {
+					// convert objects with numeric keys to array
+					if ( Object.keys( obj ).join('').match(/^([0-9_]+)$/) ) {
+						obj = Object.values( obj );
+					}
+					// recurse
+					$.each( obj,function(i,el){
+						obj[i] = fixNumKeys( el );
+					} );
+				}
+				return obj;
+			}
+
+			// prefix numeric keys with `_`
+			// repeater field names have numeric keys, which get automatically sorted upon serialization.
 			$inputs.each(function(){
 				var name = $(this).attr('name');
+
 				if ( ! name ) {
 					return;
 				}
 				$(this).data('prev-name', name );
-				$(this).attr('name',name.replace(/\[([0-9]+)\]/g,'\[_$1\]'));
+				$(this).attr('name',name.replace( /\[([0-9]+)\]/g, '\[_$1\]'));
 			});
 
 			value = $inputs.serializeJSON({
-				useIntKeysAsArrayIndex:false
+				useIntKeysAsArrayIndex:false,
 			});
 
 			// ... restoring field names to previous state
 			$inputs.each(function(){
 				$(this).attr( 'name', $(this).data('prev-name') );
+				$(this).data('prev-name', null );
 			});
 
-			// update values.
-			control.setting.set( value[this.id] );
+			// update customier value
+			control.setting.set( fixNumKeys( value[this.id ] ) );
 		}
 	});
 
