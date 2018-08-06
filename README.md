@@ -12,8 +12,7 @@ Help appreciated.
 Todo:
 -----
  - [ ] Test Fields
-	 - [ ] Repeater
-		 - [ ] Trigger change at sort
+	 - [x] Repeater
 	 - [x] Flexible Content
 	 - [ ] Tab
 	 - [ ] Accordion
