@@ -140,6 +140,7 @@
 			// will init fields
 			setTimeout(function(){
 				acf.doAction('ready', control.$wrapper);
+				acf.doAction('prepare');
 			},1);
 		},
 		updateValues: function() {

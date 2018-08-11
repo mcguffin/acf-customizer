@@ -14,7 +14,7 @@ Todo:
  - [ ] Test Fields
 	 - [x] Repeater
 	 - [x] Flexible Content
-	 - [ ] Tab
+	 - [x] Tab
 	 - [ ] Accordion
 	 - [ ] Group
  - [ ] Make theme mod defaults equal to acf field defaults
