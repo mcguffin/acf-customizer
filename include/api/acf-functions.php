@@ -62,8 +62,8 @@ function acf_add_customizer_panel( $panel = '' ) {
 }
 
 /**
-*	Add Section (child of panel)
-*
+ *	Add Section (child of panel)
+ *
  *	See https://developer.wordpress.org/reference/classes/wp_customize_manager/add_section/
  *
  *	@param $page array(
