@@ -56,3 +56,10 @@
         margin: 0; }
   #customize-theme-controls .acf-fields .acf-gallery .acf-hl > li {
     max-width: 50%; }
+
+#customize-theme-controls .acf-tab-wrap {
+  background-color: transparent; }
+  #customize-theme-controls .acf-tab-wrap .acf-tab-group {
+    border-top-style: none; }
+  #customize-theme-controls .acf-tab-wrap.-top ~ .acf-field {
+    background-color: #fff; }

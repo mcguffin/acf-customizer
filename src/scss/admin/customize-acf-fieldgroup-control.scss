@@ -92,4 +92,16 @@
 			}
 		}
 	}
+	.acf-tab-wrap {
+		background-color:transparent;
+		.acf-tab-group {
+			border-top-style:none;
+		}
+		&.-top {
+			& ~ .acf-field {
+				background-color: #fff;
+			}
+		}
+
+	}
 }
