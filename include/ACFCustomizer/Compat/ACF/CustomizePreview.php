@@ -105,9 +105,6 @@ class CustomizePreview extends Core\Singleton {
 			} else if ( $obj instanceOf \WP_Post_Type ) {
 				$loc['type'] = 'post_type';
 				$loc['id'] = $obj->name;
-			} else if ( $obj instanceof \WP_User ) {
-				$loc['type'] = 'user';
-				$loc['id'] = $obj->ID;
 			}
 		}
 		return (object) $loc;

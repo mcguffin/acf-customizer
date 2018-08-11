@@ -46,7 +46,7 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 
 
 		// type is object to save...
-		if ( in_array( $info['type'], array( 'post', 'term', 'user' ) ) ) {
+		if ( in_array( $info['type'], array( 'post', 'term' ) ) ) {
 			// ... object id okay? storage type matches type to save?
 			if ( $info['id'] !== $context->id || $this->storage_type !== $info['type'] ) {
 				return $value;
@@ -101,11 +101,12 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 	 */
 	protected function update( $value ) {
 		// additional capability check
-		if ( in_array( $this->storage_type, array( 'post', 'term', 'user' ) ) ) {
+		if ( in_array( $this->storage_type, array( 'post', 'term' ) ) ) {
 
 			$section = $this->manager->get_section( $this->id );
 			$obj_id = $section->get_context('id');
 			$obj_type = $section->get_context('type');
+
 			if ( ! current_user_can( 'edit_' . $obj_type, $obj_id ) ) {
 				return false;
 			}

@@ -56,10 +56,6 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 			$post_id = 'term_' . $section->get_context('id');
 
-		} else if ( 'user' === $this->storage_type ) {
-
-			$post_id = 'user_' . $section->get_context('id');
-
 		} else { // option, theme_mod
 
 			$post_id = $this->id;
@@ -77,7 +73,7 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 		$mce_init = array();
 
-		if ( ! $section->get_context('id') && in_array( $section->storage_type, array( 'post', 'term', 'user' ) ) ) {
+		if ( ! $section->get_context('id') && in_array( $section->storage_type, array( 'post', 'term' ) ) ) {
 			ob_end_clean();
 			$html = '';
 		} else {

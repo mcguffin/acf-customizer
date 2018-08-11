@@ -15,7 +15,7 @@ Todo:
 	 - [x] Repeater
 	 - [x] Flexible Content
 	 - [x] Tab
-	 - [ ] Accordion
+	 - [x] Accordion
 	 - [ ] Group
  - [ ] Make theme mod defaults equal to acf field defaults
  - [ ] Sanitize callbacks?
