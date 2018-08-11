@@ -141,7 +141,7 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 
 				acf_save_post( $obj_id, $value );
 
-			} else if ( in_array( $this->storage_type, 'term', 'user' ) ) {
+			} else if ( $this->storage_type === 'term' ) {
 
 				acf_save_post( "{$obj_type}_{$obj_id}", $value );
 
