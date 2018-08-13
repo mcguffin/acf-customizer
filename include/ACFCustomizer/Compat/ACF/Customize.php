@@ -284,6 +284,7 @@ class Customize extends	Core\Singleton {
 			'description'			=> '',
 			'storage_type'			=> 'theme_mod',
 			'description_hidden'	=> '',
+			'active_callback'		=> '',
 		);
 		$section_args = array_intersect_key( $args, $section_defaults );
 
