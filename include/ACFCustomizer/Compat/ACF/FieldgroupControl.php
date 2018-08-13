@@ -46,8 +46,6 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 		$section = $this->manager->get_section( $this->section );
 
-		$setting = $this->manager->get_setting( $this->setting );
-
 		if ( 'post' === $this->storage_type ) {
 
 			$post_id = $section->get_context('id');
