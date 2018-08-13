@@ -44,7 +44,6 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 
 		$info = acf_get_post_id_info( $post_id );
 
-
 		// type is object to save...
 		if ( in_array( $info['type'], array( 'post', 'term' ) ) ) {
 			// ... object id okay? storage type matches type to save?
@@ -62,11 +61,21 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 
 		$mod = $this->convert_theme_mod( $changeset_data[ $this->id ]['value'] );
 
+
 		if ( ! isset( $mod[ $field['name'] ] ) ) {
 			return $value;
 		}
 
-		return $mod[ $field['name'] ] ;
+
+		$value = $mod[ $field['name'] ];
+
+		// Apply ACF filters.
+		$value = apply_filters( "acf/load_value", $value, $post_id, $field );
+		$value = apply_filters( "acf/load_value/type={$field['type']}", $value, $post_id, $field );
+		$value = apply_filters( "acf/load_value/name={$field['_name']}", $value, $post_id, $field );
+		$value = apply_filters( "acf/load_value/key={$field['key']}", $value, $post_id, $field );
+
+		return $value;
 
 	}
 
