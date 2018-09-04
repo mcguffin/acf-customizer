@@ -9,6 +9,8 @@ Tested with WordPress 4.9
 This plugin is currently in beta stadium.  
 Any Help testing and bugfixing is highly appreciated.
 
+**Notice:** This is NOT the ACF-Customizer found on wp.org.
+
 Installation
 ------------
  - Head over to [releases](../../releases)
