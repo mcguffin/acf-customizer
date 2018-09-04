@@ -62,7 +62,7 @@ abstract class AutoUpdate extends Core\Singleton {
 
 		$plugin_info	= get_plugin_data( $this->file );
 
-		if ( $value->response[ $this->file ]->slug === $this->slug && $value->response[ $this->file ]->url !== $plugin_info['PluginURI'] ) {
+		if ( $value->response[ $plugin ]->slug === $this->slug && $value->response[ $plugin ]->url !== $plugin_info['PluginURI'] ) {
 			unset( $value->response[$plugin] );
 		}
 		return $value;
