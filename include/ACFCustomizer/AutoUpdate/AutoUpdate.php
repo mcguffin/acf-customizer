@@ -55,6 +55,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	 *	@filter site_transient_update_plugins
 	 */
 	public function check_site_transient( $value, $transient ) {
+		$plugin = plugin_basename( $this->file );
 
 		if ( ! is_object( $value ) || ! isset( $value->response ) || ! isset( $value->response[ plugin_basename( $this->file ) ] ) ) {
 			return $value;
