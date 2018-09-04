@@ -27,33 +27,60 @@ abstract class AutoUpdate extends Core\Singleton {
 	protected $directory = null;
 
 	/**
+	 *	@var string absolute path to plugin directory
+	 */
+	protected $slug = null;
+
+	/**
 	 *	@param string $plugin_file absolute path to plugin file
 	 */
 	public function init( $plugin_file ) {
 
 		$this->file = $plugin_file;
 		$this->directory = plugin_dir_path( $plugin_file );
+		$this->slug = basename($this->directory);
 
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pre_set_transient' ), 10, 3 );
+
+//		add_filter( 'pre_site_transient_update_plugins', array( $this, 'check_site_transient' ), 10, 2 );
+		add_filter( 'site_transient_update_plugins', array( $this, 'check_site_transient' ), 10, 2 );
 
 		add_filter( 'upgrader_source_selection', array( $this, 'source_selection' ), 10, 4 );
 		add_filter( 'plugins_api', array( $this, 'plugins_api' ), 10, 3 );
 	}
 
 	/**
+	 *	Prevent WP.org updates of plugins with the same slug.
+	 *
+	 *	@filter site_transient_update_plugins
+	 */
+	public function check_site_transient( $value, $transient ) {
+
+		if ( ! is_object( $value ) || ! isset( $value->response ) || ! isset( $value->response[ $this->file ] ) ) {
+			return $value;
+		}
+
+		$plugin_info	= get_plugin_data( $this->file );
+
+		if ( $value->response[ $this->file ]->slug === $this->slug && $value->response[ $this->file ]->url !== $plugin_info['PluginURI'] ) {
+			unset( $value->response[$plugin] );
+		}
+		return $value;
+	}
+
+	/**
 	 *	@filter plugin_api
 	 */
 	public function plugins_api( $res, $action, $args ) {
-		$slug = basename($this->directory);
 
-		if ( isset($_REQUEST['plugin']) && $_REQUEST['plugin'] === $slug ) {
+		if ( isset($_REQUEST['plugin']) && $_REQUEST['plugin'] === $this->slug ) {
 
 			$plugin_info	= get_plugin_data( $this->file );
 			$release_info	= $this->get_release_info();
 
 			$plugin_api = array(
 				'name'						=> $plugin_info['Name'],
-				'slug'						=> $slug,
+				'slug'						=> $this->slug,
 //				'version'					=> $release_info, // release
 				'author'					=> $plugin_info['Author'],
 				'author_profile'			=> $plugin_info['AuthorURI'],
@@ -136,14 +163,14 @@ abstract class AutoUpdate extends Core\Singleton {
 		// get own version
 		if ( $release_info = $this->get_release_info() ) {
 			$plugin 		= plugin_basename( $this->file );
-			$slug			= basename($this->directory);
+			$this->slug			= basename($this->directory);
 			$plugin_info	= get_plugin_data( $this->file );
 
 			if ( version_compare( $release_info->version, $plugin_info['Version'] , '>' ) ) {
 
 				$transient->response[ $plugin ] = (object) array(
 					'id'			=> $release_info->id,
-					'slug'			=> $slug,
+					'slug'			=> $this->slug,
 					'plugin'		=> $plugin,
 					'new_version'	=> $release_info->version,
 					'url'			=> $plugin_info['PluginURI'],
