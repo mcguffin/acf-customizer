@@ -17,16 +17,15 @@
   },
   "homepage": "https://github.com//acf-customizer#readme",
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "*",
     "gulp-concat": "*",
     "gulp-rename": "*",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
-    "gulp-util": "*"
-  },
-  "dependencies": {
+    "gulp-util": "*",
     "jquery-serializejson": "^2.8.1"
-  }
+  },
+  "dependencies": {}
 }

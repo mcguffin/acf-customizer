@@ -48,38 +48,45 @@ function concat_js( src, dest ) {
 
 
 gulp.task('scss', function() {
-	return [
-		do_scss('admin/customize-acf-fieldgroup-control'),
-	];
-});
-
-
-gulp.task('js-admin', function() {
-    return [
-		concat_js(
-			['node_modules/jquery-serializejson/jquery.serializejson.js',],
-			'jquery-serializejson.js'
-		),
-		do_js('legacy/5.6/admin/customize-acf-fieldgroup-control'),
-		do_js('admin/customize-acf-fieldgroup-control'),
-		do_js('admin/customize-acf-fieldgroup-preview'),
-    ];
+	return do_scss('admin/customize-acf-fieldgroup-control');
 
 });
 
 
-gulp.task( 'js', function(){
-	return concat_js( [
-	], 'frontend.js');
-} );
+
+gulp.task('js-admin-jqser', function() {
+	return concat_js(
+		['node_modules/jquery-serializejson/jquery.serializejson.js',],
+		'jquery-serializejson.js'
+	);
+});
+gulp.task('js-admin-legacy', function() {
+	return do_js('legacy/5.6/admin/customize-acf-fieldgroup-control');
+});
+gulp.task('js-admin-control', function() {
+	return do_js('admin/customize-acf-fieldgroup-control');
+});
+gulp.task('js-admin-preview', function() {
+	return do_js('admin/customize-acf-fieldgroup-preview');
+});
 
 
-gulp.task('build', ['scss','js','js-admin'] );
+gulp.task('js-admin', gulp.parallel( 'js-admin-jqser', 'js-admin-legacy', 'js-admin-control', 'js-admin-preview' ));
+
+
+// gulp.task( 'js', function(){
+// 	return concat_js( [
+// 	], 'frontend.js');
+// } );
+
+
+gulp.task('build', gulp.parallel('scss','js-admin') );
 
 
 gulp.task('watch', function() {
 	// place code for your default task here
-	gulp.watch('./src/scss/**/*.scss',[ 'scss' ]);
-	gulp.watch('./src/js/**/*.js',[ 'js', 'js-admin' ]);
+	gulp.watch('./src/scss/**/*.scss',gulp.series( 'scss' ) );
+	gulp.watch('./src/js/**/*.js',gulp.parallel( 'js-admin') );
 });
-gulp.task('default', ['build','watch']);
+
+gulp.task('default', gulp.series('build','watch'));
