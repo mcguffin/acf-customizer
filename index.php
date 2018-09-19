@@ -9,6 +9,7 @@ Version: 0.1.5
 Author URI:
 License: GPL3
 Github Repository: mcguffin/acf-customizer
+Github Plugin URI: mcguffin/acf-customizer
 Text Domain: acf-customizer
 Domain Path: /languages/
 */
@@ -55,7 +56,17 @@ Core\Core::instance();
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	// init auto upgrader
 	if ( ! file_exists( ACF_CUSTOMIZER_DIRECTORY . '/.git/' ) ) {
-		AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
+
+		// Not a git. Check if https://github.com/afragen/github-updater is active
+		$active_plugins = get_option('active_plugins');
+		if ( $sitewide_plugins = get_site_option('active_sitewide_plugins') ) {
+			$active_plugins = array_merge( $active_plugins, array_keys( $sitewide_plugins ) );
+		}
+
+		if ( ! in_array( 'github-updater/github-updater.php', $active_plugins ) ) {
+			// not github updater. Init our own...
+			AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
+		}
 	}
 
 }

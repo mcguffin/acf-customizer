@@ -41,8 +41,6 @@ abstract class AutoUpdate extends Core\Singleton {
 		$this->slug = basename($this->directory);
 
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pre_set_transient' ), 10, 3 );
-
-//		add_filter( 'pre_site_transient_update_plugins', array( $this, 'check_site_transient' ), 10, 2 );
 		add_filter( 'site_transient_update_plugins', array( $this, 'check_site_transient' ), 10, 2 );
 
 		add_filter( 'upgrader_source_selection', array( $this, 'source_selection' ), 10, 4 );
