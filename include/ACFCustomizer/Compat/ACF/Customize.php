@@ -50,13 +50,23 @@ class Customize extends	Core\Singleton {
 		add_action( 'init', array( $this, 'init' ), 0xffffffff );
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
-		add_action( 'customize_controls_enqueue_scripts', 'acf_enqueue_scripts' );
-		add_action( 'acf/enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customize_scripts') );
+
+
 		// must build hidden wp_editor AFTER customize_controls_print_styles
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
 
 		add_action( 'init', array( 'ACFCustomizer\Compat\ACF\CustomizePreview', 'instance') );
 
+	}
+
+	/**
+	 *	@action customize_controls_enqueue_scripts
+	 */
+	public function enqueue_customize_scripts() {
+		add_action('acf/enqueue_scripts',array($this,'enqueue_assets'));
+		acf_enqueue_scripts();
 	}
 
 
