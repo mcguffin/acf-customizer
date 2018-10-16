@@ -213,6 +213,11 @@
 			}
 			acf_customize_context = new_val;
 		});
+
+		api.previewer.bind( 'focus-control-for-setting', function( settingId ) {
+			// get clicked field ...
+		});
+
 	});
 
 

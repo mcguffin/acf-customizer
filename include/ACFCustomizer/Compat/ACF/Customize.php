@@ -177,9 +177,8 @@ class Customize extends	Core\Singleton {
 	 *	@action customize_controls_enqueue_scripts
 	 */
 	public function enqueue_assets() {
-		$core = Core\Core::instance();
 
-		wp_enqueue_style( 'acf-fieldgroup-control' , $core->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
+		wp_enqueue_style( 'acf-fieldgroup-control' );
 
 		wp_enqueue_script( 'acf-fieldgroup-control' );
 

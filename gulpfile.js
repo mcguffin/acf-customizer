@@ -48,10 +48,10 @@ function concat_js( src, dest ) {
 
 
 gulp.task('scss-customizer', function() {
-	return do_scss('admin/field-group');
+	return do_scss('admin/customize-acf-fieldgroup-control');
 });
 // gulp.task('scss-field-group', function() {
-// 	return do_scss('admin/customize-acf-fieldgroup-control');
+// 	return do_scss('admin/field-group');
 // });
 gulp.task('scss', gulp.parallel( /*'scss-field-group',*/ 'scss-customizer' ));
 

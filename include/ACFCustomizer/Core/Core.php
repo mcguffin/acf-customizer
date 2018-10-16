@@ -73,6 +73,10 @@ class Core extends Plugin {
 			$this->get_asset_url( "js/admin/customize-acf-fieldgroup-preview{$suffix}.js" ),
 			array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
 		);
+
+		wp_register_style( 'acf-fieldgroup-control' , $this->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
+
+
 	}
 
 	/**
