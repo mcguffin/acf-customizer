@@ -83,14 +83,14 @@ class FieldgroupSection extends \WP_Customize_Section {
 	/**
 	 *	@return bool
 	 */
-	public function is_post() {
+	public function is_post( $section ) {
 		return is_singular();
 	}
 
 	/**
 	 *	@return bool
 	 */
-	public function is_term() {
+	public function is_term( $section ) {
 		return is_tag() || is_category() || is_tax();
 	}
 

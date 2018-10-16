@@ -210,7 +210,7 @@ class Customize extends	Core\Singleton {
 			'theme_supports'	=> array(),
 			'title'				=> '',
 			'description'		=> '',
-			'active_callback'	=> '',
+			//'active_callback'	=> '',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -266,7 +266,7 @@ class Customize extends	Core\Singleton {
 			'theme_supports'		=> array(),
 			'title'					=> '',
 			'description'			=> '',
-			'active_callback'		=> '',
+			//'active_callback'		=> '',
 			'description_hidden'	=> false,
 			'storage_type'			=> 'theme_mod',
 			'post_id' 				=> '',
@@ -283,7 +283,7 @@ class Customize extends	Core\Singleton {
 			'description'			=> '',
 			'storage_type'			=> 'theme_mod',
 			'description_hidden'	=> '',
-			'active_callback'		=> '',
+			//'active_callback'		=> '',
 		);
 		$section_args = array_intersect_key( $args, $section_defaults );
 
