@@ -70,7 +70,7 @@
 			control.container.on('change','.acf-field', function(e){
 				//*
 				// check valid
-				var $inputs = control.container.find('.acf-field :input');
+				var $inputs = control.container.find('.acf-field :input[name]');
 
 				acf.validation.errors = [];
 				$inputs.each(function(){
@@ -79,6 +79,10 @@
 
 				acf.validation.busy = false;
 				current_control = control;
+
+				// reset validation status
+				$( control.container ).data('acf',null);
+
 				acf.validation.fetch( {
 					form: control.container,
 					lock:false,
