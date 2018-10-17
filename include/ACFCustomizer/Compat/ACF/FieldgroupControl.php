@@ -71,7 +71,7 @@ class FieldgroupControl extends \WP_Customize_Control {
 			$fields = acf_get_fields( $field_group );
 
 			$this->fix_field_layout( $fields );
-			var_dump($fields);
+
 			acf_render_fields( $fields, $post_id, 'div', $field_group['instruction_placement'] );
 		}
 
