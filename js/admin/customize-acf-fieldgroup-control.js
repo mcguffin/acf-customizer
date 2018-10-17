@@ -91,7 +91,9 @@
 						// acf.validation.ignore = 1;
 						// $button.trigger('click');
 					},
-
+					complete:function($form) {
+						acf.unlockForm( $form );
+					}
 				} );
 
 			});
