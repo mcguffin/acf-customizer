@@ -1,6 +1,10 @@
 ACF Customizer
 ==============
 
+0.1.13
+------
+ - fix locked form after input changed
+
 0.1.12
 ------
  - rm var_dump
