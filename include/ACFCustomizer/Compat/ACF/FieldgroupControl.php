@@ -66,7 +66,13 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 		foreach ( $this->setting->field_groups as $field_group_key ) {
 			$field_group = acf_get_field_group( $field_group_key );
-			acf_render_fields( acf_get_fields( $field_group ), $post_id, 'div', $field_group['instruction_placement'] );
+
+			$field_group['label_placement'] = 'top';
+			$fields = acf_get_fields( $field_group );
+
+			$this->fix_field_layout( $fields );
+			var_dump($fields);
+			acf_render_fields( $fields, $post_id, 'div', $field_group['instruction_placement'] );
 		}
 
 		$mce_init = array();
@@ -91,6 +97,38 @@ class FieldgroupControl extends \WP_Customize_Control {
 			'html'		=> $html,
 			'mce_init'	=> $this->mce_init,
 		) );
+	}
+
+
+	private function fix_field_layout( &$fields, $search = 'row', $replace = 'block' ) {
+		foreach ( array_keys($fields) as $i ) {
+			switch ( $fields[$i]['type'] ) {
+				case 'flexible_content':
+					foreach ( array_keys( $fields[$i]['layouts'] ) as $l ) {
+						if ( $fields[$i]['layouts'][$l]['display'] === $search ) {
+							$fields[$i]['layouts'][$l]['display'] = $replace;
+						}
+						$this->fix_field_layout( $fields[$i]['layouts'][$l]['sub_fields'], $search, $replace );
+					}
+					break;
+				case 'group':
+					if ( $fields[$i]['layout'] === $search ) {
+						$fields[$i]['layout'] = $replace;
+					}
+
+					$this->fix_field_layout( $fields[$i]['sub_fields'], $search, $replace );
+					break;
+				case 'repeater':
+					if ( $fields[$i]['display'] === $search ) {
+						$fields[$i]['display'] = $replace;
+						vaR_dump($fields[$i]['display']);
+					}
+
+					$this->fix_field_layout( $fields[$i]['sub_fields'], $search, $replace );
+					break;
+			}
+		}
+
 	}
 
 	/**
