@@ -5,7 +5,7 @@ Plugin Name: ACF Customizer
 Plugin URI: https://github.com/mcguffin/acf-customizer
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
-Version: 0.1.12
+Version: 0.1.13
 Author URI:
 License: GPL3
 Github Repository: mcguffin/acf-customizer
