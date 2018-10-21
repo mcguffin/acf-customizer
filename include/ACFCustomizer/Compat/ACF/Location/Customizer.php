@@ -30,7 +30,7 @@ class Customizer extends \acf_location {
 
 		// vars
 		$this->name = 'customizer';
-		$this->label = __("Customizer",'acf');
+		$this->label = __("Customizer",'acf-customizer');
 		$this->category = 'forms';
 
 	}

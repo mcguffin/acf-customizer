@@ -55,11 +55,12 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 		$changeset_data = $preview->changeset_data( $this->manager );
 		// must merge changeset data with request data...
 
-		if ( ! isset( $changeset_data[ $this->id ] ) ) {
+		// key used to be $this->ID. need to check if this still works with posts...
+		if ( ! isset( $changeset_data[ $post_id ] ) ) {
 			return $value;
 		}
 
-		$mod = $this->convert_theme_mod( $changeset_data[ $this->id ]['value'] );
+		$mod = $this->convert_theme_mod( $changeset_data[ $post_id ]['value'] );
 
 
 		if ( ! isset( $mod[ $field['name'] ] ) ) {
