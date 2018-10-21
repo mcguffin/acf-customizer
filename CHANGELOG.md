@@ -1,6 +1,10 @@
 ACF Customizer
 ==============
 
+0.0.14
+------
+ - fix: Preview values were loaded from wrong customizer section
+
 0.1.13
 ------
  - fix locked form after input changed
