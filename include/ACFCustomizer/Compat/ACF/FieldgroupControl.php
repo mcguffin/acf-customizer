@@ -75,7 +75,7 @@ class FieldgroupControl extends \WP_Customize_Control {
 			acf_render_fields( $fields, $post_id, 'div', $field_group['instruction_placement'] );
 		}
 
-		$mce_init = array();
+		$this->mce_init = array();
 
 		if ( ! $section->get_context('id') && in_array( $section->storage_type, array( 'post', 'term' ) ) ) {
 			ob_end_clean();
