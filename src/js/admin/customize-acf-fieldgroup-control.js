@@ -222,7 +222,7 @@
 			while ( path.length ) {
 				current = path.pop();
 				if ( _.isNumber( current ) ) {
-					console.log($focusEl.is('[data-type="flexible_content"]'),$focusEl.is('[data-type="repeater"]'))
+
 					if ( $focusEl.is('[data-type="flexible_content"]') ) {
 						$focusEl = $focusEl.find('> .acf-input > .acf-flexible-content > .values').children(':not(.acf-clone)').eq(current);
 					} else if ( $focusEl.is('[data-type="repeater"]') ) {
