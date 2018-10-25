@@ -40,16 +40,21 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 
 		$preview = CustomizePreview::instance();
 
-		$context = $preview->get_context();
-
 		$info = acf_get_post_id_info( $post_id );
 
 		// type is object to save...
 		if ( in_array( $info['type'], array( 'post', 'term' ) ) ) {
+
+			$context = $preview->get_context();
+
 			// ... object id okay? storage type matches type to save?
 			if ( $info['id'] !== $context->id || $this->storage_type !== $info['type'] ) {
+
 				return $value;
 			}
+
+			$post_id = $this->id;
+
 		}
 
 		$changeset_data = $preview->changeset_data( $this->manager );
