@@ -1,8 +1,9 @@
 ACF Customizer
 ==============
 
-0.1.16
+0.2.0
 ------
+ - Feature: Focus controls (call `do_action('acf_customizer_(row|field|sub_field))')` in theme)
  - Fix: Theme mod Repeatable values not loaded
  - Fix: Repeater Layout not converted to block
  - Style: More Compact Controls
