@@ -14,3 +14,5 @@
 /* Alerts/Notifications/Flags */
 /* Social Icons */
 /* Misc/CPT */
+.customize-partial-edit-shortcut-button[data-acf-customizer] {
+  left: 0; }

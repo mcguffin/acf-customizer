@@ -1,3 +1,8 @@
 @import '../variables/variables';
 
 @import '../mixins/mixins';
+.customize-partial-edit-shortcut-button {
+	&[data-acf-customizer] {
+		left:0;
+	}
+}
