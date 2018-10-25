@@ -1,6 +1,13 @@
 ACF Customizer
 ==============
 
+0.2.2
+-----
+ - Fix: Post preview values
+ - UI: use curly arrow left for Focus-Btn
+ - JS Fix: Numeric Field identification
+
+
 0.2.1
 -----
  - Focus controls: improve frontend css
