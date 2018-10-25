@@ -222,12 +222,19 @@
 			while ( path.length ) {
 				current = path.pop();
 				if ( _.isNumber( current ) ) {
-					selector = '[data-id="'+current.toString()+'"]';
+					console.log($focusEl.is('[data-type="flexible_content"]'),$focusEl.is('[data-type="repeater"]'))
+					if ( $focusEl.is('[data-type="flexible_content"]') ) {
+						$focusEl = $focusEl.find('> .acf-input > .acf-flexible-content > .values').children(':not(.acf-clone)').eq(current);
+					} else if ( $focusEl.is('[data-type="repeater"]') ) {
+						console.log($focusEl.find('> .acf-input > .acf-repeater > .acf-table > tbody'));
+						$focusEl = $focusEl.find('> .acf-input > .acf-repeater > .acf-table > tbody').children(':not(.acf-clone)').eq(current);
+					} else {
+						$focusEl = false;
+					}
 				} else {
-					selector = '[data-key="'+current+'"]';
+					$focusEl = $focusEl.find('[data-key="'+current+'"]');
 				}
-				$focusEl = $focusEl.find(selector);
-				if ( $focusEl.is('[data-id]') ) {
+				if ( !! $focusEl && $focusEl.is('[data-id]') ) {
 					expand.push( $focusEl )
 				}
 				if ( ! $focusEl.length ) {
@@ -294,7 +301,7 @@
 					if ( _.isNumber( post_id ) ) {
 						if ( !! control.preview_context && ( control.preview_context.id === post_id ) ) {
 							if ( control.focusField( path ) ) {
-								return; 
+								return;
 							}
 						}
 					} else {
