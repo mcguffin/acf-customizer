@@ -101,3 +101,8 @@
 
 #customize-theme-controls .acf-icon:before {
   line-height: inherit; }
+
+#customize-theme-controls .layout:focus,
+#customize-theme-controls .acf-row:focus {
+  z-index: 1;
+  outline: 7px solid rgba(0, 133, 186, 0.5); }

@@ -26,6 +26,28 @@
 	}
 
 
+	function expandRepeatables( expand ) {
+		return expand.forEach(function($row){
+			var field = acf.getField( $row.closest('.acf-field') );
+			// collapse others
+			$row.siblings().not($row).each(function(){
+				if ( field.type === 'repeater' ) {
+					field.collapse($(this));
+				} else if ( field.type === 'flexible_content' ) {
+					field.closeLayout($(this));
+				}
+			});
+
+			if ( field.type === 'repeater' ) {
+				field.expand($row);
+			} else if ( field.type === 'flexible_content' ) {
+				field.openLayout($row);
+			}
+		});
+
+	}
+
+
 	api.AcfFieldGroupControl = api.Control.extend({
 		preview_context: {
 			type: null,
@@ -106,7 +128,7 @@
 			var control = this,
 				request;
 
-			request = wp.ajax.send( 'load_customizer_field_groups_'+control.id, {
+			request = wp.ajax.send( 'load_customizer_field_groups_' + control.id, {
 				data: {
 					wp_customize			: 'on',
 					section_id				: control.id,
@@ -193,6 +215,45 @@
 
 			// update customier value
 			control.setting.set( fixNumKeys( value[this.id ] ) );
+		},
+		focusField:function( path ) {
+			var current, selector, $focusEl = this.$wrapper, expand = [];
+
+			while ( path.length ) {
+				current = path.pop();
+				if ( _.isNumber( current ) ) {
+					selector = '[data-id="'+current.toString()+'"]';
+				} else {
+					selector = '[data-key="'+current+'"]';
+				}
+				$focusEl = $focusEl.find(selector);
+				if ( $focusEl.is('[data-id]') ) {
+					expand.push( $focusEl )
+				}
+				if ( ! $focusEl.length ) {
+					return false;
+				}
+			}
+
+			// focus control
+			this.focus();
+
+			setTimeout(function(){
+				// expand repeatable, collapse others
+				if ( expand.length ) {
+					expandRepeatables( expand );
+				}
+
+
+				if ( ! _.isNumber( current ) ) {
+					// focus input ..
+					$focusEl.find('input').focus();
+				} else {
+					// ... or focus repeatable
+					$focusEl.attr('tabindex',1).focus()
+				}
+			},500);
+			return true;
 		}
 	});
 
@@ -222,6 +283,27 @@
 
 		api.previewer.bind( 'focus-control-for-setting', function( settingId ) {
 			// get clicked field ...
+		});
+
+
+		api.previewer.bind( 'acf-focus', function( path ) {
+			console.log(path);
+			var post_id = path.pop();
+			api.control.each( function( control ) {
+				if ( control.constructor===api.AcfFieldGroupControl ) {
+					if ( _.isNumber( post_id ) ) {
+						if ( !! control.preview_context && ( control.preview_context.id === post_id ) ) {
+							if ( control.focusField( path ) ) {
+								return; 
+							}
+						}
+					} else {
+						if ( control.id === post_id && control.focusField( path ) ) {
+							return;
+						}
+					}
+				}
+			});
 		});
 
 	});

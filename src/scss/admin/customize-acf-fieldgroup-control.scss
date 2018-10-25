@@ -167,4 +167,11 @@
 			line-height:inherit;
 		}
 	}
+	.layout,
+	.acf-row {
+		&:focus {
+			z-index:1;
+			outline:7px solid rgba($wp-blue,0.5);
+		}
+	}
 }

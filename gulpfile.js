@@ -50,10 +50,13 @@ function concat_js( src, dest ) {
 gulp.task('scss-customizer', function() {
 	return do_scss('admin/customize-acf-fieldgroup-control');
 });
+gulp.task('scss-preview', function() {
+	return do_scss('admin/customize-acf-fieldgroup-preview');
+});
 // gulp.task('scss-field-group', function() {
 // 	return do_scss('admin/field-group');
 // });
-gulp.task('scss', gulp.parallel( /*'scss-field-group',*/ 'scss-customizer' ));
+gulp.task('scss', gulp.parallel( 'scss-preview', 'scss-customizer' ));
 
 
 

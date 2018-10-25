@@ -20,6 +20,14 @@ wp.customize.acfFieldsetPreview = wp.customize.AcfFieldsetCustomizerPreview = (f
 			api.preview.send( 'acf-customize-context', self.current_location );
 		} );
 
+		$('[data-acf-customizer]').on('click',function(e){
+
+			var data = $(this).data('acf-customizer');
+
+			api.preview.send( 'acf-focus', data );
+
+		});
+
 	};
 
 	api.bind( 'preview-ready', function() {

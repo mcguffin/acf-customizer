@@ -66,13 +66,14 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 		foreach ( $this->setting->field_groups as $field_group_key ) {
 			$field_group = acf_get_field_group( $field_group_key );
-
+			printf( '<div data-key="%s">', $field_group_key );
 			$field_group['label_placement'] = 'top';
 			$fields = acf_get_fields( $field_group );
 
 			$this->fix_field_layout( $fields );
 
 			acf_render_fields( $fields, $post_id, 'div', $field_group['instruction_placement'] );
+			echo '</div>';
 		}
 
 		$this->mce_init = array();
