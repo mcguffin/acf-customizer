@@ -1,6 +1,10 @@
 ACF Customizer
 ==============
 
+0.2.1
+-----
+ - Focus controls: improve frontend css
+
 0.2.0
 ------
  - Feature: Focus controls (call `do_action('acf_customizer_(row|field|sub_field))')` in theme)
