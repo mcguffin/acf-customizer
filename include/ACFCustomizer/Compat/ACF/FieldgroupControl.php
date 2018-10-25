@@ -119,9 +119,8 @@ class FieldgroupControl extends \WP_Customize_Control {
 					$this->fix_field_layout( $fields[$i]['sub_fields'], $search, $replace );
 					break;
 				case 'repeater':
-					if ( $fields[$i]['display'] === $search ) {
-						$fields[$i]['display'] = $replace;
-						vaR_dump($fields[$i]['display']);
+					if ( $fields[$i]['layout'] === $search ) {
+						$fields[$i]['layout'] = $replace;
 					}
 
 					$this->fix_field_layout( $fields[$i]['sub_fields'], $search, $replace );
