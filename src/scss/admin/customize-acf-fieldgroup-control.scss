@@ -92,6 +92,14 @@
 			}
 		}
 	}
+	.acf-tab-group {
+		li {
+			a {
+				font-size:12px;
+				line-height:20px;
+			}
+		}
+	}
 	.acf-tab-wrap {
 		background-color:transparent;
 		.acf-tab-group {
@@ -102,6 +110,61 @@
 				background-color: #fff;
 			}
 		}
-
+	}
+	.acf-field-flexible-content,
+	.acf-field-group,
+	.acf-field-repeater {
+		padding-left:0;
+		padding-right:0;
+		> .acf-label,
+		.acf-actions {
+			padding-left:12px;
+			padding-right:12px;
+		}
+	}
+	.acf-repeater {
+		.acf-row-handle {
+			//width:8px;
+		}
+	}
+	.acf-table {
+		> thead {
+			> tr {
+				> th {
+					padding-left:4px;
+					padding-right:4px;
+					font-size:12px;
+					font-weight:bold;
+				}
+			}
+		}
+		> tbody {
+			> tr {
+				> td {
+					padding-left:4px;
+					padding-right:4px;
+					&.acf-row-handle {
+						font-size:12px;
+					}
+					&.acf-fields {
+						&.-left {
+							.acf-label {
+								font-size:12px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.acf-flexible-content {
+		.layout {
+			margin-top:6px;
+		}
+	}
+	.acf-icon {
+		&:before {
+			line-height:inherit;
+		}
 	}
 }

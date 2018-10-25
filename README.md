@@ -28,3 +28,7 @@ run `npm install` then `gulp`
 Usage
 -----
 There is some documentation in the [wiki](wiki).
+
+ToDO:
+-----
+ - Bug: Repeatables not saving as theme_mod

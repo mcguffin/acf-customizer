@@ -57,9 +57,47 @@
   #customize-theme-controls .acf-fields .acf-gallery .acf-hl > li {
     max-width: 50%; }
 
+#customize-theme-controls .acf-tab-group li a {
+  font-size: 12px;
+  line-height: 20px; }
+
 #customize-theme-controls .acf-tab-wrap {
   background-color: transparent; }
   #customize-theme-controls .acf-tab-wrap .acf-tab-group {
     border-top-style: none; }
   #customize-theme-controls .acf-tab-wrap.-top ~ .acf-field {
     background-color: #fff; }
+
+#customize-theme-controls .acf-field-flexible-content,
+#customize-theme-controls .acf-field-group,
+#customize-theme-controls .acf-field-repeater {
+  padding-left: 0;
+  padding-right: 0; }
+  #customize-theme-controls .acf-field-flexible-content > .acf-label,
+  #customize-theme-controls .acf-field-flexible-content .acf-actions,
+  #customize-theme-controls .acf-field-group > .acf-label,
+  #customize-theme-controls .acf-field-group .acf-actions,
+  #customize-theme-controls .acf-field-repeater > .acf-label,
+  #customize-theme-controls .acf-field-repeater .acf-actions {
+    padding-left: 12px;
+    padding-right: 12px; }
+
+#customize-theme-controls .acf-table > thead > tr > th {
+  padding-left: 4px;
+  padding-right: 4px;
+  font-size: 12px;
+  font-weight: bold; }
+
+#customize-theme-controls .acf-table > tbody > tr > td {
+  padding-left: 4px;
+  padding-right: 4px; }
+  #customize-theme-controls .acf-table > tbody > tr > td.acf-row-handle {
+    font-size: 12px; }
+  #customize-theme-controls .acf-table > tbody > tr > td.acf-fields.-left .acf-label {
+    font-size: 12px; }
+
+#customize-theme-controls .acf-flexible-content .layout {
+  margin-top: 6px; }
+
+#customize-theme-controls .acf-icon:before {
+  line-height: inherit; }
