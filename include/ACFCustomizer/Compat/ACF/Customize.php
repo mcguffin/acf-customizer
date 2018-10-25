@@ -74,7 +74,7 @@ class Customize extends	Core\Singleton {
 	/**
 	 *	Handle theme mod values
 	 *
-	 *	@filter acf/load_value
+	 *	@filter acf/pre_load_value
 	 */
 	public function acf_load_value( $value, $post_id, $field ) {
 
@@ -82,15 +82,37 @@ class Customize extends	Core\Singleton {
 			$storage_type = $this->section_storage_types[ $post_id ];
 			if ( $storage_type === 'theme_mod' ) {
 				$data_source = get_theme_mod( $post_id );
+
 				if ( isset( $data_source[ $field['name'] ] ) ) {
-					return $data_source[ $field['name'] ];
+					$value = $data_source[ $field['name'] ];
+
+					$value = apply_filters( "acf/load_value/type={$field['type']}",		$value, $post_id, $field );
+					$value = apply_filters( "acf/load_value/name={$field['_name']}",	$value, $post_id, $field );
+					$value = apply_filters( "acf/load_value/key={$field['key']}",		$value, $post_id, $field );
+					$value = apply_filters( "acf/load_value",							$value, $post_id, $field );
+
+					return $value;
 				}
 			}
 		}
 		return $value;
 	}
 
+	/**
+	 *	@filter acf/pre_load_reference
+	 */
+	public function pre_load_reference( $reference, $field_name, $post_id ) {
+		if ( isset( $this->section_storage_types[ $post_id ] ) ) {
+			$storage_type = $this->section_storage_types[ $post_id ];
+			if ( $storage_type === 'theme_mod' ) {
+				$data_source = get_theme_mod( $post_id );
 
+				if ( isset( $data_source[ '_' . $field_name ] ) ) {
+					return $data_source[ '_' . $field_name ];
+				}
+			}
+		}
+	}
 
 	/**
 	 *	Make sure all wp-editor scripts are loaded
@@ -139,7 +161,8 @@ class Customize extends	Core\Singleton {
 			}
 		}
 
-		add_filter( 'acf/load_value', array( $this, 'acf_load_value' ), 10, 3 );
+		add_filter( 'acf/pre_load_reference', array( $this, 'pre_load_reference' ), 10, 3 );
+		add_filter( 'acf/pre_load_value', array( $this, 'acf_load_value' ), 10, 3 );
 
 	}
 
@@ -182,6 +205,7 @@ class Customize extends	Core\Singleton {
 			$wp_customize->add_control( $wp_control );
 
 		}
+
 	}
 
 	/**
