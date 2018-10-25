@@ -1,17 +1,17 @@
 ACF Customizer
 ==============
 
-0.0.17
+0.1.16
 ------
  - Fix: Theme mod Repeatable values not loaded
  - Fix: Repeater Layout not converted to block
  - Style: More Compact Controls
 
-0.0.16
+0.1.15
 ------
  - fix php warning
 
-0.0.14
+0.1.14
 ------
  - fix: Preview values were loaded from wrong customizer section
 
