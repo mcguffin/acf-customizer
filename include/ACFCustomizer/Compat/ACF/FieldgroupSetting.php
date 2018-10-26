@@ -18,6 +18,9 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 	public $field_groups		= array(); // acf field group key in instances
 
 
+	private $_converted_theme_mod = array();
+	private $_converting_theme_mod = null;
+
 	/**
 	 *	@inheritdoc
 	 */
@@ -65,7 +68,7 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 			return $value;
 		}
 
-		$mod = $this->convert_theme_mod( $changeset_data[ $post_id ]['value'] );
+		$mod = $this->convert_theme_mod( $changeset_data, $post_id );
 
 
 		if ( ! isset( $mod[ $field['name'] ] ) ) {
@@ -172,15 +175,26 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 	/**
 	 *	@param array $mod
 	 */
-	protected function convert_theme_mod( $mod ) {
-		$this->_converted_theme_mod = array();
-		add_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10, 5 );
-		acf_save_post( 1, $mod );
-		remove_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10 );
+	protected function convert_theme_mod( $changeset, $post_id = null ) {
+		if ( is_null( $post_id ) || ! isset( $this->_converted_theme_mod[ $post_id ] ) ) {
 
-		$return = $this->_converted_theme_mod + array();
-		$this->_converted_theme_mod = null;
-		return $return;
+			// store data here
+			$this->_converting_theme_mod = array();
+
+			add_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10, 5 );
+			acf_save_post( 1, $changeset[$post_id]['value'] );
+			remove_filter( 'update_post_metadata', array( $this, 'convert_theme_mod_update_cb'), 10 );
+
+			$mod = $this->_converting_theme_mod + array();
+			$this->_converting_theme_mod = null;
+
+			if ( is_null( $post_id ) ) {
+				return $mod;
+			} else {
+				$this->_converted_theme_mod[ $post_id ] = $mod;
+			}
+		}
+		return $this->_converted_theme_mod[ $post_id ];
 	}
 
 
@@ -191,7 +205,7 @@ class FieldgroupSetting extends \WP_Customize_Setting {
 	 *	@return bool prevents wp from actually saving this in db
 	 */
 	public function convert_theme_mod_update_cb( $null, $object_id, $meta_key, $meta_value, $prev_value ) {
-		$this->_converted_theme_mod[$meta_key] = $meta_value;
+		$this->_converting_theme_mod[$meta_key] = $meta_value;
 		return true;
 	}
 
