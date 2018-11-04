@@ -27,4 +27,4 @@ run `npm install` then `gulp`
 
 Usage
 -----
-There is some documentation in the [wiki](wiki).
+There is some documentation in the [wiki](./wiki).
