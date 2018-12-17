@@ -17,7 +17,6 @@ class Core extends Plugin {
 
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 		add_action( 'plugins_loaded' , array( $this , 'init_compat' ) );
-		add_action( 'init' , array( $this , 'init' ) );
 
 		parent::__construct();
 	}
@@ -30,6 +29,7 @@ class Core extends Plugin {
 	public function init_compat() {
 		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) ) {
 			Compat\ACF\ACF::instance();
+			add_action( 'init' , array( $this , 'init' ) );
 		}
 	}
 

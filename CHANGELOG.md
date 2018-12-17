@@ -1,6 +1,14 @@
 ACF Customizer
 ==============
 
+0.2.6
+-----
+ - fix PHP fatal when acf is not active
+
+0.2.3 - 0.2.5
+-------------
+...
+
 0.2.2
 -----
  - Fix: Post preview values
