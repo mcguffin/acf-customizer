@@ -1,7 +1,7 @@
 ACF Customizer
 ==============
 
-0.2.6
+0.2.7
 -----
  - fix PHP fatal when acf is not active
 
