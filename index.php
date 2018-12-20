@@ -5,7 +5,9 @@ Plugin Name: ACF Customizer
 Plugin URI: https://github.com/mcguffin/acf-customizer
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
-Version: 0.2.9
+Version: 0.2.10
+Tested up to: 5.0.2
+Requires PHP: 5.6
 Author URI:
 License: GPL3
 Github Repository: mcguffin/acf-customizer
@@ -51,6 +53,13 @@ define( 'ACF_CUSTOMIZER_PLUGIN', pathinfo( ACF_CUSTOMIZER_DIRECTORY, PATHINFO_FI
 require_once ACF_CUSTOMIZER_DIRECTORY . 'include/autoload.php';
 
 Core\Core::instance();
+
+// github updater overide dot org updates
+add_filter( 'github_updater_override_dot_org', function() {
+    return [
+        'acf-customizer/index.php' //plugin format
+    ];
+});
 
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
