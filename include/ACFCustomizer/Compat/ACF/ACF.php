@@ -10,7 +10,7 @@ if ( ! defined('ABSPATH') ) {
 use ACFCustomizer\Core;
 
 
-class ACF extends Core\PluginComponent {
+class ACF extends Core\Singleton implements Core\ComponentInterface {
 
 	/**
 	 *	@inheritdoc
@@ -22,13 +22,15 @@ class ACF extends Core\PluginComponent {
 
 		global $wp_customize;
 
+		$core = Core\Core::instance();
+
 		if ( ! is_null( $wp_customize ) ) {
 			// instantinate at 11
 			add_action( 'plugins_loaded', array('ACFCustomizer\Compat\ACF\Customize','instance'), 11 );
 
 		}
 
-		require_once ACF_CUSTOMIZER_DIRECTORY . '/include/api/acf-functions.php';
+		require_once $core->get_plugin_dir() . '/include/api/acf-functions.php';
 
 		add_action( 'acf/include_location_rules', array( $this, 'load_location_rule' ) );
 
@@ -58,7 +60,7 @@ class ACF extends Core\PluginComponent {
 	/**
 	 *	@inheritdoc
 	 */
-	public function uninstall() {
+	public static function uninstall() {
 		// remove content and settings
 	}
 

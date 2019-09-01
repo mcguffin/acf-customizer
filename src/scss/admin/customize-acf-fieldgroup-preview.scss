@@ -1,0 +1,8 @@
+@import 'variables/index';
+@import 'mixins/index';
+
+.customize-partial-edit-shortcut-button {
+	&[data-acf-customizer] {
+		left:0;
+	}
+}

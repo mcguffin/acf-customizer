@@ -21,7 +21,7 @@ class Plugin extends Singleton implements ComponentInterface {
 
 	/** @var string plugin components which might need upgrade */
 	private static $components = array(
-		'ACFCustomizer\Compat\ACF',
+		'ACFCustomizer\Compat\ACF\ACF',
 	);
 
 	/**
@@ -101,6 +101,9 @@ class Plugin extends Singleton implements ComponentInterface {
 	 *	@return string|array plugin meta
 	 */
 	public function get_plugin_meta( $which = null ) {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
 		if ( ! isset( $this->plugin_meta ) ) {
 			$this->plugin_meta = get_plugin_data( $this->get_plugin_file() );
 		}

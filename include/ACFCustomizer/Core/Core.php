@@ -66,18 +66,12 @@ class Core extends Plugin implements CoreInterface {
 	 */
 	public function init() {
 
-		if ( version_compare( acf()->version,'5.7','lt' ) ) {
-			$control_src = 'js/legacy/5.6/admin/customize-acf-fieldgroup-control.js';
-		} else {
-			$control_src = 'js/admin/customize-acf-fieldgroup-control.js';
-		}
-
 		$serialize_handle = Asset\Asset::get( 'js/jquery-serializejson.js' )
 			->deps('jquery')
 			->register()
 			->handle;
 
-		$this->control_js = Asset\Asset::get( $control_src )
+		$this->control_js = Asset\Asset::get( 'js/admin/customize-acf-fieldgroup-control.js' )
 			->deps( [ 'jquery', $serialize_handle, 'customize-controls' ] )
 			->register();
 

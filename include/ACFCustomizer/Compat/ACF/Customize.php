@@ -46,18 +46,20 @@ class Customize extends	Core\Singleton {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
-
-		add_action( 'init', array( $this, 'init' ), 0xffffffff );
+		add_action( 'init', array( $this, 'init_late' ), 0xffffffff );
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
 
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customize_scripts') );
 
-
 		// must build hidden wp_editor AFTER customize_controls_print_styles
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
 
-		add_action( 'init', array( 'ACFCustomizer\Compat\ACF\CustomizePreview', 'instance') );
+		if ( 'init' === current_filter() ) {
+			$this->init();
+		} else {
+			add_action( 'init', array( $this, 'init' ) );
+		}
 
 	}
 
@@ -130,11 +132,17 @@ class Customize extends	Core\Singleton {
 	}
 
 
-
 	/**
 	 *	@action init
 	 */
 	public function init() {
+		CustomizePreview::instance();
+	}
+
+	/**
+	 *	@action init
+	 */
+	public function init_late() {
 
 
 		foreach ( $this->sections as $section_id => $section ) {

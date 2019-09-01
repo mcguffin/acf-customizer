@@ -1,0 +1,176 @@
+@import 'variables/index';
+@import 'mixins/index';
+
+// #customize-sidebar-outer-content {
+// 	overflow-x:visible;
+// }
+//
+// #customize-controls {
+// 	.wp-full-overlay-sidebar-content {
+// 		overflow-x:visible;
+// 	}
+// 	.control-section {
+// 		&.open {
+// 			overflow-x:visible;
+// 		}
+// 	}
+// }
+
+#customize-theme-controls {
+	& > ul {
+		& > .customize-control-acf_customizer {
+			&.customize-control {
+				margin-left:-12px;
+				margin-right:-12px;
+				width:auto;
+				float:none;
+			}
+		}
+	}
+	.acf-fields {
+		& > .acf-field {
+			// padding-left:0;
+			// padding-right:0;
+		}
+		.acf-gallery {
+			overflow: hidden;
+			.acf-gallery-main {
+				right:0 !important;
+				width:100%  !important;
+			}
+			&.sidebar-open {
+				.acf-gallery-side {
+					right:0;
+					left:0;
+				}
+			}
+			.acf-gallery-side {
+				&,
+				& > * {
+					width:100% !important;
+				}
+				left:100%;
+				right:auto;
+				.acf-gallery-side-data {
+					table.form-table {
+						&,
+						tr,
+						td,
+						th,
+						tbody,
+						tfoot,
+						thead {
+							display:block;
+						}
+						tr {
+							&.acf-field {
+								margin-top:0;
+								margin-bottom:6px;
+								td.acf-label {
+									margin:0;
+									padding:0;
+									> label {
+										font-size:11px;
+										line-height: 1em;
+										margin:0;
+									}
+								}
+								td.acf-input {
+									margin:0;
+								}
+							}
+						}
+					}
+
+				}
+			}
+			.acf-hl {
+				& > li {
+					max-width:50%;
+				}
+			}
+		}
+	}
+	.acf-tab-group {
+		li {
+			a {
+				font-size:12px;
+				line-height:20px;
+			}
+		}
+	}
+	.acf-tab-wrap {
+		background-color:transparent;
+		.acf-tab-group {
+			border-top-style:none;
+		}
+		&.-top {
+			& ~ .acf-field {
+				background-color: #fff;
+			}
+		}
+	}
+	.acf-field-flexible-content,
+	.acf-field-group,
+	.acf-field-repeater {
+		padding-left:0;
+		padding-right:0;
+		> .acf-label,
+		.acf-actions {
+			padding-left:12px;
+			padding-right:12px;
+		}
+	}
+	.acf-repeater {
+		.acf-row-handle {
+			//width:8px;
+		}
+	}
+	.acf-table {
+		> thead {
+			> tr {
+				> th {
+					padding-left:4px;
+					padding-right:4px;
+					font-size:12px;
+					font-weight:bold;
+				}
+			}
+		}
+		> tbody {
+			> tr {
+				> td {
+					padding-left:4px;
+					padding-right:4px;
+					&.acf-row-handle {
+						font-size:12px;
+					}
+					&.acf-fields {
+						&.-left {
+							.acf-label {
+								font-size:12px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.acf-flexible-content {
+		.layout {
+			margin-top:6px;
+		}
+	}
+	.acf-icon {
+		&:before {
+			line-height:inherit;
+		}
+	}
+	.layout,
+	.acf-row {
+		&:focus {
+			z-index:1;
+			outline:7px solid rgba($wp-blue,0.5);
+		}
+	}
+}

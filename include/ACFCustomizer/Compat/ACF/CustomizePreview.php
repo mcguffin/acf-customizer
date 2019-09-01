@@ -182,9 +182,10 @@ class CustomizePreview extends Core\Singleton {
 	 */
 	public function enqueue_preview() {
 
-		wp_enqueue_script( 'acf-fieldgroup-preview' );
+		$core = Core\Core::instance();
 
-		wp_enqueue_style( 'acf-fieldgroup-preview' );
+		$core->preview_css->enqueue();
+		$core->preview_js->enqueue();
 
 	}
 
