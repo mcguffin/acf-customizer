@@ -1,28 +1,54 @@
 <?php
+/**
+ *	@package ACFCustomizer\Core
+ *	@version 1.0.1
+ *	2018-09-22
+ */
 
 namespace ACFCustomizer\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
-
+use ACFCustomizer\Asset;
 use ACFCustomizer\Compat;
 
-class Core extends Plugin {
+class Core extends Plugin implements CoreInterface {
+
+
+	public $control_css = null;
+
+	public $control_js = null;
+
+	public $preview_css = null;
+
+	public $preview_js = null;
 
 	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
 
-		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
-		add_action( 'plugins_loaded' , array( $this , 'init_compat' ) );
+		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
+		add_action( 'init' , array( $this , 'init' ) );
 
-		parent::__construct();
+//		add_action( 'wp_enqueue_scripts' , array( $this , 'enqueue_assets' ) );
+
+		$args = func_get_args();
+		parent::__construct( ...$args );
 	}
 
 	/**
-	 *	Init Compat Classes
+	 *	Load frontend styles and scripts
+	 *
+	 *	@action wp_enqueue_scripts
+	 */
+	// public function enqueue_assets() {
+	// }
+
+
+	/**
+	 *	Load Compatibility classes
 	 *
 	 *  @action plugins_loaded
 	 */
@@ -33,18 +59,6 @@ class Core extends Plugin {
 		}
 	}
 
-
-
-	/**
-	 *	Load text domain
-	 *
-	 *  @action plugins_loaded
-	 */
-	public function load_textdomain() {
-		$path = pathinfo( dirname( ACF_CUSTOMIZER_FILE ), PATHINFO_FILENAME );
-		load_plugin_textdomain( 'acf-customizer' , false, $path . '/languages' );
-	}
-
 	/**
 	 *	Init hook.
 	 *
@@ -52,49 +66,71 @@ class Core extends Plugin {
 	 */
 	public function init() {
 
-		$suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.min' : '';
-
 		if ( version_compare( acf()->version,'5.7','lt' ) ) {
-			$control_src = "js/legacy/5.6/admin/customize-acf-fieldgroup-control{$suffix}.js";
+			$control_src = 'js/legacy/5.6/admin/customize-acf-fieldgroup-control.js';
 		} else {
-			$control_src = "js/admin/customize-acf-fieldgroup-control{$suffix}.js";
+			$control_src = 'js/admin/customize-acf-fieldgroup-control.js';
 		}
 
-		wp_register_script( 'jquery-serializejson', $this->get_asset_url( "js/jquery-serializejson{$suffix}.js" ), array( 'jquery' ) );
+		$serialize_handle = Asset\Asset::get( 'js/jquery-serializejson.js' )
+			->deps('jquery')
+			->register()
+			->handle;
 
-		wp_register_script(
-			'acf-fieldgroup-control',
-			$this->get_asset_url( $control_src ),
-			array( 'jquery', 'jquery-serializejson', 'customize-controls' )
-		);
+		$this->control_js = Asset\Asset::get( $control_src )
+			->deps( [ 'jquery', $serialize_handle, 'customize-controls' ] )
+			->register();
 
-		wp_register_script(
-			'acf-fieldgroup-preview',
-			$this->get_asset_url( "js/admin/customize-acf-fieldgroup-preview{$suffix}.js" ),
-			array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
-		);
+		$this->preview_js = Asset\Asset::get( 'js/admin/customize-acf-fieldgroup-preview.js' )
+			->deps( [ 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ] )
+			->register();
 
-		wp_register_style(
-			'acf-fieldgroup-preview',
-			$this->get_asset_url( "css/admin/customize-acf-fieldgroup-preview{$suffix}.css" ),
-			array( 'customize-preview' )
-		);
 
-		wp_register_style( 'acf-fieldgroup-control' , $this->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
+		$this->control_css = Asset\Asset::get( 'css/admin/customize-acf-fieldgroup-control.css' )
+			->register();
+
+		$this->preview_css = Asset\Asset::get( 'css/admin/customize-acf-fieldgroup-preview.css' )
+			->deps( 'customize-preview' )
+			->register();
+
+
+		// Asset\Asset::get( 'css/main.css' )->register();
+		// Asset\Asset::get( 'js/main.js' )
+		// 	->deps( ['jquery'] )
+		// 	->localize( array(
+		// 		/* Script localization */
+		// 	) )
+		// 	->register();
+		//
+		//
+		// $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.min' : '';
+		//
+		//
+		// wp_register_script( 'jquery-serializejson', $this->get_asset_url( 'js/jquery-serializejson.js' ), array( 'jquery' ) );
+
+		// wp_register_script(
+		// 	'acf-fieldgroup-control',
+		// 	$this->get_asset_url( $control_src ),
+		// 	array( 'jquery', 'jquery-serializejson', 'customize-controls' )
+		// );
+
+		// wp_register_script(
+		// 	'acf-fieldgroup-preview',
+		// 	$this->get_asset_url( 'js/admin/customize-acf-fieldgroup-preview.js' ),
+		// 	array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
+		// );
+
+
+		// wp_register_style(
+		// 	'acf-fieldgroup-preview',
+		// 	$this->get_asset_url( 'css/admin/customize-acf-fieldgroup-preview.css' ),
+		// 	array( 'customize-preview' )
+		// );
+
+		// wp_register_style( 'acf-fieldgroup-control' , $this->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
 
 
 	}
-
-	/**
-	 *	Get asset url for this plugin
-	 *
-	 *	@param	string	$asset	URL part relative to plugin class
-	 *	@return wp_enqueue_editor
-	 */
-	public function get_asset_url( $asset ) {
-		return plugins_url( $asset, ACF_CUSTOMIZER_FILE );
-	}
-
 
 
 }

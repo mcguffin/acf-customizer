@@ -212,14 +212,22 @@ class Customize extends	Core\Singleton {
 	 *	@action customize_controls_enqueue_scripts
 	 */
 	public function enqueue_assets() {
+		$core = Core\Core::instance();
 
-		wp_enqueue_style( 'acf-fieldgroup-control' );
+		$core->control_css->enqueue();
+		$core->control_js
+			->localize([
+				'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
+			], 'acf_fieldgroup_control' )
+			->enqueue();
 
-		wp_enqueue_script( 'acf-fieldgroup-control' );
-
-		wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
-			'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
-		) );
+		// wp_enqueue_style( 'acf-fieldgroup-control' );
+		//
+		// wp_enqueue_script( 'acf-fieldgroup-control' );
+		//
+		// wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
+		// 	'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
+		// ) );
 	}
 
 	/**

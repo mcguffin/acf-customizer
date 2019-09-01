@@ -1,10 +1,15 @@
 {
   "name": "acf-customizer",
-  "version": "0.0.1",
-  "description": "Plugin description",
+  "version": "0.2.10",
+  "description": "Use ACF Fields in customizer.",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "gulp dev",
+    "test": "node ./src/run/test.js",
+    "dev-test": "./src/run/dev-test.sh",
+    "dashicons": "node ./src/run/dashicons.js",
+    "rollback": "git reset --hard HEAD~ && git push origin +master",
+    "i18n": "wp i18n make-pot . languages/acf-customizer.pot --domain=acf-customizer --exclude=tmp/*"
   },
   "repository": {
     "type": "git",
@@ -17,15 +22,84 @@
   },
   "homepage": "https://github.com//acf-customizer#readme",
   "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-autoprefixer": "*",
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.5.4",
+    "babelify": "^10.0.0",
+    "browserify": "^16.3.0",
+    "browserify-shim": "^3.8.14",
+    "event-stream": "^4.0.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
     "gulp-concat": "*",
     "gulp-rename": "*",
-    "gulp-sass": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-uglify": "*",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
     "gulp-util": "*",
-    "jquery-serializejson": "^2.8.1"
+    "jquery-serializejson": "^2.9.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jquery": "^1.12.4"
+  },
+  "wpPlugin": {
+    "components": {
+      "core": {
+        "components": [],
+        "flags": [
+          "css",
+          "js"
+        ]
+      },
+      "compat": {
+        "components": {
+          "acf": {
+            "flags": []
+          }
+        },
+        "flags": []
+      }
+    },
+    "name": "ACF Customizer",
+    "slug": "acf-customizer",
+    "prefix": "acf_customizer",
+    "textdomain": "acf-customizer",
+    "namespace": "ACFCustomizer",
+    "author": "mcguffin",
+    "author_uri": "https://github.com/mcguffin",
+    "year": 2019
+  },
+  "wporg": {
+    "steps": [
+      "build",
+      "git",
+      "github"
+    ],
+    "type": "plugin",
+    "build": {
+      "prebuild": [
+        "wp i18n make-pot . languages/acf-customizer.pot --domain=acf-customizer --exclude=tmp"
+      ],
+      "build": []
+    },
+    "git": {
+      "host": "github.com",
+      "user": "mcguffin"
+    },
+    "wporg": {
+      "assets": ".wporg"
+    }
+  },
+  "browserslist": [
+    "last 3 versions",
+    "> 0.25%",
+    "IE 10"
+  ],
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  }
 }

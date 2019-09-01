@@ -1,4 +1,9 @@
 <?php
+/**
+ *	@package ACFCustomizer\Core
+ *	@version 1.0.0
+ *	2018-09-22
+ */
 
 namespace ACFCustomizer\Core;
 
@@ -20,9 +25,14 @@ abstract class Singleton {
 	 * @return object single instance of Core
 	 */
 	public static function instance() {
+
 		$class = get_called_class();
-		if ( ! isset( self::$instances[ $class ] ) )
-			self::$instances[ $class ] = new $class();
+
+		if ( ! isset( self::$instances[ $class ] ) ) {
+			$args = func_get_args();
+			self::$instances[ $class ] = new $class( ...$args );
+		}
+
 		return self::$instances[ $class ];
 	}
 
@@ -37,4 +47,16 @@ abstract class Singleton {
 	 */
 	protected function __construct() {
 	}
+
+	/**
+	 *	Array filter: Append instance to array.
+	 *	Use it for filters
+	 */
+	public function append_this( $arr ) {
+		$arr[] = $this;
+		return $arr;
+	}
+
+
+
 }
