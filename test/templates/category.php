@@ -26,7 +26,11 @@ get_header();
 				<?php
 					the_archive_title( '<h1 class="page-title">', '</h1>' );
 				?>
-				<?php get_template_part( 'template-parts/acf/layouts' ); ?>
+				<?php
+					get_template_part( 'template-parts/acf/repeat-basic' );
+					get_template_part( 'template-parts/acf/basic' );
+					get_template_part( 'template-parts/acf/layouts' );
+				?>
 			</header><!-- .page-header -->
 			<?php
 

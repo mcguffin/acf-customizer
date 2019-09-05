@@ -24,6 +24,8 @@ $acf_test_post_id = get_the_ID();
 	<div class="entry-content">
 		<?php
 
+		get_template_part( 'template-parts/acf/repeat-basic' );
+		get_template_part( 'template-parts/acf/basic' );
 		get_template_part( 'template-parts/acf/layouts' );
 
 		the_content();

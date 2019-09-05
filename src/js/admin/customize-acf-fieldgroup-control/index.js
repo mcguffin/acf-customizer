@@ -239,7 +239,6 @@
 					if ( $focusEl.is('[data-type="flexible_content"]') ) {
 						$focusEl = $focusEl.find('> .acf-input > .acf-flexible-content > .values').children(':not(.acf-clone)').eq(current);
 					} else if ( $focusEl.is('[data-type="repeater"]') ) {
-						console.log($focusEl.find('> .acf-input > .acf-repeater > .acf-table > tbody'));
 						$focusEl = $focusEl.find('> .acf-input > .acf-repeater > .acf-table > tbody').children(':not(.acf-clone)').eq(current);
 					} else {
 						$focusEl = false;
@@ -263,7 +262,6 @@
 				if ( expand.length ) {
 					expandRepeatables( expand );
 				}
-
 
 				if ( ! _.isNumber( current ) ) {
 					// focus input ..
@@ -307,24 +305,16 @@
 
 
 		api.previewer.bind( 'acf-focus', function( path ) {
-			var post_id = path.pop();
-
-			api.control.each( function( control ) {
-				if ( control.constructor === api.AcfFieldGroupControl ) {
-
-					if ( _.isNumber( post_id ) ) {
-						if ( !! control.preview_context && ( control.preview_context.id === post_id ) ) {
-							if ( control.focusField( path ) ) {
-								return;
-							}
-						}
-					} else {
-						if ( control.id === post_id && control.focusField( path ) ) {
-							return;
-						}
+			var section_id = path.pop();
+			console.log(section_id)
+			try {
+				api.control.each( function( control ) {
+					if ( control.constructor === api.AcfFieldGroupControl && section_id === control.id ) {
+						control.focusField( path );
+						throw( 'break loop' );
 					}
-				}
-			});
+				});
+			} catch(err){}
 		});
 
 	});

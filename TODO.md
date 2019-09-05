@@ -2,15 +2,18 @@ ACF-Customizer ToDo
 ===================
 
  - [x] Fix: Post fields not loaded
- - [ ] Bug: Preview value not shown when added Layout
+ - [x] Bug: Preview value not shown when added Layout
  - [ ] Edit-Shortcuts:
-	 - [ ] Works not on term + page fields (rows work!)
-	 - [ ] Textfield doesn't focus
+	 - [x] Works not on term + page fields (rows work!)
+	 - [ ] Textarea field doesn't focus
 	 - [ ] Find solution to focus Image, Gallery
-	 - [ ] More distinct focus style
+	 - [x] More distinct focus style
  - [ ] Tests
-	 - [ ] Multiple Fields in one Section
-	 - [ ] Basic types
+	 - [x] Multiple Fields in one Section
+	 - [x] Basic types
+	 - [ ] Multiple Sections with same post_id
 	 - [ ] Repeater
+	 - [ ] Visibility Rules
 	 - [ ] ACF-Dropzone
 	 - [ ] OSM Field
+	 - [x] Duplicate Repetaer

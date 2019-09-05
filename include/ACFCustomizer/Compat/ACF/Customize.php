@@ -28,9 +28,14 @@ class Customize extends	Core\Singleton {
 	private $section_controls = array();
 
 	/**
-	 *	Mapping $post_id <=> storage type
+	 *	Mapping $field_group + $storage_type <=> $section
 	 */
-	private $section_storage_types = array();
+	private $fieldgroup_storage_section = array();
+
+	/**
+	 *	Mapping $field_group + $storage_type <=> $section
+	 */
+	private $fieldgroup_postid_section = array();
 
 	/**
 	 *	Field groups
@@ -65,6 +70,37 @@ class Customize extends	Core\Singleton {
 		} else {
 			add_action( 'init', array( $this, 'init' ) );
 		}
+	}
+
+	/**
+	 *	Used by customize preview shortcuts
+	 *	Ugly long function name.
+	 *
+	 *	@param string $field_group_key
+	 *	@param string $storage_type
+	 *	@return string
+	 */
+	public function get_section_id_by_fieldgroup_storage( $field_group_key, $storage_type ) {
+		if ( isset( $this->fieldgroup_storage_section[ $field_group_key . '___' . $storage_type ] ) ) {
+			return $this->fieldgroup_storage_section[ $field_group_key . '___' . $storage_type ];
+		}
+		return false;
+	}
+
+
+	/**
+	 *	Used by customize preview shortcuts
+	 *	Ugly long function name.
+	 *
+	 *	@param string $field_group_key
+	 *	@param string $storage_type
+	 *	@return string
+	 */
+	public function get_section_id_by_fieldgroup_post_id( $field_group_key, $post_id ) {
+		if ( isset( $this->fieldgroup_postid_section[ $field_group_key . '___' . $post_id ] ) ) {
+			return $this->fieldgroup_postid_section[ $field_group_key . '___' . $post_id ];
+		}
+		return false;
 	}
 
 	/**
@@ -119,8 +155,6 @@ class Customize extends	Core\Singleton {
 
 
 		foreach ( $this->sections as $section_id => $section ) {
-			// post_id <=> storage_type
-			$this->section_storage_types[ $section['post_id'] ] = $section['setting_args']['type'];
 
 			//continue;
 			$field_groups = acf_get_field_groups( array(
@@ -137,7 +171,8 @@ class Customize extends	Core\Singleton {
 
 				$this->sections[ $section_id ][ 'field_groups' ][] =  $field_group_key;
 
-				$this->section_storage_types[ $section['post_id'] ] = $section['storage_type'];
+				$this->fieldgroup_storage_section[ $field_group_key . '___' . $section['storage_type'] ] = $section_id;
+				$this->fieldgroup_postid_section[ $field_group_key . '___' . $section['post_id'] ] = $section_id;
 
 			}
 		}
@@ -184,6 +219,8 @@ class Customize extends	Core\Singleton {
 		}
 
 	}
+
+
 
 	/**
 	 *	@action customize_controls_enqueue_scripts

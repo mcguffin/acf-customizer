@@ -63,15 +63,22 @@ class CustomizePreview extends Core\Singleton {
 	}
 
 	/**
-	 *	@param $selector
-	 *	@param $post_id
+	 *	Build path from
+	 *
+	 *	@param string $selector If null will build path based on ACF loop hierarchy. If not get path from field hierarchy.
+	 *	@param string|int $post_id If null will guess current post id.
+	 *	@return array
 	 */
 	private function build_path( $selector = null, $post_id = null ) {
 
 		$path = array();
+		$section_id = false;
+		$post_id_info = false;
 
 		$acf_loop = acf()->loop;
 		$is_loop = $acf_loop->is_loop();
+
+		$customize = Customize::instance();
 
 		if ( is_null( $post_id ) ) {
 			if ( $is_loop ) {
@@ -79,10 +86,11 @@ class CustomizePreview extends Core\Singleton {
 			} else {
 				$post_id = acf_get_valid_post_id();
 			}
+
 		}
-		if ( ! $post_id ) {
-			return false;
-		}
+
+		$post_id_info = acf_get_post_id_info( $post_id );
+
 
 		if ( ! is_null( $selector ) ) {
 
@@ -107,11 +115,24 @@ class CustomizePreview extends Core\Singleton {
 				$path[] = $loop['i'];
 				$path[] = $field['key'];
 			}
+		} else {
+			$field = get_field_object( $selector, $post_id );
+		}
+		$field_group_key = $field['parent'];
+
+		$path[] = $field_group_key; // field group
+
+		if ( $post_id_info['type'] === 'option' ) {
+			$section_id = $customize->get_section_id_by_fieldgroup_post_id( $field_group_key, $post_id );
+		} else {
+			$section_id = $customize->get_section_id_by_fieldgroup_storage( $field_group_key, $post_id_info['type'] );
 		}
 
-		$path[] = $field['parent']; // add field group
+		if ( ! $section_id ) {
+			return false;
+		}
 
-		$path[] = $post_id;
+		$path[] = $section_id;
 
 		return $path;
 	}
@@ -121,14 +142,13 @@ class CustomizePreview extends Core\Singleton {
 	 */
 	private function get_partial_button( $path ) {
 		// pencil
-		// $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"/></svg>';
+		$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"/></svg>';
 
 		// chain
 		// $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.6,15.2l3.7-3.7c0.2,0.6,0.2,1.3,0,2s-0.5,1.3-1,1.8l-1.4,1.4c-0.7,0.6-1.6,1-2.7,1s-2-0.4-2.7-1.1c-0.8-0.8-1.1-1.7-1.1-2.7s0.4-2,1.1-2.7l1.4-1.5c0.5-0.5,1.1-0.8,1.8-1s1.3-0.2,2,0L5,12.4c-0.4,0.4-0.6,0.8-0.6,1.4c0,0.5,0.2,1,0.6,1.4s0.8,0.6,1.4,0.6S7.2,15.6,7.6,15.2z M8.3,13.2l4.8-4.8c0.2-0.2,0.3-0.4,0.3-0.7c0-0.3-0.1-0.5-0.3-0.7c-0.2-0.2-0.5-0.3-0.7-0.3c-0.3,0-0.5,0.1-0.7,0.3l-4.8,4.8c-0.2,0.2-0.3,0.4-0.3,0.7s0.1,0.5,0.3,0.7c0.2,0.2,0.4,0.3,0.7,0.3C7.9,13.4,8.1,13.3,8.3,13.2z M16.5,3.6c0.8,0.8,1.1,1.7,1.1,2.7c0,1.1-0.4,2-1.1,2.7l-1.4,1.4c-0.5,0.5-1.1,0.8-1.8,1s-1.3,0.2-2,0l2.4-2.3l0.7-0.7l0.7-0.7c0.4-0.4,0.6-0.8,0.6-1.4s-0.2-1-0.6-1.4s-0.8-0.6-1.4-0.6c-0.5,0-1,0.2-1.4,0.6l-0.7,0.7l-3,3C8.5,8,8.5,7.3,8.7,6.7s0.5-1.3,1-1.8l1.4-1.4c0.8-0.8,1.7-1.1,2.7-1.1S15.7,2.8,16.5,3.6z"/></svg>';
 
 		// curly arrow left
-
-		$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18.1,13.8c0-3.3-2.7-6-6-6c-0.6,0-2.3,0-3.6,0V3.5L1.9,10l6.4,6.4v-4.3c1.7,0,4.3,0,4.7,0c2.1,0,3.9,1.7,3.9,3.9c0,0.8-0.2,1.5-0.6,2.1C17.4,16.9,18.1,15.4,18.1,13.8z"/></svg>';
+		// $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M18.1,13.8c0-3.3-2.7-6-6-6c-0.6,0-2.3,0-3.6,0V3.5L1.9,10l6.4,6.4v-4.3c1.7,0,4.3,0,4.7,0c2.1,0,3.9,1.7,3.9,3.9c0,0.8-0.2,1.5-0.6,2.1C17.4,16.9,18.1,15.4,18.1,13.8z"/></svg>';
 
 		$btn = sprintf('<button data-acf-customizer="%s" aria-label="%s" title="%s" class="customize-partial-edit-shortcut-button">%s</button>',
 				esc_attr( json_encode($path) ),
@@ -170,15 +190,6 @@ class CustomizePreview extends Core\Singleton {
 		return $this->_changeset_data;
 
 	}
-
-	/**
-	 *	@filter acf/pre_load_value
-	 */
-	// public function acf_pre_load_value( $value, $post_id, $field ) {
-	//
-	// 	return apply_filters( 'acf_get_preview_value', $value, $post_id, $field );
-	//
-	// }
 
 	/**
 	 *	@action wp_enueue_scripts

@@ -16,7 +16,17 @@
 // 	}
 // }
 
+.wp-picker-holder,
+.ui-datepicker {
+	.wp-customizer & {
+		box-shadow:0 0 10px rgba(0,0,0,0.2);
+	}
+}
+
 #customize-theme-controls {
+	table,td {
+		font-size:inherit;
+	}
 	& > ul {
 		& > .customize-control-acf_customizer {
 			&.customize-control {
@@ -27,8 +37,20 @@
 			}
 		}
 	}
+
+	.acf-input-wrap {
+		overflow:visible;
+	}
+
 	.acf-fields {
-		& > .acf-field {
+		& > * > .acf-field {
+			margin-left:10px;
+			margin-right:10px;
+			&.acf-field-repeater,
+			&.acf-field-flexible-content {
+				margin-left:0;
+				margin-right:0;
+			}
 			// padding-left:0;
 			// padding-right:0;
 		}

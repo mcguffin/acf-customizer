@@ -17,6 +17,8 @@ global $acf_test_post_id;
 	<div>
 	<?php
 		$acf_test_post_id = 'acf_customize_mod_1';
+		get_template_part( 'template-parts/acf/repeat-basic' );
+		get_template_part( 'template-parts/acf/basic' );
 		get_template_part( 'template-parts/acf/layouts' );
 
 	?>
@@ -24,6 +26,8 @@ global $acf_test_post_id;
 	<div>
 	<?php
 		$acf_test_post_id = 'acf_customize_opt_1';
+		get_template_part( 'template-parts/acf/repeat-basic' );
+		get_template_part( 'template-parts/acf/basic' );
 		get_template_part( 'template-parts/acf/layouts' );
 	?>
 	</div>
