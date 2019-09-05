@@ -1,6 +1,6 @@
 {
     "key": "group_acf_customizer_layout",
-    "title": "Field Layout",
+    "title": "ACF Customizer Layout",
     "fields": [
         {
             "key": "field_50060025b9785",
@@ -16,8 +16,8 @@
                 "id": ""
             },
             "layouts": {
-                "$1_5006": {
-                    "key": "$1_5006",
+                "layout_50070038b9786": {
+                    "key": "layout_50070038b9786",
                     "name": "basic",
                     "label": "Basic",
                     "display": "row",
@@ -63,7 +63,7 @@
                             "placeholder": "",
                             "maxlength": "",
                             "rows": "",
-                            "new_lines": "",
+                            "new_lines": "br",
                             "show_column": 0,
                             "show_column_weight": 1000,
                             "allow_quickedit": 0,
@@ -708,8 +708,8 @@
                 },
                 "layout_50060057b978a": {
                     "key": "layout_50060057b978a",
-                    "name": "Repeatable",
-                    "label": "repeatable",
+                    "name": "repeatable",
+                    "label": "Repeatable",
                     "display": "block",
                     "sub_fields": [
                         {
@@ -934,6 +934,13 @@
                 "operator": "==",
                 "value": "category"
             }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
         ]
     ],
     "menu_order": 0,
@@ -944,5 +951,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1567331729
+    "modified": 1567677352
 }

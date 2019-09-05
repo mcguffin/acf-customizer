@@ -18,8 +18,21 @@ class PluginTest {
 
 		add_action( 'init', [ $this, 'init' ] );
 
-
+//		add_filter( 'template_include', [ $this, 'template_include' ], 99 );
+		add_filter('stylesheet_directory',function($dir){
+			return dirname(__FILE__).'/templates';
+		});
 	}
+
+	// public function template_include( $template ) {
+	// 	$file = str_replace( get_stylesheet_directory(), '', $template);
+	// 	$test_template = dirname(__FILE__) . '/templates' . $file;
+	// 	vaR_dump($test_template);
+	// 	if ( file_exists( $test_template ) ) {
+	// 		return $test_template;
+	// 	}
+	// 	return $template;
+	// }
 
 	/**
 	 *	@action init

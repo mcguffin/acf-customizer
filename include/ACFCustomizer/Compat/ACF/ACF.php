@@ -26,7 +26,7 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 
 		if ( ! is_null( $wp_customize ) ) {
 			// instantinate at 11
-			add_action( 'plugins_loaded', array('ACFCustomizer\Compat\ACF\Customize','instance'), 11 );
+//			add_action( 'plugins_loaded', array('ACFCustomizer\Compat\ACF\Customize','instance'), 11 );
 
 		}
 

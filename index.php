@@ -68,3 +68,5 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	}
 
 }
+
+include_once __DIR__ . DIRECTORY_SEPARATOR . 'test/test.php';

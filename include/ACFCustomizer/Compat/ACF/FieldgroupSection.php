@@ -15,7 +15,9 @@ class FieldgroupSection extends \WP_Customize_Section {
 
 	private $context = null;
 
-	public $storage_type		= 'theme_mod'; // acf field group key in instances
+	public $post_id = '';
+
+	public $storage_type = 'theme_mod'; // acf field group key in instances
 
 	/**
 	 *	@inheritdoc
@@ -47,12 +49,21 @@ class FieldgroupSection extends \WP_Customize_Section {
 		parent::__construct( $manager, $id, $args );
 
 		if ( isset( $_REQUEST['acf_customize_context'] ) ) {
-			$this->context = json_decode( wp_unslash( $_POST['acf_customize_context'] ) );
+			/*
+			expected
+			[
+				id: <int>,
+				type: term|post
+			]
+			*/
+			$this->context = json_decode( wp_unslash( $_REQUEST['acf_customize_context'] ) );
 		} else {
 
 		}
 
 	}
+
+
 
 	/**
 	 *	@return mixed

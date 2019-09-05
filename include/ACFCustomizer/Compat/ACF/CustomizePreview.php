@@ -25,14 +25,14 @@ class CustomizePreview extends Core\Singleton {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_preview' ) );
 
 			add_action( 'wp_footer', array( $this, 'wp_foot' ), 2000 );
-			add_filter( 'acf/pre_load_value', array( $this, 'acf_pre_load_value' ), 10, 3 );
 
-			add_action('acf_customizer_field' ,array( $this, 'partial_field' ), 10, 2 );
-			add_action('acf_customizer_row', array( $this, 'partial_row' ), 10, 0 );
-			add_action('acf_customizer_sub_field', array( $this, 'partial_subfield' ), 10, 1 );
+			add_action( 'acf_customizer_field' ,array( $this, 'partial_field' ), 10, 2 );
+			add_action( 'acf_customizer_row', array( $this, 'partial_row' ), 10, 0 );
+			add_action( 'acf_customizer_sub_field', array( $this, 'partial_subfield' ), 10, 1 );
 
 		}
 	}
+
 
 	/**
 	 *	@action acf_customizer_field
@@ -116,6 +116,9 @@ class CustomizePreview extends Core\Singleton {
 		return $path;
 	}
 
+	/**
+	 *	@param array $path Path to customize control
+	 */
 	private function get_partial_button( $path ) {
 		// pencil
 		// $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"/></svg>';
@@ -171,11 +174,11 @@ class CustomizePreview extends Core\Singleton {
 	/**
 	 *	@filter acf/pre_load_value
 	 */
-	public function acf_pre_load_value( $value, $post_id, $field ) {
-
-		return apply_filters( 'acf_get_preview_value', $value, $post_id, $field );
-
-	}
+	// public function acf_pre_load_value( $value, $post_id, $field ) {
+	//
+	// 	return apply_filters( 'acf_get_preview_value', $value, $post_id, $field );
+	//
+	// }
 
 	/**
 	 *	@action wp_enueue_scripts
@@ -189,15 +192,21 @@ class CustomizePreview extends Core\Singleton {
 
 	}
 
+	/**
+	 *	@action wp_footer
+	 */
 	public function wp_foot() {
 
 		?>
-		<script type="text/javascript">
+		<script type="text/javascript" id="acf-customize-context">
 		var _acf_customize_context = <?php echo json_encode( array( 'current_location' => $this->get_context() ) ) ?>;
 		</script>
 		<?php
 	}
 
+	/**
+	 *	@return
+	 */
 	public function get_context() {
 		$obj = get_queried_object();
 		$loc = array(

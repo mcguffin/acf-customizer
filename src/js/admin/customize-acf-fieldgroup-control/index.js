@@ -6,6 +6,14 @@
 		acf_customize_context,
 		queue = [];
 
+	// var _isEqual = _.isEqual,
+	// 	isEqualPatch = function(object,other) {
+	// 	if ( _.isObject(object) && _.isObject(other) && ! _isEqual( Object.keys(object), Object.keys(other) ) ) {
+	// 		return false;
+	// 	}
+	// 	return _isEqual(object,other);
+	// }
+
 	// make sure fields get inited in the order they appear in the dom
 	function enqueue(request,done) {
 		var idx = queue.length,
@@ -115,6 +123,7 @@
 					},
 					complete:function($form) {
 						acf.unlockForm( $form );
+						setTimeout( function(){ control.setting.preview(); }, 100 );
 					}
 				} );
 
@@ -184,7 +193,7 @@
 						obj = Object.values( obj );
 					}
 					// recurse
-					$.each( obj,function(i,el){
+					$.each( obj,function( i, el ){
 						obj[i] = fixNumKeys( el );
 					} );
 				}
@@ -213,14 +222,18 @@
 				$(this).data('prev-name', null );
 			});
 
-			// update customier value
+			// force value update
+			control.setting._value.___acf_customizer_dirty = true;
+			// update customizer value
 			control.setting.set( fixNumKeys( value[this.id ] ) );
+
 		},
 		focusField:function( path ) {
 			var current, selector, $focusEl = this.$wrapper, expand = [];
 
 			while ( path.length ) {
 				current = path.pop();
+
 				if ( _.isNumber( current ) ) {
 
 					if ( $focusEl.is('[data-type="flexible_content"]') ) {
@@ -280,12 +293,12 @@
 	api.bind('ready',function(){
 		api.previewer.bind( 'acf-customize-context', function( new_val ) {
 			var prev_val;
-
 			prev_val = acf_customize_context
 			if ( JSON.stringify(new_val) != JSON.stringify(prev_val) ) {
 				api.trigger( 'acf-customize-context-changed', new_val )
 			}
 			acf_customize_context = new_val;
+
 		});
 
 		api.previewer.bind( 'focus-control-for-setting', function( settingId ) {
@@ -294,10 +307,11 @@
 
 
 		api.previewer.bind( 'acf-focus', function( path ) {
-			console.log(path);
 			var post_id = path.pop();
+
 			api.control.each( function( control ) {
-				if ( control.constructor===api.AcfFieldGroupControl ) {
+				if ( control.constructor === api.AcfFieldGroupControl ) {
+
 					if ( _.isNumber( post_id ) ) {
 						if ( !! control.preview_context && ( control.preview_context.id === post_id ) ) {
 							if ( control.focusField( path ) ) {

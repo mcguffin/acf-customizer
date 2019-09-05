@@ -1,7 +1,7 @@
 /* global _acf_customizer_location */
 
 /** @namespace wp.customize.acfFieldsetPreview */
-console.log("xxxx")
+
 wp.customize.acfFieldsetPreview = wp.customize.AcfFieldsetCustomizerPreview = (function( $, _, wp, api ) {
 	var self;
 
@@ -22,7 +22,7 @@ wp.customize.acfFieldsetPreview = wp.customize.AcfFieldsetCustomizerPreview = (f
 			api.preview.send( 'acf-customize-context', self.current_location );
 		} );
 
-		$('[data-acf-customizer]').on('click',function(e){
+		$(document).on( 'click', '[data-acf-customizer]', function(e){
 
 			var data = $(this).data('acf-customizer');
 

@@ -170,7 +170,8 @@
 	.acf-row {
 		&:focus {
 			z-index:1;
-			outline:7px solid rgba($wp-blue,0.5);
+			//outline:7px solid rgba($wp-blue,0.5);
+			box-shadow:0 0 7px rgba($wp-blue,0.8);
 		}
 	}
 }

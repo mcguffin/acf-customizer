@@ -23,7 +23,9 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 	public $storage_type		= 'theme_mod'; // acf field group key in instances
 
-
+	/**
+	 *	@inheritdoc
+	 */
 	public function __construct( $manager, $id, $args = array() ) {
 
 		parent::__construct( $manager, $id, $args );
@@ -31,6 +33,7 @@ class FieldgroupControl extends \WP_Customize_Control {
 		add_action( "wp_ajax_load_customizer_field_groups_{$id}", array( $this, 'load_field_groups' ) );
 
 	}
+
 
 	/**
 	 *	@action wp_ajax_load_customizer_field_groups_{$this->id}
@@ -101,6 +104,9 @@ class FieldgroupControl extends \WP_Customize_Control {
 	}
 
 
+	/**
+	 *	Adjust acf field layout to a narrow column friendly one
+	 */
 	private function fix_field_layout( &$fields, $search = 'row', $replace = 'block' ) {
 		foreach ( array_keys($fields) as $i ) {
 			switch ( $fields[$i]['type'] ) {

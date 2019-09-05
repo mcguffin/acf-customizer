@@ -23,6 +23,11 @@ class Customize extends	Core\Singleton {
 	private $sections = array();
 
 	/**
+	 *	registered sections
+	 */
+	private $section_controls = array();
+
+	/**
 	 *	Mapping $post_id <=> storage type
 	 */
 	private $section_storage_types = array();
@@ -60,7 +65,6 @@ class Customize extends	Core\Singleton {
 		} else {
 			add_action( 'init', array( $this, 'init' ) );
 		}
-
 	}
 
 	/**
@@ -74,47 +78,14 @@ class Customize extends	Core\Singleton {
 
 
 	/**
-	 *	Handle theme mod values
+	 *	Whether field belongs to a section
 	 *
-	 *	@filter acf/pre_load_value
+	 *	@param string $section_id The section ID
+	 *	@param string $field_key ACF field Key
 	 */
-	public function acf_load_value( $value, $post_id, $field ) {
-
-		if ( isset( $this->section_storage_types[ $post_id ] ) ) {
-			$storage_type = $this->section_storage_types[ $post_id ];
-			if ( $storage_type === 'theme_mod' ) {
-				$data_source = get_theme_mod( $post_id );
-
-				if ( isset( $data_source[ $field['name'] ] ) ) {
-					$value = $data_source[ $field['name'] ];
-
-					$value = apply_filters( "acf/load_value/type={$field['type']}",		$value, $post_id, $field );
-					$value = apply_filters( "acf/load_value/name={$field['_name']}",	$value, $post_id, $field );
-					$value = apply_filters( "acf/load_value/key={$field['key']}",		$value, $post_id, $field );
-					$value = apply_filters( "acf/load_value",							$value, $post_id, $field );
-
-					return $value;
-				}
-			}
-		}
-		return $value;
-	}
-
-	/**
-	 *	@filter acf/pre_load_reference
-	 */
-	public function pre_load_reference( $reference, $field_name, $post_id ) {
-		if ( isset( $this->section_storage_types[ $post_id ] ) ) {
-			$storage_type = $this->section_storage_types[ $post_id ];
-			if ( $storage_type === 'theme_mod' ) {
-				$data_source = get_theme_mod( $post_id );
-
-				if ( isset( $data_source[ '_' . $field_name ] ) ) {
-					return $data_source[ '_' . $field_name ];
-				}
-			}
-		}
-	}
+	// public function section_has_field( $section_id, $field_key ) {
+	//
+	// }
 
 	/**
 	 *	Make sure all wp-editor scripts are loaded
@@ -140,6 +111,8 @@ class Customize extends	Core\Singleton {
 	}
 
 	/**
+	 *	Gather field groups from sections
+	 *
 	 *	@action init
 	 */
 	public function init_late() {
@@ -169,9 +142,6 @@ class Customize extends	Core\Singleton {
 			}
 		}
 
-		add_filter( 'acf/pre_load_reference', array( $this, 'pre_load_reference' ), 10, 3 );
-		add_filter( 'acf/pre_load_value', array( $this, 'acf_load_value' ), 10, 3 );
-
 	}
 
 
@@ -187,15 +157,14 @@ class Customize extends	Core\Singleton {
 			$wp_panel = $wp_customize->add_panel( $panel_id, $panel['args'] );
 		}
 		foreach ( $this->sections as $section_id => $section ) {
+			// filter known field groups for section
 			$section['args']['field_groups'] = array_intersect_key(
 				$this->field_groups,
 				array_combine(
 					array_values( $section['field_groups'] ),
 					array_keys( $section['field_groups'] )
 				)
-			);
-
-			$post_id = $section['post_id'];
+			);// postid 2 section
 
 			$wp_section = new FieldgroupSection( $wp_customize, $section_id, $section['args'] );
 
@@ -334,6 +303,7 @@ class Customize extends	Core\Singleton {
 			'description'			=> '',
 			'storage_type'			=> 'theme_mod',
 			'description_hidden'	=> '',
+			'post_id'				=> '',
 			//'active_callback'		=> '',
 		);
 		$section_args = array_intersect_key( $args, $section_defaults );
@@ -345,6 +315,7 @@ class Customize extends	Core\Singleton {
 		}
 
 		$section_id = $args['post_id'];
+		$section_args['post_id'] = $args['post_id'];
 
 		if ( ! $_str_args ) {
 			// make unique $section_id if post_id was specified explicitely
@@ -353,7 +324,6 @@ class Customize extends	Core\Singleton {
 				$section_id = sprintf('%s_%d', $args['post_id'], ++$i );
 			}
 		}
-
 
 		$control_args = array(
 			'capability'			=> $args['capability'],
@@ -364,7 +334,7 @@ class Customize extends	Core\Singleton {
 		);
 
 		$setting_args = array(
-			'type'					=> $args['storage_type'] === 'theme_mod' ? 'theme_mod' : 'option', // theme_mod|option
+			'type'					=> $args['storage_type'],// === 'theme_mod' ? 'theme_mod' : 'option', // theme_mod|option
 			'setting'				=> $section_id,
 			'capability'			=> $args['capability'],
 			'theme_supports'		=> $args['theme_supports'],
@@ -373,6 +343,7 @@ class Customize extends	Core\Singleton {
 			'sanitize_js_callback'	=> false,
 			'dirty'					=> false,
 			'storage_type'			=> $args['storage_type'],
+			'post_id'				=> $args['post_id'],
 		);
 
 		$this->sections[ $section_id ] = array(
@@ -385,6 +356,10 @@ class Customize extends	Core\Singleton {
 			'control_args'	=> $control_args,
 			'setting_args'	=> $setting_args,
 		);
+
+		$storage = Storage\Storage::get( $args['storage_type'] );
+		$storage->register_setting_id( $section_id );
+
 		return $section_id;
 	}
 
