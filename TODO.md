@@ -12,8 +12,11 @@ ACF-Customizer ToDo
 	 - [x] Multiple Fields in one Section
 	 - [x] Basic types
 	 - [ ] Multiple Sections with same post_id
-	 - [ ] Repeater
+	 - [x] Repeater
+	 - [ ] Nested Repeaters and Layouts
 	 - [ ] Visibility Rules
+ - [ ] 3rd Party tests
 	 - [ ] ACF-Dropzone
 	 - [ ] OSM Field
 	 - [x] Duplicate Repetaer
+	 - [ ] Table Field

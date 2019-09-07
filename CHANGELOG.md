@@ -1,6 +1,13 @@
 ACF Customizer
 ==============
 
+0.3.0
+-----
+ - Code: Refactor PHP
+ - Code: Add Tests
+ - Code: use plugin skeleton
+ - Fix: Shortcuts
+
 0.2.7
 -----
  - fix PHP fatal when acf is not active

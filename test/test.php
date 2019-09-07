@@ -22,6 +22,13 @@ class PluginTest {
 		add_filter('stylesheet_directory',function($dir){
 			return dirname(__FILE__).'/templates';
 		});
+
+		add_filter('acf/fields/google_map/api', function($api){
+			$api['key'] = get_option('google_maps_api_key');
+			return $api;
+		});
+
+
 	}
 
 	// public function template_include( $template ) {
