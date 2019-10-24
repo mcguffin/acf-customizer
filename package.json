@@ -16,7 +16,7 @@
     "url": "git+https://github.com//acf-customizer.git"
   },
   "author": "Jörn Lund",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com//acf-customizer/issues"
   },
