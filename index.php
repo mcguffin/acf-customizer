@@ -3,6 +3,7 @@
 /*
 Plugin Name: ACF Customizer
 Plugin URI: https://github.com/mcguffin/acf-customizer
+Github Plugin URI: mcguffin/acf-customizer
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
 Version: 0.2.10
@@ -42,29 +43,3 @@ if ( ! defined('ABSPATH') ) {
 require_once dirname(__FILE__) . '/include/autoload.php';
 
 Core\Core::instance( __FILE__ );
-
-// github updater overide dot org updates
-add_filter( 'github_updater_override_dot_org', function() {
-    return [
-        'acf-customizer/index.php' //plugin format
-    ];
-});
-
-
-if ( is_admin() || defined( 'DOING_AJAX' ) ) {
-	// init auto upgrader
-	if ( ! file_exists( dirname(__FILE__) . '/.git/' ) ) {
-
-		// Not a git. Check if https://github.com/afragen/github-updater is active
-		$active_plugins = get_option('active_plugins');
-		if ( $sitewide_plugins = get_site_option('active_sitewide_plugins') ) {
-			$active_plugins = array_merge( $active_plugins, array_keys( $sitewide_plugins ) );
-		}
-
-		if ( ! in_array( 'github-updater/github-updater.php', $active_plugins ) ) {
-			// not github updater. Init our own...
-			AutoUpdate\AutoUpdateGithub::instance()->init( __FILE__ );
-		}
-	}
-
-}
