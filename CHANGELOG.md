@@ -1,12 +1,10 @@
 ACF Customizer
 ==============
 
-0.3.0
+0.2.11
 -----
- - Code: Refactor PHP
- - Code: Add Tests
- - Code: use plugin skeleton
- - Fix: Shortcuts
+ - remove auto updater remains
+ - add afragen/github-updater plugin meta
 
 0.2.7
 -----
