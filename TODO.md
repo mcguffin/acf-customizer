@@ -18,5 +18,6 @@ ACF-Customizer ToDo
  - [ ] 3rd Party tests
 	 - [ ] ACF-Dropzone
 	 - [ ] OSM Field
-	 - [x] Duplicate Repetaer
+	 - [x] Duplicate Repeater
 	 - [ ] Table Field
+ - [ ] Add composer.json
