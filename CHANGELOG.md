@@ -1,8 +1,12 @@
 ACF Customizer
 ==============
 
+0.1.12
+------
+ - fix: fieldgroups not showing in customizer
+
 0.2.11
------
+------
  - remove auto updater remains
  - add afragen/github-updater plugin meta
 
