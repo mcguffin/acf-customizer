@@ -84,14 +84,17 @@
       "prebuild": [
         "wp i18n make-pot . languages/acf-customizer.pot --domain=acf-customizer --exclude=tmp"
       ],
-      "build": []
+      "build": [
+        "gulp build"
+      ]
     },
     "git": {
       "host": "github.com",
       "user": "mcguffin"
     },
     "wporg": {
-      "assets": ".wporg"
+      "assets": ".wporg",
+      "svn_user": "podpirate"
     }
   },
   "browserslist": [
