@@ -27,8 +27,26 @@ class PluginTest {
 			$api['key'] = get_option('google_maps_api_key');
 			return $api;
 		});
+		add_filter( 'the_content', [ $this, 'the_content' ] );
 
+	}
 
+	public function the_content( $content ) {
+		$content = '';
+		$content .= '<pre>';
+		$show = [
+			['text','acf_customize_opt_1'],
+			['text','acf_customize_opt_2'],
+			['text',get_the_ID()],
+		];
+		foreach ( $show as $field ) {
+			@list( $field_name, $post_id ) = $field;
+			$content .= "get_field({$field_name} {$post_id}):\n";
+			$content .= var_export(get_field($field_name,$post_id),true)."\n";
+			$content .= "\n";
+		}
+		$content .= '</pre>';
+		return $content;
 	}
 
 	// public function template_include( $template ) {
@@ -91,7 +109,18 @@ class PluginTest {
 			'storage_type'			=> 'option',
 			'post_id'				=> 'acf_customize_opt_1',
 		]);
-
+		acf_add_customizer_section([
+			'priority'				=> 10,
+			'panel'					=> $opt_id,
+			//'capability'			=> '',
+			//'theme_supports'		=> '',
+			'title'					=> 'Options #2',
+			'description'			=> '',
+			//'active_callback'		=> '',
+			'description_hidden'	=> true,
+			'storage_type'			=> 'option',
+			'post_id'				=> 'acf_customize_opt_2',
+		]);
 
 		$post_id = acf_add_customizer_panel([
 			'id'				=> 'acf_cust_post',

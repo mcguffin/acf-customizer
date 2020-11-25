@@ -160,6 +160,13 @@
                 "value": "acf_customize_opt_1"
             }
         ],
+		[
+            {
+                "param": "customizer",
+                "operator": "==",
+                "value": "acf_customize_opt_2"
+            }
+        ],
         [
             {
                 "param": "customizer",
