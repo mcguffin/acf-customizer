@@ -60,7 +60,7 @@ class Customize extends	Core\Singleton {
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
 
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customize_scripts') );
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_assets') );
 
 		// must build hidden wp_editor AFTER customize_controls_print_styles
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
