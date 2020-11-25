@@ -160,7 +160,7 @@ abstract class Storage extends Core\Singleton {
 	 *	@param string $fallback What to return if no changeset data found
 	 *	@return mixed
 	 */
-	protected function get_changeset_value( $field_key, $fallback = null ) {
+	protected function get_changeset_value( $field_key, $fallback = null, $post_id = null ) {
 
 		$changeset_data = false;
 
@@ -168,14 +168,22 @@ abstract class Storage extends Core\Singleton {
 			$changeset_data = json_decode( wp_unslash( $_POST['customized'] ), true );
 		}
 
+
 		if ( ! $changeset_data ) {
 			$changeset_data = $this->manager->changeset_data();
 			$changeset_data = array_map( [$this, '_flatten_value' ], $changeset_data );
 		}
-
+		// options an theme_mods are stored under their post id
+		if ( ! is_null( $post_id ) ) {
+			if ( isset( $changeset_data[ $post_id ] ) && isset( $changeset_data[ $post_id ][ $field_key ] ) ) {
+				return $changeset_data[ $post_id ][ $field_key ];
+			}
+			return $fallback;
+		}
 		foreach ( $changeset_data as $key => $data ) {
 
 			if ( $this->has_setting_id( $key ) && isset( $data[ $field_key ] ) ) {
+
 				return $data[ $field_key ];
 			}
 		}
