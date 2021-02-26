@@ -1,0 +1,15 @@
+{
+  "name": "mcguffin/acf-customizer",
+  "description": "Use ACF Fields in customizer.",
+  "type": "wordpress-plugin",
+  "minimum-stability": "dev",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+      {
+          "name": "Jörn Lund"
+      }
+  ],
+  "require": {
+      "composer/installers": "~1.0"
+  }
+}
