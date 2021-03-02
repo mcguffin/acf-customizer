@@ -60,7 +60,7 @@ class Customize extends	Core\Singleton {
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
 
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_assets') );
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customize_scripts') );
 
 		// must build hidden wp_editor AFTER customize_controls_print_styles
 		add_action( 'customize_controls_print_footer_scripts', array( $this, 'hidden_wp_editor' ), 1 );
@@ -102,6 +102,31 @@ class Customize extends	Core\Singleton {
 		}
 		return false;
 	}
+
+	/**
+	 *	@action customize_controls_enqueue_scripts
+	 */
+	public function enqueue_customize_scripts() {
+		// kudos @dcooperdalrymple
+		if ( ! did_action('acf/enqueue_scripts') ) {
+			add_action('acf/enqueue_scripts', array( $this, 'enqueue_assets' ) );
+			acf_enqueue_scripts();
+			acf_enqueue_uploader();
+		} else {
+			$this->enqueue_assets();
+		}
+	}
+
+
+	/**
+	 *	Whether field belongs to a section
+	 *
+	 *	@param string $section_id The section ID
+	 *	@param string $field_key ACF field Key
+	 */
+	// public function section_has_field( $section_id, $field_key ) {
+	//
+	// }
 
 	/**
 	 *	Make sure all wp-editor scripts are loaded
@@ -215,6 +240,13 @@ class Customize extends	Core\Singleton {
 			], 'acf_fieldgroup_control' )
 			->enqueue();
 
+		// wp_enqueue_style( 'acf-fieldgroup-control' );
+		//
+		// wp_enqueue_script( 'acf-fieldgroup-control' );
+		//
+		// wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
+		// 	'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
+		// ) );
 	}
 
 	/**
