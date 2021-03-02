@@ -104,30 +104,6 @@ class Customize extends	Core\Singleton {
 	}
 
 	/**
-	 *	@action customize_controls_enqueue_scripts
-	 */
-	public function enqueue_customize_scripts() {
-		//if (did_action('acf/enqueue_scripts') <= 0) {
-			add_action('acf/enqueue_scripts',array($this,'enqueue_assets'));
-			acf_enqueue_scripts();
-			acf_enqueue_uploader();
-		// } else {
-		// 	$this->enqueue_assets();
-		// }
-	}
-
-
-	/**
-	 *	Whether field belongs to a section
-	 *
-	 *	@param string $section_id The section ID
-	 *	@param string $field_key ACF field Key
-	 */
-	// public function section_has_field( $section_id, $field_key ) {
-	//
-	// }
-
-	/**
 	 *	Make sure all wp-editor scripts are loaded
 	 *
 	 *	@action customize_controls_print_footer_scripts
@@ -239,13 +215,6 @@ class Customize extends	Core\Singleton {
 			], 'acf_fieldgroup_control' )
 			->enqueue();
 
-		// wp_enqueue_style( 'acf-fieldgroup-control' );
-		//
-		// wp_enqueue_script( 'acf-fieldgroup-control' );
-		//
-		// wp_localize_script('acf-fieldgroup-control' , 'acf_fieldgroup_control' , array(
-		// 	'load_field_group_nonce'	=> wp_create_nonce('load-field-group'),
-		// ) );
 	}
 
 	/**

@@ -88,42 +88,6 @@ class Core extends Plugin implements CoreInterface {
 			->register();
 
 
-		// Asset\Asset::get( 'css/main.css' )->register();
-		// Asset\Asset::get( 'js/main.js' )
-		// 	->deps( ['jquery'] )
-		// 	->localize( array(
-		// 		/* Script localization */
-		// 	) )
-		// 	->register();
-		//
-		//
-		// $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.min' : '';
-		//
-		//
-		// wp_register_script( 'jquery-serializejson', $this->get_asset_url( 'js/jquery-serializejson.js' ), array( 'jquery' ) );
-
-		// wp_register_script(
-		// 	'acf-fieldgroup-control',
-		// 	$this->get_asset_url( $control_src ),
-		// 	array( 'jquery', 'jquery-serializejson', 'customize-controls' )
-		// );
-
-		// wp_register_script(
-		// 	'acf-fieldgroup-preview',
-		// 	$this->get_asset_url( 'js/admin/customize-acf-fieldgroup-preview.js' ),
-		// 	array( 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' )
-		// );
-
-
-		// wp_register_style(
-		// 	'acf-fieldgroup-preview',
-		// 	$this->get_asset_url( 'css/admin/customize-acf-fieldgroup-preview.css' ),
-		// 	array( 'customize-preview' )
-		// );
-
-		// wp_register_style( 'acf-fieldgroup-control' , $this->get_asset_url( '/css/admin/customize-acf-fieldgroup-control.css' ), array() );
-
-
 	}
 
 
