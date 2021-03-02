@@ -39,7 +39,7 @@ class CustomizePreview extends Core\Singleton {
 	 */
 	public function partial_field( $selector, $post_id = null ) {
 		if ( $path = $this->build_path( $selector, $post_id ) ) {
-			echo $this->get_partial_button( $path );
+			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -48,7 +48,7 @@ class CustomizePreview extends Core\Singleton {
 	 */
 	public function partial_row( ) {
 		if ( $path = $this->build_path( ) ) {
-			echo $this->get_partial_button( $path );
+			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -58,7 +58,7 @@ class CustomizePreview extends Core\Singleton {
 	 */
 	public function partial_subfield( $selector ) {
 		if ( $path = $this->build_path( $selector ) ) {
-			echo $this->get_partial_button( $path );
+			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -173,7 +173,11 @@ class CustomizePreview extends Core\Singleton {
 			return $data;
 		}
 
-		$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true );
+		$customized = json_decode( wp_unslash( $_REQUEST['customized'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! is_array( $customized ) ) {
+			return $data;
+		}
 
 		foreach ( $customized as $key => $value ) {
 

@@ -10,3 +10,8 @@
 .svnignore
 .sass-cache
 node_modules/
+vendor/
+!/include/vendor/
+
+# phpcs
+phpcs-report.txt

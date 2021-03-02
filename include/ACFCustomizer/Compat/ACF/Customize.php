@@ -107,9 +107,13 @@ class Customize extends	Core\Singleton {
 	 *	@action customize_controls_enqueue_scripts
 	 */
 	public function enqueue_customize_scripts() {
-		add_action('acf/enqueue_scripts',array($this,'enqueue_assets'));
-		acf_enqueue_scripts();
-		acf_enqueue_uploader();
+		//if (did_action('acf/enqueue_scripts') <= 0) {
+			add_action('acf/enqueue_scripts',array($this,'enqueue_assets'));
+			acf_enqueue_scripts();
+			acf_enqueue_uploader();
+		// } else {
+		// 	$this->enqueue_assets();
+		// }
 	}
 
 

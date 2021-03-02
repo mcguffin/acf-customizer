@@ -39,7 +39,11 @@ class FieldgroupControl extends \WP_Customize_Control {
 	 *	@action wp_ajax_load_customizer_field_groups_{$this->id}
 	 */
 	public function load_field_groups() {
-
+		if ( ! isset( $_REQUEST['_nonce'] ) ) {
+			wp_send_json_error( array(
+				'message' => __( 'Nonce missing.', 'acf-customizer' ),
+			) );
+		}
 		// check nonce
 		if ( ! wp_verify_nonce($_REQUEST['_nonce'],'load-field-group') ) {
 			wp_send_json_error( array(
@@ -69,7 +73,7 @@ class FieldgroupControl extends \WP_Customize_Control {
 
 		foreach ( $this->setting->field_groups as $field_group_key ) {
 			$field_group = acf_get_field_group( $field_group_key );
-			printf( '<div data-key="%s">', $field_group_key );
+			printf( '<div data-key="%s">', esc_attr( $field_group_key ) );
 			$field_group['label_placement'] = 'top';
 			$fields = acf_get_fields( $field_group );
 

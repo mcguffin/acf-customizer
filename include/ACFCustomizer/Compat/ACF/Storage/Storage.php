@@ -77,7 +77,7 @@ abstract class Storage extends Core\Singleton {
 				type: term|post
 			]
 			*/
-			if ( $context = json_decode( wp_unslash( $_REQUEST['acf_customize_context'] ), true ) ) {
+			if ( $context = json_decode( wp_unslash( $_REQUEST['acf_customize_context'] ), true ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				extract( $context );
 				$type = in_array( $type, [ 'term', 'post' ] ) ? $type : '';
 				$id = intval( $id );
@@ -171,7 +171,7 @@ abstract class Storage extends Core\Singleton {
 
 		if ( ! $changeset_data ) {
 			$changeset_data = $this->manager->changeset_data();
-			$changeset_data = array_map( [$this, '_flatten_value' ], $changeset_data );
+			$changeset_data = array_map( [ $this, '_flatten_value' ], $changeset_data );
 		}
 		// options an theme_mods are stored under their post id
 		if ( ! is_null( $post_id ) ) {

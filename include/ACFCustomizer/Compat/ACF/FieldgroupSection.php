@@ -58,7 +58,7 @@ class FieldgroupSection extends \WP_Customize_Section {
 			*/
 			$this->context = json_decode( wp_unslash( $_REQUEST['acf_customize_context'] ) );
 		} else {
-
+			// ???
 		}
 
 	}
