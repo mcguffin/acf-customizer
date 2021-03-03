@@ -163,7 +163,11 @@ abstract class Storage extends Core\Singleton {
 	protected function get_changeset_value( $field_key, $fallback = null, $post_id = null ) {
 
 		$changeset_data = false;
-
+		/*
+		TODO
+		Fix WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		Fix WordPress.Security.NonceVerification.Missing
+		*/
 		if ( isset( $_POST['customized'] ) ) {
 			$changeset_data = json_decode( wp_unslash( $_POST['customized'] ), true );
 		}
