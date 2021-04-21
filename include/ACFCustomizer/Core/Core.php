@@ -29,23 +29,12 @@ class Core extends Plugin implements CoreInterface {
 	 */
 	protected function __construct() {
 
-		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
-		add_action( 'init' , array( $this , 'init' ) );
-
-//		add_action( 'wp_enqueue_scripts' , array( $this , 'enqueue_assets' ) );
+		add_action( 'init' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules
+		add_action( 'init' , array( $this , 'init_assets' ) );
 
 		$args = func_get_args();
 		parent::__construct( ...$args );
 	}
-
-	/**
-	 *	Load frontend styles and scripts
-	 *
-	 *	@action wp_enqueue_scripts
-	 */
-	// public function enqueue_assets() {
-	// }
-
 
 	/**
 	 *	Load Compatibility classes
@@ -55,7 +44,6 @@ class Core extends Plugin implements CoreInterface {
 	public function init_compat() {
 		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) ) {
 			Compat\ACF\ACF::instance();
-			add_action( 'init' , array( $this , 'init' ) );
 		}
 	}
 
@@ -64,7 +52,7 @@ class Core extends Plugin implements CoreInterface {
 	 *
 	 *  @action init
 	 */
-	public function init() {
+	public function init_assets() {
 
 		$serialize_handle = Asset\Asset::get( 'js/jquery-serializejson.js' )
 			->deps('jquery')
@@ -78,7 +66,6 @@ class Core extends Plugin implements CoreInterface {
 		$this->preview_js = Asset\Asset::get( 'js/admin/customize-acf-fieldgroup-preview.js' )
 			->deps( [ 'jquery', 'wp-util', 'customize-preview', 'customize-selective-refresh' ] )
 			->register();
-
 
 		$this->control_css = Asset\Asset::get( 'css/admin/customize-acf-fieldgroup-control.css' )
 			->register();
