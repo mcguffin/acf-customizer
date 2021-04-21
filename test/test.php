@@ -46,6 +46,9 @@ class PluginTest {
 			$content .= "\n";
 		}
 		$content .= '</pre>';
+
+		get_template_part('template-parts/acf/repeat-basic');
+
 		return $content;
 	}
 
