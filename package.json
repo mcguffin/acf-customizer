@@ -1,6 +1,6 @@
 {
   "name": "acf-customizer",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Use ACF Fields in customizer.",
   "private": true,
   "scripts": {
@@ -45,7 +45,6 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
-  "dependencies": {},
   "wpPlugin": {
     "components": {
       "core": {
