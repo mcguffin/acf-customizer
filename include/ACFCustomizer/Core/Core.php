@@ -24,12 +24,14 @@ class Core extends Plugin implements CoreInterface {
 
 	public $preview_js = null;
 
+	private $is_loaded = false; 
+
 	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
-
-		add_action( 'init' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules
+		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules (acf as regular plugin)
+		add_action( 'init' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules (acf bundled in theme)
 		add_action( 'init' , array( $this , 'init_assets' ) );
 
 		$args = func_get_args();
@@ -42,7 +44,8 @@ class Core extends Plugin implements CoreInterface {
 	 *  @action plugins_loaded
 	 */
 	public function init_compat() {
-		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) ) {
+		if ( function_exists('acf') && version_compare( acf()->version, '5.6','>=' ) && $this->is_loaded === false) {
+			$this->is_loaded = true; //Enshure single instance
 			Compat\ACF\ACF::instance();
 		}
 	}
