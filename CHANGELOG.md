@@ -1,6 +1,10 @@
 ACF Customizer
 ==============
 
+0.2.15
+------
+ - Support bundled with ACF. (Kudos to [@sebastianthulin](https://github.com/sebastianthulin))
+
 0.2.12
 ------
  - fix: fieldgroups not showing in customizer
