@@ -36,13 +36,26 @@ class PluginTest {
 		$content .= '<pre>';
 		$show = [
 			['text','acf_customize_opt_1'],
+			['some_color','acf_customize_opt_1'],
+			['ambigous_name','acf_customize_opt_1'],
 			['text','acf_customize_opt_2'],
+			['some_color','acf_customize_opt_2'],
+			['ambigous_name','acf_customize_opt_2'],
+			['ambigous_name',get_the_ID()],
 			['text',get_the_ID()],
+		];
+		$mods = [
+			'acf_customize_mod_1',
 		];
 		foreach ( $show as $field ) {
 			@list( $field_name, $post_id ) = $field;
 			$content .= "get_field({$field_name} {$post_id}):\n";
 			$content .= var_export(get_field($field_name,$post_id),true)."\n";
+			$content .= "\n";
+		}
+		foreach ( $mods as $mod ) {
+			$content .= "get_theme_mod({$mod}):\n";
+			$content .= var_export(get_theme_mod($mod),true)."\n";
 			$content .= "\n";
 		}
 		$content .= '</pre>';
