@@ -26,9 +26,8 @@ class Post extends Storage {
 	 *	@filter acf/pre_load_value
 	 */
 	public function pre_load_value( $value, $post_id, $field ) {
-
 		if ( $this->is_context( $post_id, 'post' ) ) {
-			return $this->get_changeset_value( $field['key'], $value );
+			return $this->get_changeset_value( $field, $value, $post_id );
 		}
 
 		return $value;

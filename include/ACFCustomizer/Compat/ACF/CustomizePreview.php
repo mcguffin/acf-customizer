@@ -79,6 +79,7 @@ class CustomizePreview extends Core\Singleton {
 		$is_loop = $acf_loop->is_loop();
 
 		$customize = Customize::instance();
+		$acf = ACF::instance();
 
 		if ( is_null( $post_id ) ) {
 			if ( $is_loop ) {
@@ -95,13 +96,15 @@ class CustomizePreview extends Core\Singleton {
 		if ( ! is_null( $selector ) ) {
 
 			if ( $is_loop ) {
-				if ( $field = get_sub_field_object( $selector, $post_id ) ) {
-					$path[] = $field['key'];
-				}
+				$field = get_sub_field_object( $selector, $post_id );
 			} else {
-				if ( $field = get_field_object( $selector, $post_id ) ) {
-					$path[] = $field['key'];
-				}
+				$field = get_field_object( $selector, $post_id );
+			}
+			if ( $field ) {
+				$path[] = $field['key'];
+			} else {
+				$field = get_field_object( $acf->ensure_field_key( [ 'name' => $selector ], $post_id ), $post_id );
+				$path[] = $field['key'];
 			}
 		}
 
@@ -115,9 +118,14 @@ class CustomizePreview extends Core\Singleton {
 				$path[] = $loop['i'];
 				$path[] = $field['key'];
 			}
-		} else {
-			$field = get_field_object( $selector, $post_id );
+		// } else {
+		// 	$field = acf_get_field( $acf->ensure_field_key( [ 'name' => $selector ], $post_id ), $post_id );
 		}
+if ( ! $field ) {
+	var_dump($loops);
+	var_dump($path);
+	var_dump($acf->ensure_field_key( [ 'name' => $selector ], $post_id ));
+}
 		$field_group_key = $field['parent'];
 
 		$path[] = $field_group_key; // field group

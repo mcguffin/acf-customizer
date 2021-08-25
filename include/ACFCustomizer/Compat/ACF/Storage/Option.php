@@ -27,7 +27,7 @@ class Option extends Storage {
 	public function pre_load_value( $value, $post_id, $field ) {
 
 		if ( $this->has_setting_id( $post_id ) ) {
-			return $this->get_changeset_value( $field['key'], $value, $post_id );
+			return $this->get_changeset_value( $field, $value, $post_id );
 		}
 
 		return $value;

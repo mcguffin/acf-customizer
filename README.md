@@ -7,7 +7,7 @@ Supported ACF versions: 5.6 – 5.9
 Tested with WordPress 4.9 – 5.6
 
 This plugin is currently in beta stadium.  
-Any Help testing and bugfixing is highly appreciated.
+Any Help testing and bugfixing is highly appreciated (and bundled with my premature apologies for late responses).
 
 Installation
 ------------
@@ -34,13 +34,6 @@ Installation
  - Download 'acf-customizer.zip'
  - Install and activate it like any other WordPress plugin
  - As long as the plugin is active, it will check for updates
-
-Developing
-----------
-This plugin uses gulp.
-
-To get started `cd` in the plugin directory,  
-run `npm install` then `gulp`
 
 Usage
 -----

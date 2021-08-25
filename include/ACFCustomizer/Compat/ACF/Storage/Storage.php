@@ -3,6 +3,7 @@
 namespace ACFCustomizer\Compat\ACF\Storage;
 
 use ACFCustomizer\Core;
+use ACFCustomizer\Compat\ACF\ACF;
 
 abstract class Storage extends Core\Singleton {
 
@@ -39,6 +40,8 @@ abstract class Storage extends Core\Singleton {
 
 		$this->set_context();
 	}
+
+
 
 	/**
 	 *	register a post id
@@ -160,29 +163,46 @@ abstract class Storage extends Core\Singleton {
 	 *	@param string $fallback What to return if no changeset data found
 	 *	@return mixed
 	 */
-	protected function get_changeset_value( $field_key, $fallback = null, $post_id = null ) {
+	protected function get_changeset_value( $field, $fallback = null, $post_id = null ) {
 
-		$changeset_data = false;
-		/*
-		TODO
-		Fix WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		Fix WordPress.Security.NonceVerification.Missing
-		*/
+		$field_key = ACF::instance()->ensure_field_key( $field, $post_id );
+
+		$decoded_post_id = acf_decode_post_id( $post_id );
+		$changeset_data = $this->manager->changeset_data();
+		$changeset_data = array_map( [ $this, '_flatten_value' ], $changeset_data );
+
 		if ( isset( $_POST['customized'] ) ) {
-			$changeset_data = json_decode( wp_unslash( $_POST['customized'] ), true );
+			$posted_changeset = json_decode( wp_unslash( $_POST['customized'] ), true );
+			$changeset_data = $posted_changeset + $changeset_data;
 		}
 
+		$value = $this->find_in_changeset( $changeset_data, $field_key, $decoded_post_id['type'] === 'option' ? $post_id : null );
 
-		if ( ! $changeset_data ) {
-			$changeset_data = $this->manager->changeset_data();
-			$changeset_data = array_map( [ $this, '_flatten_value' ], $changeset_data );
+		if ( is_null( $value ) ) {
+			return $fallback;
 		}
-		// options an theme_mods are stored under their post id
+
+		return $value;
+	}
+
+
+
+	/**
+	 *	Find value for field key in changeset data
+	 *
+	 *	@param Array $changeset_data
+	 *	@param String $field_key
+	 *	@param Mixed $post_id
+	 *
+	 *	@return Mixed
+	 */
+	private function find_in_changeset( $changeset_data, $field_key, $post_id ) {
+		// options and theme_mods are stored under their post id
 		if ( ! is_null( $post_id ) ) {
 			if ( isset( $changeset_data[ $post_id ] ) && isset( $changeset_data[ $post_id ][ $field_key ] ) ) {
 				return $changeset_data[ $post_id ][ $field_key ];
 			}
-			return $fallback;
+			return null;
 		}
 		foreach ( $changeset_data as $key => $data ) {
 
@@ -191,9 +211,14 @@ abstract class Storage extends Core\Singleton {
 				return $data[ $field_key ];
 			}
 		}
-		return $fallback;
+		return null;
 	}
-
+	/**
+	 *	array_map() callback
+	 *
+	 *	@param Array $el
+	 *	@return Mixed $el['value']
+	 */
 	private function _flatten_value( $el ) {
 		if ( isset( $el['value'] ) ) {
 			return $el['value'];

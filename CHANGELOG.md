@@ -1,6 +1,11 @@
 ACF Customizer
 ==============
 
+0.3.0
+-----
+ - Better handling of ambigous field names
+ - Fix: values not appearin in preview if never been saved before
+
 0.2.15
 ------
  - Support bundled with ACF. (Kudos to [@sebastianthulin](https://github.com/sebastianthulin))
