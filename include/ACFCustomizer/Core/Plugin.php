@@ -173,7 +173,7 @@ class Plugin extends Singleton implements ComponentInterface {
 
 		$result = array(
 			'success'	=> true,
-			'messages'	=> array(),
+			'messages'	=> [],
 		);
 
 		foreach ( self::$components as $component ) {
