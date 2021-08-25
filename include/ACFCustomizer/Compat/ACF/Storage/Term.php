@@ -30,7 +30,7 @@ class Term extends Storage {
 	public function pre_load_value( $value, $post_id, $field ) {
 
 		if ( $this->is_context( $post_id, 'term' ) ) {
-			return $this->get_changeset_value( $field['key'], $value );
+			return $this->get_changeset_value( $field, $value );
 		}
 
 		return $value;
