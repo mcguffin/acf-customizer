@@ -15,7 +15,7 @@ $acf_test_post_id = get_the_ID();
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<?php if ( ! twentynineteen_can_show_post_thumbnail() ) : ?>
+	<?php if ( ! function_exists('twentynineteen_can_show_post_thumbnail') || ! twentynineteen_can_show_post_thumbnail() ) : ?>
 	<header class="entry-header">
 		<?php get_template_part( 'template-parts/header/entry', 'header' ); ?>
 	</header>
