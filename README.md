@@ -3,8 +3,9 @@ ACF-Customizer
 
 Bringing ACF Fields to the WordPress Customizer.
 
-Supported ACF versions: 5.6 – 5.9
-Tested with WordPress 4.9 – 5.6
+ - Supported ACF versions: 5.6 – 6.0
+ - Tested with WordPress 4.9 – 5.6
+ - Tested with PHP <= 8.0
 
 This plugin is currently in beta stadium.  
 Any Help testing and bugfixing is highly appreciated (and bundled with my premature apologies for late responses).
