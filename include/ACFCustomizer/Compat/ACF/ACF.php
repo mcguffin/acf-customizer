@@ -39,9 +39,9 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 	/**
 	 *	Return proper field key for field in context of $post_id.
 	 *
-	 *	@param Array $field Minimum ACF field [ 'name' => 'some-name' ]
-	 *	@param String|Integer $post_id
-	 *	@return String a proper field key if applicable, field name otherwise
+	 *	@param array $field Minimum ACF field [ 'name' => 'some-name' ]
+	 *	@param string|int $post_id
+	 *	@return string a proper field key if applicable, field name otherwise
 	 */
 	public function ensure_field_key( $field, $post_id ) {
 		if ( ! empty( $field['key'] ) ) {
@@ -78,6 +78,9 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 
 	/**
 	 *	returns whether an ACF field is handling data for specified post_id
+	 *	@param array $acf_field
+	 *	@param int|string $post_id
+	 *	@return boolean
 	 */
 	public function acf_field_is_handling_post_id( $acf_field, $post_id ) {
 
@@ -111,6 +114,8 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 
 	/**
 	 *	array_filter callback
+	 *	@param array $location
+	 *	@return boolean
 	 */
 	private function filter_customizer_locations( $location ) {
 		foreach ( $location as $loc ) {

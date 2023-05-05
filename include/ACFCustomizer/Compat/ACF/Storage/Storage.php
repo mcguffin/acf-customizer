@@ -7,11 +7,14 @@ use ACFCustomizer\Compat\ACF\ACF;
 
 abstract class Storage extends Core\Singleton {
 
+	/** @var array [ 'id' => (int|string), 'type' => (string) ] */
 	protected $context = null;
 
+	/** @var WP_Customize */
 	public $manager = null;
 
-	protected $setting_ids = array();
+	/** @var array */
+	protected $setting_ids = [];
 
 
 	/**
@@ -119,19 +122,6 @@ abstract class Storage extends Core\Singleton {
 		return $info['type'] === $type
 			&& $this->get_context('type') === $type
 			&& $this->get_context('id') === $info['id'];
-
-		// // no term data requested
-		// if ( $info['type'] !== $type ) {
-		// 	return $value;
-		// }
-		// // not term page
-		// if ( $this->get_context('type') !== 'term' ) {
-		// 	return $value;
-		// }
-		// // not this term
-		// if ( $this->get_context('id') !== $info['id'] ) {
-		// 	return $value;
-		// }
 
 	}
 

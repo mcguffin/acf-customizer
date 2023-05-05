@@ -29,8 +29,8 @@ class ThemeMod extends Storage {
 	 */
 	public function pre_load_value( $value, $post_id, $field ) {
 		if ( $this->has_setting_id( $post_id ) ) {
+
 			$data_source = get_theme_mod( $post_id );
-			//$data_source = $this->convert_theme_mod( $mod, $post_id );
 
 			if ( isset( $data_source[ $field['key'] ] ) ) {
 				$value = $data_source[ $field['key'] ];
@@ -38,10 +38,10 @@ class ThemeMod extends Storage {
 				if ( $flex = acf()->fields->get_field_type( 'flexible_content' ) ) {
 					remove_filter( 'acf/load_value/type=flexible_content', [$flex, 'load_value'], 10 );
 				}
-				$value = apply_filters( "acf/load_value/type={$field['type']}",		$value, $post_id, $field );
-				$value = apply_filters( "acf/load_value/name={$field['_name']}",	$value, $post_id, $field );
-				$value = apply_filters( "acf/load_value/key={$field['key']}",		$value, $post_id, $field );
-				$value = apply_filters( "acf/load_value",							$value, $post_id, $field );
+				$value = apply_filters( "acf/load_value/type={$field['type']}",  $value, $post_id, $field );
+				$value = apply_filters( "acf/load_value/name={$field['_name']}", $value, $post_id, $field );
+				$value = apply_filters( "acf/load_value/key={$field['key']}",    $value, $post_id, $field );
+				$value = apply_filters( "acf/load_value",                        $value, $post_id, $field );
 
 				if ( $flex ) {
 					add_filter( 'acf/load_value/type=flexible_content', [ $flex, 'load_value' ], 10, 3 );

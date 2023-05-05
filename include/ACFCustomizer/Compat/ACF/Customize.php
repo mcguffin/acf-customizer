@@ -74,7 +74,6 @@ class Customize extends	Core\Singleton {
 
 	/**
 	 *	Used by customize preview shortcuts
-	 *	Ugly long function name.
 	 *
 	 *	@param string $field_group_key
 	 *	@param string $storage_type
@@ -90,10 +89,9 @@ class Customize extends	Core\Singleton {
 
 	/**
 	 *	Used by customize preview shortcuts
-	 *	Ugly long function name.
 	 *
 	 *	@param string $field_group_key
-	 *	@param string $storage_type
+	 *	@param string $post_id
 	 *	@return string
 	 */
 	public function get_section_id_by_fieldgroup_post_id( $field_group_key, $post_id ) {
@@ -116,17 +114,6 @@ class Customize extends	Core\Singleton {
 			$this->enqueue_assets();
 		}
 	}
-
-
-	/**
-	 *	Whether field belongs to a section
-	 *
-	 *	@param string $section_id The section ID
-	 *	@param string $field_key ACF field Key
-	 */
-	// public function section_has_field( $section_id, $field_key ) {
-	//
-	// }
 
 	/**
 	 *	Make sure all wp-editor scripts are loaded
