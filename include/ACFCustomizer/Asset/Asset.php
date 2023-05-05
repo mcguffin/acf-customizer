@@ -73,6 +73,11 @@ class Asset {
 	private $handle;
 
 	/**
+	 *	@var string
+	 */
+	private $varname;
+
+	/**
 	 *	@var array|boolean Localization
 	 */
 	private $l10n = false;
