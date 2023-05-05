@@ -1,6 +1,6 @@
 {
   "name": "acf-customizer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Use ACF Fields in customizer.",
   "private": true,
   "scripts": {

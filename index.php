@@ -6,7 +6,7 @@ Plugin URI: https://github.com/mcguffin/acf-customizer
 Github Plugin URI: mcguffin/acf-customizer
 Description: Use ACF Fields in customizer.
 Author: Jörn Lund
-Version: 0.3.1
+Version: 0.3.2
 Tested up to: 6.2
 Requires PHP: 7.4
 Author URI: https://github.com/mcguffin

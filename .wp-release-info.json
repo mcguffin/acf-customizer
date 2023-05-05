@@ -1,9 +1,9 @@
 {
   "id": "https://github.com/mcguffin/acf-customizer/raw/master/.wp-release-info.json",
   "slug": "acf-customizer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "url": "https://github.com/mcguffin/acf-customizer",
-  "package": "https://github.com/mcguffin/acf-customizer/releases/download/0.3.1/acf-customizer.zip",
+  "package": "https://github.com/mcguffin/acf-customizer/releases/download/0.3.2/acf-customizer.zip",
   "tested": "6.2",
   "requires_php": "7.4"
 }
