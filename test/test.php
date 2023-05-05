@@ -2,6 +2,8 @@
 
 namespace ACFCustomizer;
 
+use ACFCustomizer\Compat;
+
 class PluginTest {
 
 	private $current_json_save_path = null;
@@ -33,7 +35,7 @@ class PluginTest {
 
 	public function the_content( $content ) {
 		$content = '';
-		$content .= '<pre>';
+
 		$show = [
 			['text','acf_customize_opt_1'],
 			['some_color','acf_customize_opt_1'],
@@ -41,27 +43,57 @@ class PluginTest {
 			['text','acf_customize_opt_2'],
 			['some_color','acf_customize_opt_2'],
 			['ambigous_name','acf_customize_opt_2'],
-			['ambigous_name',get_the_ID()],
-			['text',get_the_ID()],
 		];
+
+		// fields for posts
+		$content .= '<h3>Post `'.get_the_ID().'`</h3>';
+		$content .= $this->render_field_groups( acf_get_field_groups(
+			[
+				'post_id'   => get_the_ID(),
+				'post_type' => get_post_type(),
+			]
+		), get_the_ID() );
+
+		$content .= '<h3>Option `acf_customize_opt_1`</h3>';
+		$content .= $this->render_field_groups( acf_get_field_groups(
+			[ 'customizer' => 'acf_customize_opt_1', ]
+		), 'acf_customize_opt_1' );
+
+
+		// theme mods
 		$mods = [
 			'acf_customize_mod_1',
 		];
-		foreach ( $show as $field ) {
-			@list( $field_name, $post_id ) = $field;
-			$content .= "get_field({$field_name} {$post_id}):\n";
-			$content .= var_export(get_field($field_name,$post_id),true)."\n";
-			$content .= "\n";
-		}
 		foreach ( $mods as $mod ) {
-			$content .= "get_theme_mod({$mod}):\n";
+			$content .= "<h3>Theme mod `{$mod}`</h3>";
+			$content .= '<pre>';
 			$content .= var_export(get_theme_mod($mod),true)."\n";
+			$content .= '</pre>';
 			$content .= "\n";
 		}
-		$content .= '</pre>';
 
 		get_template_part('template-parts/acf/repeat-basic');
 
+		return $content;
+	}
+
+	private function render_field_groups( $field_groups, $post_id = null ) {
+		$customizePreview = Compat\ACF\CustomizePreview::instance();
+		$content = '';
+		foreach ( $field_groups as $group ) {
+			$fields = acf_get_fields( $group );
+
+			$content .= "# Group: ".$group['title']."\n";
+			foreach ( $fields as $field ) {
+				$content .= $customizePreview->get_partial_field( $field['name'], $post_id );
+				$content .= '<pre>';
+				$content .= "Label: ".$field['label']."\n";
+				$content .= "Name: ".$field['name']."\n";
+				$content .= "Value: ".var_export(get_field($field['name'],$post_id),true)."\n"."\n";
+				$content .= '</pre>';
+			}
+			$content .= "\n";
+		}
 		return $content;
 	}
 
@@ -102,6 +134,19 @@ class PluginTest {
 			'storage_type'			=> 'theme_mod',
 			'post_id'				=> 'acf_customize_mod_1',
 		]);
+		//
+		// acf_add_customizer_section([
+		// 	'priority'				=> 11,
+		// 	'panel'					=> $mod_id,
+		// 	//'capability'			=> '',
+		// 	//'theme_supports'		=> '',
+		// 	'title'					=> 'Theme Mod #2 (ambigous post_id)',
+		// 	'description'			=> '',
+		// 	//'active_callback'		=> '',
+		// 	'description_hidden'	=> true,
+		// 	'storage_type'			=> 'theme_mod',
+		// 	'post_id'				=> 'acf_customize_opt_1',
+		// ]);
 
 		$opt_id = acf_add_customizer_panel([
 			'id'				=> 'acf_cust_opt',
@@ -185,6 +230,7 @@ class PluginTest {
 
 
 		if ( function_exists( 'acf_add_options_page' ) ) {
+
 			acf_add_options_page( array(
 				'page_title'	=> 'ACF Customizer Options',
 				'description'	=> 'You are testing the ACF Custmizer Plugin.',
@@ -194,8 +240,6 @@ class PluginTest {
 				'parent_slug'	=> 'themes.php',
 			) );
 		}
-
-
 
 	}
 
