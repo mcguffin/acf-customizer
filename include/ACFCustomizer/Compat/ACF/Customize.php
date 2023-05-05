@@ -102,6 +102,21 @@ class Customize extends	Core\Singleton {
 	}
 
 	/**
+	 *	Used by customize preview shortcuts
+	 *
+	 *	@param string $post_id
+	 *	@return boolean|string false on failure storage type otherwise
+	 */
+	public function get_storage_type_by_post_id( $post_id ) {
+		foreach ( $this->sections as $section_id => $section ) {
+			if ( $post_id === $section[ 'post_id' ] ) {
+				return $section['storage_type'];
+			}
+		}
+		return false;
+	}
+
+	/**
 	 *	@action customize_controls_enqueue_scripts
 	 */
 	public function enqueue_customize_scripts() {

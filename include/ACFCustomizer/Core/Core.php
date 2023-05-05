@@ -15,24 +15,28 @@ use ACFCustomizer\Compat;
 
 class Core extends Plugin implements CoreInterface {
 
-
+	/** @var Asset\Asset */
 	public $control_css = null;
 
+	/** @var Asset\Asset */
 	public $control_js = null;
 
+	/** @var Asset\Asset */
 	public $preview_css = null;
 
+	/** @var Asset\Asset */
 	public $preview_js = null;
 
-	private $is_loaded = false; 
+	/** @var boolean */
+	private $is_loaded = false;
 
 	/**
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
-		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules (acf as regular plugin)
-		add_action( 'init' , array( $this , 'init_compat' ), 0 ); // must run before hook acf/include_location_rules (acf bundled in theme)
-		add_action( 'init' , array( $this , 'init_assets' ) );
+		add_action( 'plugins_loaded', [ $this , 'init_compat' ], 0 ); // must run before hook acf/include_location_rules (acf as regular plugin)
+		add_action( 'init', [ $this , 'init_compat' ], 0 ); // must run before hook acf/include_location_rules (acf bundled in theme)
+		add_action( 'init', [ $this , 'init_assets' ] );
 
 		$args = func_get_args();
 		parent::__construct( ...$args );

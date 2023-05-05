@@ -17,23 +17,26 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 	 */
 	protected function __construct() {
 
-		// need to figure out which version ist lowest...
-
-
 		global $wp_customize;
 
 		$core = Core\Core::instance();
 
-		if ( ! is_null( $wp_customize ) ) {
-			// instantinate at 11
-//			add_action( 'plugins_loaded', array('ACFCustomizer\Compat\ACF\Customize','instance'), 11 );
-
-		}
-
 		require_once $core->get_plugin_dir() . '/include/api/acf-functions.php';
 
 		add_action( 'acf/include_location_rules', array( $this, 'load_location_rule' ) );
+		add_filter( 'acf/decode_post_id', [ $this, 'decode_post_id' ], 10, 2 );
 
+	}
+
+	/**
+	 *	@filter acf/decode_post_id
+	 */
+	public function decode_post_id( $decoded_post_id, $post_id ) {
+		if ( 'option' === $decoded_post_id['type'] && ( $storage_type = Customize::instance()->get_storage_type_by_post_id( $post_id ) ) ) {
+			// storage type by post id
+			$decoded_post_id['type'] = $storage_type;
+		}
+		return $decoded_post_id;
 	}
 
 	/**
@@ -51,6 +54,7 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 		$local_fields = acf_get_local_store( 'fields' )->query(array(
 			'name' => $field['name']
 		));
+
 		$candidates = array_keys( $local_fields );
 		$candidates = array_merge( $candidates, $wpdb->get_col( $wpdb->prepare(
 			"SELECT post_name FROM $wpdb->posts WHERE post_excerpt = %s",
@@ -78,6 +82,7 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 
 	/**
 	 *	returns whether an ACF field is handling data for specified post_id
+	 *
 	 *	@param array $acf_field
 	 *	@param int|string $post_id
 	 *	@return boolean
@@ -85,7 +90,7 @@ class ACF extends Core\Singleton implements Core\ComponentInterface {
 	public function acf_field_is_handling_post_id( $acf_field, $post_id ) {
 
 		$decoded_post_id = acf_decode_post_id( $post_id );
-		if ( ! in_array( $decoded_post_id['type'], [ 'post', 'term', 'option' ] ) ) {
+		if ( ! in_array( $decoded_post_id['type'], [ 'post', 'term', 'option', 'theme_mod' ] ) ) {
 			return false;
 		}
 

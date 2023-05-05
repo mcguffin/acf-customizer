@@ -38,28 +38,52 @@ class CustomizePreview extends Core\Singleton {
 	 *	@action acf_customizer_field
 	 */
 	public function partial_field( $selector, $post_id = null ) {
-		if ( $path = $this->build_path( $selector, $post_id ) ) {
-			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
+		echo $this->get_partial_field( $selector, $post_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
 	 *	@action acf_customizer_row
 	 */
 	public function partial_row( ) {
-		if ( $path = $this->build_path( ) ) {
-			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $this->partial_row(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 *	@action acf_customizer_sub_field
+	 */
+	public function partial_subfield( $selector ) {
+		echo $this->get_partial_subfield( $selector ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
+	 *	@action acf_customizer_field
+	 */
+	public function get_partial_field( $selector, $post_id = null ) {
+		if ( $path = $this->build_path( $selector, $post_id ) ) {
+			return $this->get_partial_button( $path );
 		}
+		return '';
+	}
+
+	/**
+	 *	@action acf_customizer_row
+	 */
+	public function get_partial_row() {
+		if ( $path = $this->build_path( ) ) {
+			return $this->get_partial_button( $path );
+		}
+		return '';
 	}
 
 
 	/**
 	 *	@action acf_customizer_sub_field
 	 */
-	public function partial_subfield( $selector ) {
+	public function get_partial_subfield( $selector ) {
 		if ( $path = $this->build_path( $selector ) ) {
-			echo $this->get_partial_button( $path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return $this->get_partial_button( $path );
 		}
+		return '';
 	}
 
 	/**
@@ -67,11 +91,11 @@ class CustomizePreview extends Core\Singleton {
 	 *
 	 *	@param string $selector If null will build path based on ACF loop hierarchy. If not get path from field hierarchy.
 	 *	@param string|int $post_id If null will guess current post id.
-	 *	@return array
+	 *	@return array Array of field keys
 	 */
 	private function build_path( $selector = null, $post_id = null ) {
 
-		$path = array();
+		$path = [];
 		$section_id = false;
 		$post_id_info = false;
 
@@ -80,21 +104,18 @@ class CustomizePreview extends Core\Singleton {
 
 		$customize = Customize::instance();
 		$acf = ACF::instance();
-
+var_export($is_loop);
 		if ( is_null( $post_id ) ) {
 			if ( $is_loop ) {
 				$post_id = acf_get_loop( 'active', 'post_id' );
 			} else {
 				$post_id = acf_get_valid_post_id();
 			}
-
 		}
 
 		$post_id_info = acf_get_post_id_info( $post_id );
 
-
 		if ( ! is_null( $selector ) ) {
-
 			if ( $is_loop ) {
 				$field = get_sub_field_object( $selector, $post_id );
 			} else {
@@ -104,7 +125,9 @@ class CustomizePreview extends Core\Singleton {
 				$path[] = $field['key'];
 			} else {
 				$field = get_field_object( $acf->ensure_field_key( [ 'name' => $selector ], $post_id ), $post_id );
-				$path[] = $field['key'];
+				if ( is_array( $field ) ) {
+					$path[] = $field['key'];
+				}
 			}
 		}
 
@@ -121,11 +144,7 @@ class CustomizePreview extends Core\Singleton {
 		// } else {
 		// 	$field = acf_get_field( $acf->ensure_field_key( [ 'name' => $selector ], $post_id ), $post_id );
 		}
-if ( ! $field ) {
-	var_dump($loops);
-	var_dump($path);
-	var_dump($acf->ensure_field_key( [ 'name' => $selector ], $post_id ));
-}
+
 		$field_group_key = $field['parent'];
 
 		$path[] = $field_group_key; // field group

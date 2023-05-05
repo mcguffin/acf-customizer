@@ -49,10 +49,11 @@ abstract class Storage extends Core\Singleton {
 	/**
 	 *	register a post id
 	 *
+	 *	@param string setting_id
 	 *	@param string $post_id
 	 */
-	public function register_setting_id( $setting_id ) {
-		$this->setting_ids[ $setting_id ] = true;
+	public function register_setting_id( $setting_id, $post_id = true ) {
+		$this->setting_ids[ $setting_id ] = $post_id;
 	}
 
 
@@ -64,7 +65,7 @@ abstract class Storage extends Core\Singleton {
 	 */
 	public function has_setting_id( $setting_id ) {
 
-		return isset( $this->setting_ids[ $setting_id ] ) && $this->setting_ids[ $setting_id ];
+		return isset( $this->setting_ids[ $setting_id ] ) && false !== $this->setting_ids[ $setting_id ];
 
 	}
 

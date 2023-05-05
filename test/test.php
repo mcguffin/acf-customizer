@@ -7,6 +7,7 @@ use ACFCustomizer\Compat;
 class PluginTest {
 
 	private $current_json_save_path = null;
+	private $customizePreview = null;
 
 	public function __construct() {
 		add_filter( 'acf/settings/load_json', [ $this, 'load_json' ] );
@@ -34,6 +35,8 @@ class PluginTest {
 	}
 
 	public function the_content( $content ) {
+		$this->customizePreview = Compat\ACF\CustomizePreview::instance();
+
 		$content = '';
 
 		$show = [
@@ -72,29 +75,56 @@ class PluginTest {
 			$content .= "\n";
 		}
 
-		get_template_part('template-parts/acf/repeat-basic');
+		// get_template_part('template-parts/acf/repeat-basic');
 
 		return $content;
 	}
 
-	private function render_field_groups( $field_groups, $post_id = null ) {
-		$customizePreview = Compat\ACF\CustomizePreview::instance();
+	private function render_field_groups( $field_groups, $post_id = null, $get_field_cb = 'get_field' ) {
 		$content = '';
 		foreach ( $field_groups as $group ) {
 			$fields = acf_get_fields( $group );
 
 			$content .= "# Group: ".$group['title']."\n";
 			foreach ( $fields as $field ) {
-				$content .= $customizePreview->get_partial_field( $field['name'], $post_id );
-				$content .= '<pre>';
-				$content .= "Label: ".$field['label']."\n";
-				$content .= "Name: ".$field['name']."\n";
-				$content .= "Value: ".var_export(get_field($field['name'],$post_id),true)."\n"."\n";
-				$content .= '</pre>';
+				if ( in_array( $field['type'], ['flexible_content', 'repeater'] ) ) {
+					$content .= '<pre>';
+					$content .= "Label: ".$field['label']."\n";
+					$content .= "Name: ".$field['name']."\n";
+					$content .= '</pre>';
+					while ( have_rows( $field['name'] ) ) {
+						the_row();
+						$content .= $this->customizePreview->get_partial_row();
+
+						$sub_fields = acf_get_fields( $field );
+						foreach ( $sub_fields as $sub_field ) {
+							$content .= $this->render_field( $sub_field, $post_id, 'get_sub_field' );
+						}
+					}
+				} else {
+					$content .= $this->render_field( $field, $post_id );
+				}
 			}
 			$content .= "\n";
 		}
 		return $content;
+	}
+
+	private function render_field( $field, $post_id, $get_field_cb = 'get_field' ) {
+		$content = '';
+		if ( $get_field_cb === 'get_field' ) {
+			$content .= $this->customizePreview->get_partial_field( $field['name'], $post_id );
+		} else {
+			// $content .= $this->customizePreview->get_partial_subfield( $field['name'] );
+		}
+		$content .= '<pre>';
+		$content .= "Label: ".$field['label']."\n";
+		$content .= "Name: ".$field['name']."\n";
+		$content .= "Value: ".var_export($get_field_cb($field['name'],$post_id),true)."\n"."\n";
+		$content .= '</pre>';
+
+		return $content;
+
 	}
 
 	// public function template_include( $template ) {
